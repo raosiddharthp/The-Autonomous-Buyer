@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Autonomous Buyer</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --bg3: #161616;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8e6df;
+    --muted: #888780;
+    --accent: #e8e6df;
+    --tag-bg: rgba(255,255,255,0.06);
+    --card-bg: #141414;
+    --high: rgba(220,80,60,0.12);
+    --mod: rgba(180,140,60,0.12);
+    --low: rgba(60,120,80,0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Georgia', 'Times New Roman', serif; font-size: 16px; line-height: 1.65; }
+  .sans { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 20px 40px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); z-index: 100; }
+  .nav-brand { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; font-weight: 500; letter-spacing: 0.01em; }
+  .nav-links { display: flex; gap: 28px; list-style: none; }
+  .nav-links a { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .nav-cta:hover { color: var(--text); }
+  .hero { padding: 100px 40px 80px; max-width: 900px; margin: 0 auto; }
+  .hero-eyebrow { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 32px; }
+  .hero h1 { font-size: clamp(36px, 5vw, 54px); font-weight: 400; line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 28px; }
+  .hero h1 em { font-style: italic; }
+  .hero h1 strong { font-weight: 600; }
+  .hero-sub { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; color: var(--muted); line-height: 1.6; max-width: 640px; margin-bottom: 56px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+  .stat-cell { background: var(--bg); padding: 28px 24px; }
+  .stat-num { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 32px; font-weight: 300; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .stat-label { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .stat-source { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; color: rgba(136,135,128,0.6); }
+  .stat-source a { color: rgba(136,135,128,0.6); text-decoration: none; border-bottom: 1px solid rgba(136,135,128,0.2); }
+  .stat-source a:hover { color: var(--muted); }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+  .tag { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; padding: 5px 12px; border: 1px solid var(--border2); color: var(--muted); letter-spacing: 0.04em; }
+  .scroll-hint { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: rgba(136,135,128,0.5); letter-spacing: 0.06em; }
+  section { border-top: 1px solid var(--border); padding: 80px 40px; max-width: 900px; margin: 0 auto; }
+  .section-id { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); display: flex; align-items: center; gap: 0; margin-bottom: 48px; }
+  .section-id .num { font-size: 11px; }
+  .section-id .title { margin-left: 12px; }
+  section h2 { font-size: clamp(24px, 3.5vw, 36px); font-weight: 400; line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 28px; }
+  section h2 em { font-style: italic; }
+  section h2 strong { font-weight: 600; }
+  .intro-text { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 680px; margin-bottom: 56px; }
+  .forces { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .force { background: var(--bg); padding: 32px; display: grid; grid-template-columns: 140px 1fr; gap: 32px; }
+  .force-label { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .force-tag { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; color: rgba(136,135,128,0.5); margin-top: 8px; }
+  .force-body h3 { font-size: 18px; font-weight: 500; font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .force-body p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .anchor-header { border: 1px solid var(--border); padding: 32px; margin-bottom: 1px; background: var(--card-bg); }
+  .anchor-eyebrow { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+  .anchor-name { font-size: 28px; font-weight: 500; font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; margin-bottom: 8px; letter-spacing: -0.02em; }
+  .anchor-meta { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); margin-bottom: 28px; line-height: 1.7; }
+  .anchor-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border-top: 1px solid var(--border); }
+  .anchor-stat { padding: 20px; background: var(--bg); }
+  .anchor-stat-num { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 24px; font-weight: 300; letter-spacing: -0.03em; margin-bottom: 6px; }
+  .anchor-stat-label { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: var(--muted); }
+  .pains { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-top: 1px; }
+  .pain { background: var(--bg); padding: 32px; display: grid; grid-template-columns: 120px 1fr; gap: 32px; }
+  .pain-label { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .pain-body h3 { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 17px; font-weight: 500; margin-bottom: 12px; letter-spacing: -0.01em; }
+  .pain-body p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .pain-target { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: rgba(136,135,128,0.6); font-style: italic; }
+  .principles { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .principle { background: var(--bg); padding: 36px 32px; display: grid; grid-template-columns: 60px 1fr; gap: 28px; }
+  .principle-num { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 28px; font-weight: 300; color: var(--muted); font-style: italic; padding-top: 4px; }
+  .principle-body .p-label { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+  .principle-body h3 { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 17px; font-weight: 500; margin-bottom: 14px; letter-spacing: -0.01em; }
+  .principle-body p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 12px; }
+  .principle-body .in-practice { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); line-height: 1.65; padding: 16px; border-left: 2px solid var(--border2); margin-top: 12px; }
+  .principle-body .in-practice strong { color: var(--text); font-weight: 500; }
+  .arch-intro { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: var(--muted); line-height: 1.7; max-width: 680px; margin-bottom: 40px; }
+  .layers { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); margin-bottom: 48px; }
+  .layer { background: var(--bg); padding: 32px; display: grid; grid-template-columns: 160px 1fr; gap: 32px; }
+  .layer-id { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-top: 4px; }
+  .layer-name { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 12px; }
+  .layer-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .layer-item { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; padding: 4px 10px; border: 1px solid var(--border2); color: var(--muted); }
+  .layer-sep { background: var(--bg); padding: 12px 32px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .layer-sep p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: rgba(136,135,128,0.45); letter-spacing: 0.06em; text-align: center; }
+  .delivers-header { margin-bottom: 32px; }
+  .delivers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .deliver { background: var(--bg); padding: 28px; }
+  .deliver h4 { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; font-weight: 500; margin-bottom: 10px; }
+  .deliver p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); line-height: 1.65; }
+  .reg-table { width: 100%; border-collapse: collapse; border: 1px solid var(--border); }
+  .reg-table th { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border); background: var(--bg3); font-weight: 400; }
+  .reg-table td { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; padding: 20px; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.6; color: var(--muted); }
+  .reg-table tr:last-child td { border-bottom: none; }
+  .reg-name { color: var(--text); font-weight: 500; font-size: 13px; margin-bottom: 3px; }
+  .reg-sub { color: var(--muted); font-size: 12px; }
+  .risk-badge { display: inline-block; font-size: 11px; padding: 3px 10px; letter-spacing: 0.04em; }
+  .risk-high { background: var(--high); color: #e08070; border: 1px solid rgba(220,80,60,0.2); }
+  .risk-mod { background: var(--mod); color: #c0a060; border: 1px solid rgba(180,140,60,0.2); }
+  .risk-low { background: var(--low); color: #70a880; border: 1px solid rgba(60,120,80,0.2); }
+  .pages-header { margin-bottom: 36px; }
+  .pages-header p { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 15px; color: var(--muted); line-height: 1.7; }
+  .pages-grid { display: grid; gap: 1px; background: var(--border); border: 1px solid var(--border); }
+  .page-card { background: var(--bg); padding: 28px 32px; display: flex; justify-content: space-between; align-items: flex-start; text-decoration: none; color: var(--text); transition: background 0.15s; }
+  .page-card:hover { background: var(--bg3); }
+  .page-card-left { flex: 1; }
+  .page-pg { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .page-title { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 16px; font-weight: 500; margin-bottom: 6px; letter-spacing: -0.01em; }
+  .page-sub { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); }
+  .page-status { display: flex; align-items: center; gap: 16px; flex-shrink: 0; margin-left: 24px; }
+  .status-badge { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 11px; padding: 4px 10px; border: 1px solid var(--border2); color: var(--muted); letter-spacing: 0.04em; white-space: nowrap; }
+  .status-coming { border-color: var(--border); color: rgba(136,135,128,0.5); }
+  .page-arrow { font-size: 18px; color: var(--muted); margin-left: 8px; }
+  footer { border-top: 1px solid var(--border); padding: 60px 40px; max-width: 900px; margin: 0 auto; }
+  .footer-brand { font-size: 24px; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 16px; }
+  .footer-brand em { font-style: italic; }
+  .footer-brand strong { font-weight: 600; }
+  .footer-desc { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 14px; color: var(--muted); max-width: 480px; margin-bottom: 36px; line-height: 1.7; }
+  .footer-desc a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border2); }
+  .footer-desc a:hover { color: var(--text); }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 13px; color: var(--muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--text); }
+  .footer-copy { margin-top: 40px; font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif; font-size: 12px; color: rgba(136,135,128,0.4); }
+  @media (max-width: 700px) {
+    nav { padding: 16px 20px; }
+    .hero, section, footer { padding-left: 20px; padding-right: 20px; }
+    .hero { padding-top: 60px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .force, .pain, .principle, .layer { grid-template-columns: 1fr; gap: 12px; }
+    .delivers-grid { grid-template-columns: 1fr; }
+    .anchor-stats { grid-template-columns: 1fr 1fr; }
+    .nav-links { display: none; }
+    .page-card { flex-direction: column; gap: 16px; }
+    .page-status { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-brand sans">The Autonomous Buyer</span>
+  <ul class="nav-links">
+    <li><a href="#why-now">Why Now</a></li>
+    <li><a href="#problem">The Problem</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+  </ul>
+  <a class="nav-cta sans" href="https://github.com/raosiddharthp" target="_blank">GitHub →</a>
+</nav>
+
+<div class="hero">
+  <p class="hero-eyebrow sans">Architecture Portfolio · 2025–2026</p>
+  <h1>The procurement system that closes <em>itself</em> — <strong>every sourcing event governed, every commitment audited, every payment reconciled.</strong></h1>
+  <p class="hero-sub sans">An explainability-first, EU AI Act-compliant P2P architecture — designed for regulated enterprises. Six process modules. One agent swarm. Zero unaudited decisions.</p>
+
+  <div class="stats-grid">
+    <div class="stat-cell">
+      <div class="stat-num sans">17.4</div>
+      <div class="stat-label sans">Days avg. invoice cycle</div>
+      <div class="stat-source sans"><a href="https://www.bottomline.com/resources/blog/hidden-and-not-so-hidden-costs-of-manual-accounts-payable" target="_blank">Ardent Partners, State of ePayables 2024 ↗</a></div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num sans">$12.88</div>
+      <div class="stat-label sans">Avg. cost per invoice (manual)</div>
+      <div class="stat-source sans"><a href="https://www.bottomline.com/resources/blog/hidden-and-not-so-hidden-costs-of-manual-accounts-payable" target="_blank">Ardent Partners, State of ePayables 2024 ↗</a></div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num sans">50–65%</div>
+      <div class="stat-label sans">First-time 3-way match rate (manual)</div>
+      <div class="stat-source sans"><a href="https://www.growexx.com/blog/three-way-matching-in-accounts-payable/" target="_blank">GroweXX / tacto.ai benchmark ↗</a></div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-num sans">~80%</div>
+      <div class="stat-label sans">Of transactions are tail spend</div>
+      <div class="stat-source sans"><a href="https://www.jaggaer.com/blog/tail-spend-management-direct-vs-indirect-spend" target="_blank">JAGGAER / Deloitte CPO Survey ↗</a></div>
+    </div>
+  </div>
+
+  <div class="tags">
+    <span class="tag sans">EU AI Act Compliant</span>
+    <span class="tag sans">TOGAF 10</span>
+    <span class="tag sans">Google Cloud · Vertex AI</span>
+    <span class="tag sans">ADK Multi-Agent</span>
+    <span class="tag sans">XAI / SHAP</span>
+    <span class="tag sans">HITL-gated</span>
+    <span class="tag sans">ISO 20400</span>
+    <span class="tag sans">CSRD · LkSG</span>
+    <span class="tag sans">3-Way Match</span>
+    <span class="tag sans">SAP S/4HANA · Ariba</span>
+  </div>
+  <p class="scroll-hint sans">Scroll to explore</p>
+</div>
+
+<!-- 01 WHY NOW -->
+<section id="why-now">
+  <div class="section-id sans"><span class="num">01</span><span class="title">Why Now</span></div>
+  <h2>The architectural conditions for autonomous P2P <strong>are now in place.</strong></h2>
+  <p class="intro-text sans">Three things had to be true simultaneously for an autonomous procurement system to be architecturally viable: the regulatory framework had to be clear enough to design against, the agentic tooling had to be mature enough to execute multi-step procurement workflows, and the data infrastructure had to be fast enough to act on in real time.<br><br>In 2024–25, all three converged. The Autonomous Buyer is a response to that convergence — a complete architectural design that takes each of the four enabling factors below and expresses it as a concrete engineering decision.</p>
+
+  <div class="forces">
+    <div class="force">
+      <div>
+        <div class="force-label sans">FORCE — 01</div>
+        <div class="force-tag sans">EU AI Act · Aug 2024</div>
+      </div>
+      <div class="force-body">
+        <h3>Regulatory Clarity Arrived</h3>
+        <p>The EU AI Act entered enforcement in August 2024. AI systems used in procurement decisions — supplier scoring, contract risk assessment, spend anomaly detection — that materially affect business relationships are subject to transparency and oversight requirements. Compliance is no longer optional. This is the forcing function that turns "nice to have" HITL into a contractual necessity, and turns every autonomous procurement action into a decision that must be explainable before it executes.</p>
+      </div>
+    </div>
+    <div class="force">
+      <div>
+        <div class="force-label sans">FORCE — 02</div>
+        <div class="force-tag sans">Context Window · 2024</div>
+      </div>
+      <div class="force-body">
+        <h3>LLMs Can Now Read the Entire Supplier Landscape</h3>
+        <p>Gemini 1.5 Pro's 1M token context window means an LLM can now read an entire supplier catalogue, a full RFx response portfolio, or a decade of contract history in a single pass — and reason across them. This collapses the boundary between structured ERP data and unstructured procurement documents — SOWs, framework agreements, supplier questionnaires — that has blocked intelligent procurement automation for fifteen years.</p>
+      </div>
+    </div>
+    <div class="force">
+      <div>
+        <div class="force-label sans">FORCE — 03</div>
+        <div class="force-tag sans">ADK / MCP / A2A · 2025</div>
+      </div>
+      <div class="force-body">
+        <h3>Agentic Tooling Matured</h3>
+        <p>Google's Agent Development Kit (ADK), the Model Context Protocol (MCP), and the Agent-to-Agent (A2A) communication protocol gave the industry its first production-grade framework for multi-agent systems. For the first time, you can design a swarm of specialist procurement agents — Sourcing, Contract, PO, Match, Payment, Supplier Risk — each with formal state machines, tool contracts, and audit trails, without building the orchestration layer from scratch.</p>
+      </div>
+    </div>
+    <div class="force">
+      <div>
+        <div class="force-label sans">FORCE — 04</div>
+        <div class="force-tag sans">GCP Data Platform · 2024–25</div>
+      </div>
+      <div class="force-body">
+        <h3>Enterprise Spend Fabric Is Ready</h3>
+        <p>BigQuery, Vertex AI Feature Store, Pub/Sub, and Firestore now compose into a real-time enterprise data fabric that didn't exist in its current form three years ago. The gap between a procurement event — a goods receipt hitting the warehouse, a supplier invoice arriving — and an AI-driven 3-way match and payment instruction has collapsed from days to seconds. Tail spend is no longer invisible; it's a query.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 ANCHOR PROBLEM -->
+<section id="problem">
+  <div class="section-id sans"><span class="num">02</span><span class="title">The Anchor Problem</span></div>
+  <h2>Anchor Client · Medical Imaging OEM</h2>
+
+  <div class="anchor-header">
+    <div class="anchor-eyebrow sans">Anchor Client · Medical Imaging OEM</div>
+    <div class="anchor-name sans"><strong>ClaraVis</strong> Medical Systems</div>
+    <div class="anchor-meta sans">Munich, Germany · €1.2B Revenue · 4,200 Employees<br>MRI &amp; CT Imaging Portfolio · Installed Base: 12,000+ Units · 34 Countries · 1,400+ Active Suppliers</div>
+    <div class="anchor-stats">
+      <div class="anchor-stat"><div class="anchor-stat-num sans">11</div><div class="anchor-stat-label sans">Days avg. invoice cycle</div></div>
+      <div class="anchor-stat"><div class="anchor-stat-num sans">€3.2M</div><div class="anchor-stat-label sans">Annual late payment penalties</div></div>
+      <div class="anchor-stat"><div class="anchor-stat-num sans">6</div><div class="anchor-stat-label sans">Disconnected procurement systems</div></div>
+      <div class="anchor-stat"><div class="anchor-stat-num sans">23%</div><div class="anchor-stat-label sans">Of spend classified as tail / unmanaged</div></div>
+    </div>
+  </div>
+
+  <div class="pains">
+    <div class="pain">
+      <div class="pain-label sans">PAIN 01</div>
+      <div class="pain-body">
+        <h3>Manual P2P Across 6 Disconnected Systems</h3>
+        <p>Every ClaraVis procurement event — from a component requisition in Munich to a service contract in Singapore — requires sequential handoffs between Procurement, Legal, Finance, Logistics, Accounts Payable, and Compliance. Each handoff is a human, an email, and a 2–4 day delay. SAP Ariba handles strategic sourcing. SAP S/4HANA runs the ERP. A legacy AP platform manages invoices. None of them share a live event stream. The 3-way match is done manually in spreadsheets by a team of six.</p>
+        <p class="pain-target">Target with AB: P2P cycle under 3 days. Invoice processing cost reduced by 78%. 3-way match straight-through rate above 90%.</p>
+      </div>
+    </div>
+    <div class="pain">
+      <div class="pain-label sans">PAIN 02</div>
+      <div class="pain-body">
+        <h3>EU AI Act &amp; GDPR Exposure on Every Procurement ML Decision</h3>
+        <p>ClaraVis's procurement analytics team built two predictive models — supplier risk scoring and spend anomaly detection — both of which influence supplier selection and payment decisions. Under EU AI Act Annex III and the GDPR's automated decision-making provisions (Article 22), these models require explainability, human oversight, and documented architecture. Neither model currently produces a human-reviewable explanation. Neither has a formal HITL checkpoint. A supplier flagged by the risk model and delisted had no recourse — no explanation, no appeal path.</p>
+        <p class="pain-target">The AB satisfies Article 14 by making human oversight a state machine node. Every high-risk supplier scoring inference routes through a named Procurement Manager — with a SHAP explanation and confidence score — before any supplier status change commits.</p>
+      </div>
+    </div>
+    <div class="pain">
+      <div class="pain-label sans">PAIN 03</div>
+      <div class="pain-body">
+        <h3>1,400 Suppliers. No Unified Compliance Layer.</h3>
+        <p>ClaraVis's supplier base spans 34 countries. The EU's Corporate Sustainability Reporting Directive (CSRD), the German Supply Chain Due Diligence Act (LkSG), and the EU Deforestation Regulation (EUDR) impose specific obligations to monitor and document Tier-1 and Tier-2 supplier compliance. Today this is done manually by a two-person team using spreadsheets and annual questionnaires. 63% of suppliers have not been assessed in the last 18 months. The regulatory exposure is unquantified.</p>
+        <p class="pain-target">Automated supplier compliance monitoring → continuous CSRD/LkSG scoring → HITL escalation on threshold breach → full audit trail per supplier per regulation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PHILOSOPHY -->
+<section id="philosophy">
+  <div class="section-id sans"><span class="num">03</span><span class="title">Design Philosophy</span></div>
+  <h2>Four principles. Non-negotiable in a <em>regulated</em> context.</h2>
+  <p class="intro-text sans">These aren't best-practice guidelines. In the EU AI Act, GDPR, and supply chain regulatory environment, they are architectural constraints. Every component of the Autonomous Buyer must satisfy all four.</p>
+
+  <div class="principles">
+    <div class="principle">
+      <div class="principle-num">I</div>
+      <div class="principle-body">
+        <div class="p-label sans">PRINCIPLE — 01</div>
+        <h3>Explainability engineered in — from model design to audit trail</h3>
+        <p>XAI is not a dashboard you add after the model ships. Every ML model in this system — supplier risk scoring, spend anomaly detection, 3-way match exception classification — is designed with its explanation contract upfront, before a single line of training code is written. SHAP values are generated at inference time, not retrospectively. Every procurement decision that touches a supplier relationship or a payment writes its explanation to the immutable audit log before any downstream action executes.</p>
+        <div class="in-practice"><strong>In practice:</strong> When the Supplier Risk Model classifies a ClaraVis component supplier as elevated-risk, the Category Manager sees: the top 5 features driving the score (delivery performance, financial stability signals, CSRD non-compliance flags), the confidence score, and a one-click override with mandatory reason code — before the supplier's status changes in SAP Ariba.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">II</div>
+      <div class="principle-body">
+        <div class="p-label sans">PRINCIPLE — 02</div>
+        <h3>Human oversight is a first-class state machine node, specified before implementation</h3>
+        <p>EU AI Act Article 14 defines meaningful human oversight as a designed mechanism — a specific point in the decision flow where a named human reviews the agent's reasoning, the SHAP explanation, and the confidence score, then chooses to approve, reject, or escalate. In this architecture, every HITL checkpoint is a formal state in the agent's state machine, with a defined entry condition, a presentation contract, a decision interface, a timeout behaviour, and an immutable audit record written before the agent proceeds.</p>
+        <div class="in-practice"><strong>In practice:</strong> The Contract Agent autonomously extracts and classifies 150+ clause types from a supplier MSA. When it flags an indemnity cap below ClaraVis's policy threshold, it pauses, surfaces the clause with its risk score and three similar past precedents, and waits for Legal Counsel to approve before any counter-proposal is drafted or sent.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">III</div>
+      <div class="principle-body">
+        <div class="p-label sans">PRINCIPLE — 03</div>
+        <h3>Compliance obligations encoded as write-path constraints, satisfied continuously</h3>
+        <p>Most enterprise compliance tools are forensic — they tell you what happened after the fact. This architecture makes compliance a live property of every procurement transaction. CSRD supplier due diligence requirements, LkSG documentation obligations, GDPR automated-decision constraints, and EU AI Act Article 13 transparency requirements are encoded as immutable constraints in the data model and enforced by the write path — not checked by a quarterly report. The compliance audit trail is a by-product of normal operations, not a separate process.</p>
+        <div class="in-practice"><strong>In practice:</strong> Every ClaraVis supplier onboarding event writes simultaneously to the Vendor Master, the CSRD compliance register, the LkSG due diligence log, and the EU AI Act model inference record — in one atomic transaction with a single regulatory tag set. The compliance team's quarterly report is a query, not a manual process.</div>
+      </div>
+    </div>
+    <div class="principle">
+      <div class="principle-num">IV</div>
+      <div class="principle-body">
+        <div class="p-label sans">PRINCIPLE — 04</div>
+        <h3>Augment the procurement function — never replace its judgment</h3>
+        <p>The agent swarm does not run procurement. It runs the work procurement shouldn't be spending human time on: extracting clause types, classifying spend categories, matching invoices, routing exceptions, scoring suppliers, and preparing decisions for human review. Every module has a defined autonomy boundary — a set of actions below a risk threshold it can execute without asking, and a set above the threshold where it prepares the best possible brief for a human and waits.</p>
+        <div class="in-practice"><strong>In practice:</strong> The PO Agent handles requisition intake, budget validation, preferred supplier selection, and PO generation fully autonomously for all catalogue items under €5,000. A non-catalogue item, a new supplier, or a value above threshold automatically escalates to the Category Manager with a full briefing document — supplier options, price benchmark, risk flags — the agent prepared.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 ARCHITECTURE -->
+<section id="architecture">
+  <div class="section-id sans"><span class="num">04</span><span class="title">The Architecture</span></div>
+  <h2>Four layers. One <em>coherent</em> contract.</h2>
+  <p class="arch-intro sans">Each layer has a single responsibility and a clean interface to the layer above and below it. XAI outputs and HITL checkpoints flow upward from the ML layer to the Presentation layer. Governance and audit constraints flow downward from policy into the Infrastructure layer. Nothing bypasses a layer. Nothing is ad-hoc.<br><br>The Agent layer and the ML layer are deliberately separated — agents carry state and orchestrate decisions; ML models produce inferences and explanations. Keeping them distinct makes each independently testable, deployable, and auditable. Layer 4 makes compliance physically un-bypassable.</p>
+
+  <div class="layers">
+    <div class="layer">
+      <div>
+        <div class="layer-id sans">LAYER 01</div>
+      </div>
+      <div>
+        <div class="layer-name sans">Presentation &amp; Experience</div>
+        <div class="layer-items">
+          <span class="layer-item sans">Portfolio Site</span>
+          <span class="layer-item sans">6 Module Dashboards</span>
+          <span class="layer-item sans">HITL Approval UI</span>
+          <span class="layer-item sans">XAI Explanation Viewer</span>
+          <span class="layer-item sans">Supplier Portal</span>
+          <span class="layer-item sans">Spend Analytics</span>
+          <span class="layer-item sans">Audit Trail Dashboard</span>
+          <span class="layer-item sans">React · TypeScript</span>
+        </div>
+      </div>
+    </div>
+    <div class="layer-sep"><p class="sans">↕ &nbsp; REST / gRPC / Pub/Sub events</p></div>
+    <div class="layer">
+      <div>
+        <div class="layer-id sans">LAYER 02</div>
+      </div>
+      <div>
+        <div class="layer-name sans">Agent Orchestration</div>
+        <div class="layer-items">
+          <span class="layer-item sans">ADK Multi-Agent Swarm</span>
+          <span class="layer-item sans">Sourcing Agent</span>
+          <span class="layer-item sans">Contract Agent</span>
+          <span class="layer-item sans">PO Agent</span>
+          <span class="layer-item sans">3-Way Match Agent</span>
+          <span class="layer-item sans">Payment Agent</span>
+          <span class="layer-item sans">Supplier Risk Agent</span>
+          <span class="layer-item sans">A2A Protocol</span>
+          <span class="layer-item sans">MCP Tool Manifest</span>
+          <span class="layer-item sans">Pub/Sub Orchestration</span>
+          <span class="layer-item sans">State Machine Specs</span>
+          <span class="layer-item sans">Circuit Breakers</span>
+        </div>
+      </div>
+    </div>
+    <div class="layer-sep"><p class="sans">↕ &nbsp; gRPC inference calls · feature store reads · SHAP explanation writes</p></div>
+    <div class="layer">
+      <div>
+        <div class="layer-id sans">LAYER 03</div>
+      </div>
+      <div>
+        <div class="layer-name sans">ML &amp; Intelligence Platform</div>
+        <div class="layer-items">
+          <span class="layer-item sans">Vertex AI Pipelines</span>
+          <span class="layer-item sans">Feature Store</span>
+          <span class="layer-item sans">Supplier Risk Model</span>
+          <span class="layer-item sans">Spend Anomaly Model</span>
+          <span class="layer-item sans">Match Exception Classifier</span>
+          <span class="layer-item sans">SHAP · XAI Layer</span>
+          <span class="layer-item sans">Model Registry</span>
+          <span class="layer-item sans">Model Cards</span>
+          <span class="layer-item sans">Drift Detection</span>
+          <span class="layer-item sans">Retraining Pipelines</span>
+        </div>
+      </div>
+    </div>
+    <div class="layer-sep"><p class="sans">↕ &nbsp; VPC-native · CMEK-encrypted · IAM-bound</p></div>
+    <div class="layer">
+      <div>
+        <div class="layer-id sans">LAYER 04</div>
+      </div>
+      <div>
+        <div class="layer-name sans">Infrastructure &amp; Governance</div>
+        <div class="layer-items">
+          <span class="layer-item sans">Terraform IaC</span>
+          <span class="layer-item sans">GKE · Cloud Run</span>
+          <span class="layer-item sans">VPC-SC Zero-Trust</span>
+          <span class="layer-item sans">CMEK Encryption</span>
+          <span class="layer-item sans">BeyondCorp</span>
+          <span class="layer-item sans">IAM · Workload Identity</span>
+          <span class="layer-item sans">Immutable Audit Log</span>
+          <span class="layer-item sans">Cloud Build CI/CD</span>
+          <span class="layer-item sans">GreenOps Scheduling</span>
+          <span class="layer-item sans">FinOps Cost Tags</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="delivers-header">
+    <h2 style="font-size:24px; margin-bottom:16px;">Six things the architecture <em>delivers</em> — by design.</h2>
+    <p class="sans" style="font-size:14px; color:var(--muted); max-width:640px; line-height:1.7; margin-bottom:32px;">Every architecture decision in this portfolio is production-grade. Every design artifact traces to a real enterprise requirement. The ClaraVis scenario is a representative composite of patterns from real regulated-industry procurement deployments.<br><br>Each capability below is a structural property of the design — an outcome of the architectural decisions made across the six modules, expressed in component specifications, and enforced by the infrastructure.</p>
+  </div>
+  <div class="delivers-grid">
+    <div class="deliver">
+      <h4 class="sans">A formally specified multi-agent procurement swarm</h4>
+      <p class="sans">Agent topology defined using Google ADK. Each agent — Sourcing, Contract, PO, Match, Payment, Supplier Risk — carries a state machine specification, a tool manifest, a confidence threshold, a documented autonomy boundary, and a circuit-breaker configuration. Every component traces to a named GCP service or ADK construct.</p>
+    </div>
+    <div class="deliver">
+      <h4 class="sans">An executable architecture</h4>
+      <p class="sans">Every component in every layer maps to a named GCP service, a Terraform resource, or an ADK agent definition. Architecture Decision Records document each significant choice alongside the alternatives considered. The architecture is buildable directly from its design artifacts.</p>
+    </div>
+    <div class="deliver">
+      <h4 class="sans">Compliance as a structural property</h4>
+      <p class="sans">EU AI Act, GDPR Article 22, CSRD, LkSG, and ISO 20400 obligations are encoded as write-path constraints. A compliance audit reads the operational log — there is no separate compliance database and no remediation process. Compliance is continuous and automatic.</p>
+    </div>
+    <div class="deliver">
+      <h4 class="sans">Full P2P scope on a common data fabric</h4>
+      <p class="sans">Sourcing, contracting, purchase orders, 3-way match, invoice payment, and supplier performance — six modules sharing a common Pub/Sub event fabric, a common Vertex AI Feature Store, a common XAI contract, and a common HITL specification.</p>
+    </div>
+    <div class="deliver">
+      <h4 class="sans">Domain-specific procurement ML patterns</h4>
+      <p class="sans">Supplier risk scoring with SHAP explanation contract. Spend anomaly detection using isolation forest with confidence-threshold HITL escalation. 3-way match exception classification with tolerance-band logic. Every model card specified before training begins.</p>
+    </div>
+    <div class="deliver">
+      <h4 class="sans">Documented tradeoffs at every decision point</h4>
+      <p class="sans">Every Architecture Decision Record states what was selected, what was considered, and the technical reasoning: Firestore over Spanner for agent state, Cloud Run over GKE for stateless match modules, SHAP over LIME for the XAI layer. The reasoning is the design.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 05 REGULATORY -->
+<section id="regulatory">
+  <div class="section-id sans"><span class="num">05</span><span class="title">Regulatory Grounding</span></div>
+  <h2>Compliance is not a <em>layer.</em> It is the foundation.</h2>
+  <p class="intro-text sans">Each regulation below imposes specific architectural constraints — not just documentation requirements. The design satisfies them structurally, not through post-hoc reporting.</p>
+
+  <table class="reg-table">
+    <thead>
+      <tr>
+        <th style="width:220px;">Regulation</th>
+        <th>Architectural Constraint It Imposes on the AB</th>
+        <th style="width:110px;">Risk Level</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="reg-name sans">EU AI Act — Annex III</div><div class="reg-sub sans">High-Risk AI Systems</div></td>
+        <td>Every ML inference affecting a supplier relationship or a payment must produce a human-readable SHAP explanation before any write operation. Named human approver required for high-risk supplier scoring decisions. Immutable audit trail mandatory. Risk management system documented and versioned.</td>
+        <td><span class="risk-badge risk-high sans">High Risk</span></td>
+      </tr>
+      <tr>
+        <td><div class="reg-name sans">GDPR — Article 22</div><div class="reg-sub sans">Automated Decision-Making</div></td>
+        <td>No fully automated decision that produces a legal or similarly significant effect on a supplier without a human in the loop. HITL checkpoint is architecturally mandatory for any supplier status change, delistment, or payment block. Supplier has right to explanation — satisfaction is built into the audit log, not a separate process.</td>
+        <td><span class="risk-badge risk-high sans">High Risk</span></td>
+      </tr>
+      <tr>
+        <td><div class="reg-name sans">CSRD / LkSG / EUDR</div><div class="reg-sub sans">Supply Chain Due Diligence</div></td>
+        <td>Supplier due diligence obligations encoded as continuous monitoring constraints, not annual questionnaires. Every supplier onboarding and periodic review event writes to the CSRD compliance register atomically. LkSG risk assessments triggered automatically on threshold breach. EUDR deforestation checks built into the Sourcing Agent's tool manifest.</td>
+        <td><span class="risk-badge risk-mod sans">Moderate</span></td>
+      </tr>
+      <tr>
+        <td><div class="reg-name sans">ISO 20400 : 2017</div><div class="reg-sub sans">Sustainable Procurement</div></td>
+        <td>Sustainability criteria encoded as first-class scoring dimensions in the Sourcing Agent's RFx evaluation logic. ESG supplier scores versioned alongside financial scores in the Feature Store. GreenOps scheduling aligns batch procurement workloads with low-carbon compute windows.</td>
+        <td><span class="risk-badge risk-mod sans">Moderate</span></td>
+      </tr>
+      <tr>
+        <td><div class="reg-name sans">GDPR / EU DPDP</div><div class="reg-sub sans">Data Protection</div></td>
+        <td>All supplier PII confined within VPC-SC perimeter. CMEK encryption — ClaraVis holds the keys, not Google. Data residency enforced by GCP region constraints in Terraform. Right-to-erasure handled via Firestore document-level deletion with audit record preservation.</td>
+        <td><span class="risk-badge risk-low sans">Native to Infra</span></td>
+      </tr>
+      <tr>
+        <td><div class="reg-name sans">ISO 27001</div><div class="reg-sub sans">Information Security</div></td>
+        <td>BeyondCorp zero-trust: no implicit network trust. All service-to-service calls via Workload Identity. Secrets managed exclusively through Secret Manager — no hardcoded credentials anywhere in the codebase or IaC. Security posture continuously validated by Security Command Center.</td>
+        <td><span class="risk-badge risk-low sans">Native to Infra</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 06 MODULE PAGES -->
+<section id="modules">
+  <div class="section-id sans"><span class="num">06</span><span class="title">Continue the Architecture</span></div>
+  <div class="pages-header">
+    <h2>The concept is clear.<br><strong>Now comes the design.</strong></h2>
+    <p class="sans">The following pages take every principle above and express it as concrete architecture artifacts — agent state machines, ML pipeline designs, workflow simulations, and module-level technical specifications. Each page is independently readable. Together, they form a complete AI Solutions Architecture for autonomous P2P.</p>
+  </div>
+
+  <div class="pages-grid">
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 02</div>
+        <div class="page-title sans">ClaraVis — Client Brief &amp; Requirements</div>
+        <div class="page-sub sans">BRD · Stakeholder Map · AI Readiness Audit · P2P Use Case Catalogue</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge sans">In Design</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 03</div>
+        <div class="page-title sans">Sourcing / RFx</div>
+        <div class="page-sub sans">Supplier Shortlisting · RFx Agent · Evaluation Scoring · HITL Award</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 04</div>
+        <div class="page-title sans">Contract Negotiation &amp; Award</div>
+        <div class="page-sub sans">Clause Extraction · Risk Scoring · Redline Agent · HITL Sign-off</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 05</div>
+        <div class="page-title sans">Purchase Order (PO)</div>
+        <div class="page-sub sans">Requisition Intake · Budget Validation · PO Agent · Approval Routing</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 06</div>
+        <div class="page-title sans">3-Way Match</div>
+        <div class="page-sub sans">Invoice · Delivery Note · PO · Exception Detection · HITL Resolution</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 07</div>
+        <div class="page-title sans">Invoice Payment / Spend</div>
+        <div class="page-sub sans">Payment Scheduling · Early Pay Discount · Spend Analytics · Forecasting</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+    <a class="page-card" href="#">
+      <div class="page-card-left">
+        <div class="page-pg sans">PG 08</div>
+        <div class="page-title sans">Supplier Performance</div>
+        <div class="page-sub sans">KPI Scoring · Risk Flagging · CSRD/LkSG Monitoring · Remediation Workflow</div>
+      </div>
+      <div class="page-status">
+        <span class="status-badge status-coming sans">Coming</span>
+        <span class="page-arrow">→</span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">The <em>Autonomous</em> <strong>Buyer</strong></div>
+  <p class="footer-desc sans">A full-stack, EU AI Act-compliant Procure-to-Pay architecture portfolio. Six process modules. One agent swarm. Every decision explainable, every agent auditable, every human checkpoint intentional.<br><br>Part of <a href="https://raosiddharthp.github.io/The-Autonomous-Enterprise/" target="_blank">The Autonomous Enterprise</a> suite.</p>
+  <div class="footer-links">
+    <a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a>
+  </div>
+  <p class="footer-copy sans">© 2026 Siddharth Rao</p>
+</footer>
+
+</body>
+</html>

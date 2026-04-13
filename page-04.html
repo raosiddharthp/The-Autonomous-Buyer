@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PG 04 — Contract Negotiation &amp; Award · The Autonomous Buyer</title>
+<style>
+:root {
+  --bg:#0a0a0a;--bg2:#111111;--bg3:#161616;--bg4:#1a1a1a;
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
+  --text:#e8e6df;--muted:#888780;--faint:rgba(136,135,128,0.5);
+  --high:rgba(220,80,60,0.12);--mod:rgba(180,140,60,0.12);--low:rgba(60,120,80,0.10);
+  --hitl:rgba(180,140,60,0.14);--hitl-border:rgba(180,140,60,0.35);
+  --amber:#b48c3c;--red:#dc503c;--green:#3c7850;
+  --track-a:rgba(60,100,160,0.10);--track-b:rgba(100,60,160,0.10);
+  --track-a-border:rgba(60,100,160,0.25);--track-b-border:rgba(100,60,160,0.25);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Georgia','Times New Roman',serif;font-size:16px;line-height:1.65;}
+.sans{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
+a{color:var(--muted);text-decoration:none;}
+a:hover{color:var(--text);}
+
+/* ── NAV ── */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);z-index:100;gap:16px;}
+.nav-trail{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+.nav-trail strong{color:var(--text);}
+.nav-right{display:flex;gap:20px;flex-shrink:0;}
+.nav-right a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+.nav-right a:hover{color:var(--text);}
+
+/* ── LAYOUT ── */
+.layout{display:grid;grid-template-columns:200px 1fr;max-width:1100px;margin:0 auto;}
+.sidebar{padding:48px 0 80px 40px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;}
+.sb-links{display:flex;flex-direction:column;gap:3px;}
+.sb-links a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);padding:5px 0 5px 12px;border-left:2px solid var(--border);text-decoration:none;transition:all 0.15s;display:block;}
+.sb-links a:hover,.sb-links a.active{color:var(--text);border-left-color:var(--border2);}
+.sb-sep{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);padding:14px 0 6px 12px;display:block;}
+.content{padding:60px 40px 80px;border-left:1px solid var(--border);}
+
+/* ── HERO ── */
+.page-eyebrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
+.page-title{font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;margin-bottom:20px;}
+.page-title strong{font-weight:600;}
+.page-title em{font-style:italic;}
+.page-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:32px;}
+.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.htag{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.04em;}
+.htag.risk{border-color:rgba(220,80,60,0.3);color:#e08070;background:var(--high);}
+.hero-adrs{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);margin-top:8px;}
+
+/* ── SECTIONS ── */
+.section{border-top:1px solid var(--border);padding:64px 0 0;}
+.sec-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
+.sec-h2{font-size:clamp(20px,3vw,30px);font-weight:400;line-height:1.2;letter-spacing:-0.02em;margin-bottom:20px;}
+.sec-h2 em{font-style:italic;}
+.sec-h2 strong{font-weight:600;}
+.sec-intro{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--muted);line-height:1.7;max-width:640px;margin-bottom:40px;}
+
+/* ── STATE MACHINE (tall HITL variant) ── */
+.sm-wrap{overflow-x:auto;margin-bottom:8px;}
+.sm-grid{display:flex;gap:0;border:1px solid var(--border);min-width:700px;align-items:stretch;}
+.sm-node{flex:1;padding:14px 6px;border-right:1px solid var(--border);text-align:center;transition:all 0.25s;min-width:0;display:flex;flex-direction:column;justify-content:center;}
+.sm-node:last-child{border-right:none;}
+.sn-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+.sn-name{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--muted);font-weight:500;line-height:1.3;}
+.sm-node.hitl-node{background:var(--hitl);flex:1.5;padding:22px 8px;}
+.sm-node.hitl-node .sn-id{color:var(--amber);}
+.sm-node.hitl-node .sn-name{color:#c8a060;font-size:11px;}
+.sm-node.active{background:rgba(255,255,255,0.06);border-bottom:2px solid var(--text);}
+.sm-node.active .sn-name{color:var(--text);}
+.sm-node.hitl-node.active{border-bottom:2px solid var(--amber);}
+.sm-node.done{background:rgba(60,120,80,0.06);}
+.sm-node.done .sn-name{color:rgba(136,135,128,0.45);}
+.sm-legend{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px;margin-bottom:36px;}
+.sm-leg-item{display:flex;align-items:center;gap:7px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
+.sm-leg-swatch{width:12px;height:12px;border:1px solid var(--border2);}
+.sm-leg-swatch.hitl{background:var(--hitl);border-color:var(--hitl-border);}
+.sm-leg-swatch.active{background:rgba(255,255,255,0.06);}
+.sm-leg-swatch.done{background:rgba(60,120,80,0.06);border-color:rgba(60,120,80,0.25);}
+
+/* ── DUAL PIPELINE ── */
+.pipeline-wrap{border:1px solid var(--border);margin-bottom:8px;overflow:hidden;}
+.pipe-row{display:flex;border-bottom:1px solid var(--border);}
+.pipe-row:last-child{border-bottom:none;}
+.pipe-row-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);padding:10px 14px;border-right:1px solid var(--border);width:80px;flex-shrink:0;display:flex;align-items:center;}
+.pipe-full{flex:1;padding:16px 20px;display:flex;align-items:center;justify-content:center;text-align:center;}
+.pipe-half{flex:1;padding:16px 18px;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;}
+.pipe-half:last-child{border-right:none;}
+.pipe-cell-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:500;color:var(--text);margin-bottom:5px;}
+.pipe-cell-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.55;}
+.pipe-row.trigger .pipe-full{background:var(--bg3);}
+.pipe-half.track-a{background:var(--track-a);border-left:3px solid var(--track-a-border);}
+.pipe-half.track-b{background:var(--track-b);border-left:3px solid var(--track-b-border);}
+.pipe-row.shared .pipe-full{background:var(--bg2);}
+.pipe-row.hitl-row .pipe-full{background:var(--hitl);}
+.pipe-row.hitl-row .pipe-cell-title{color:var(--amber);}
+.pipe-row.hitl-row .pipe-cell-sub{color:rgba(180,140,60,0.7);}
+.pipe-row.output .pipe-half{background:var(--bg3);}
+.track-badge{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;padding:2px 8px;margin-bottom:7px;display:inline-block;letter-spacing:0.06em;}
+.track-badge.a{border:1px solid var(--track-a-border);color:#6090c0;}
+.track-badge.b{border:1px solid var(--track-b-border);color:#9070c0;}
+.pipe-inner-grid{display:flex;gap:0;border:1px solid var(--border);width:100%;}
+.pipe-inner-cell{flex:1;padding:10px 14px;border-right:1px solid var(--border);text-align:center;}
+.pipe-inner-cell:last-child{border-right:none;}
+.pipe-inner-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:500;color:var(--text);margin-bottom:4px;}
+.pipe-inner-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);line-height:1.5;}
+
+/* ── SIMULATION ── */
+.sim-wrap{border:1px solid var(--border);}
+.sim-progress{display:flex;border-bottom:1px solid var(--border);}
+.sim-step-dot{flex:1;height:3px;background:var(--border);transition:background 0.3s;}
+.sim-step-dot.done-dot{background:var(--green);}
+.sim-step-dot.active-dot{background:var(--text);}
+.sim-step-dot.hitl-dot{background:var(--amber);}
+.sim-panel{padding:32px 32px 28px;}
+.sim-meta{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.sim-step-num{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);}
+.sim-state-badge{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 10px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.06em;font-weight:500;}
+.sim-state-badge.hitl{border-color:var(--hitl-border);color:var(--amber);background:var(--hitl);}
+.sim-state-badge.done-badge{border-color:rgba(60,120,80,0.3);color:#6aab80;background:var(--low);}
+.sim-title{font-size:18px;font-weight:500;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;margin-bottom:12px;letter-spacing:-0.01em;}
+.sim-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
+.sim-data{border:1px solid var(--border);margin-bottom:20px;}
+.sim-data-row{display:grid;grid-template-columns:155px 1fr;border-bottom:1px solid var(--border);}
+.sim-data-row:last-child{border-bottom:none;}
+.sim-data-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:flex-start;padding-top:13px;}
+.sim-data-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);padding:12px 16px;line-height:1.6;}
+.sim-data-val strong{color:var(--text);font-weight:500;}
+.flag{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid rgba(220,80,60,0.3);color:#e08070;background:var(--high);margin-left:5px;}
+.ok{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid rgba(60,120,80,0.3);color:#6aab80;background:var(--low);margin-left:5px;}
+.warn{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid rgba(180,140,60,0.3);color:var(--amber);background:var(--hitl);margin-left:5px;}
+
+/* SHAP */
+.shap-wrap{margin-bottom:20px;}
+.shap-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;}
+.shap-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.shap-feat{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);width:180px;flex-shrink:0;text-align:right;}
+.shap-bar-bg{flex:1;height:6px;background:var(--border);}
+.shap-bar-fill{height:100%;transition:width 0.5s;}
+.shap-bar-fill.pos{background:#e08070;}
+.shap-bar-fill.low{background:var(--amber);}
+.shap-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);width:40px;text-align:right;}
+
+/* CLAUSE DIFF */
+.clause-diff{margin-bottom:20px;}
+.clause-diff-header{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;}
+.clause-diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+.clause-col{background:var(--bg);padding:18px;}
+.clause-col-head{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:12px;}
+.clause-col-head.original{color:#e08070;}
+.clause-col-head.redline{color:#6aab80;}
+.clause-text{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.75;}
+.clause-text del{color:#e08070;text-decoration:line-through;background:rgba(220,80,60,0.08);}
+.clause-text ins{color:#6aab80;text-decoration:none;background:rgba(60,120,80,0.10);}
+.clause-justification{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);padding:14px 18px;border:1px solid var(--border);background:var(--bg3);border-top:none;line-height:1.7;}
+.clause-justification strong{color:var(--text);font-weight:500;}
+
+/* HITL */
+.hitl-panel{border:1px solid var(--hitl-border);background:var(--hitl);padding:22px;margin-bottom:20px;}
+.hitl-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.hitl-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);font-weight:500;}
+.hitl-article{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:rgba(180,140,60,0.7);border:1px solid rgba(180,140,60,0.25);padding:2px 8px;}
+.hitl-reason{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:rgba(180,140,60,0.8);margin-bottom:14px;padding-left:12px;border-left:2px solid var(--hitl-border);line-height:1.6;}
+.hitl-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
+.hitl-clause-row{display:grid;grid-template-columns:200px 1fr auto;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
+.hitl-clause-row:last-of-type{border-bottom:none;}
+.hitl-clause-id{font-family:-apple-system,'Helvetice Neue',Arial,sans-serif;font-size:12px;color:var(--muted);}
+.hitl-clause-risk{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:2px 8px;border:1px solid rgba(220,80,60,0.3);color:#e08070;background:var(--high);}
+.hitl-clause-btns{display:flex;gap:6px;}
+.hitl-clause-btn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:5px 11px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;transition:all 0.15s;}
+.hitl-clause-btn:hover{color:var(--text);}
+.hitl-clause-btn.approve{border-color:rgba(60,120,80,0.4);color:#6aab80;}
+.hitl-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+.hitl-btn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:9px 20px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;}
+.hitl-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.3);}
+.hitl-btn.approve{border-color:rgba(60,120,80,0.5);color:#6aab80;}
+.hitl-btn.approve:hover{background:rgba(60,120,80,0.1);}
+.hitl-btn.reject{border-color:rgba(220,80,60,0.4);color:#e08070;}
+.hitl-timeout{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:12px;}
+.sign-stats{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:16px;}
+.sign-stat{background:var(--bg);padding:16px 18px;}
+.sign-stat-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-bottom:6px;}
+.sign-stat-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:20px;font-weight:300;letter-spacing:-0.02em;}
+.sim-controls{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-top:1px solid var(--border);background:var(--bg2);}
+.sim-btn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:9px 22px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;}
+.sim-btn:hover:not(:disabled){color:var(--text);border-color:rgba(255,255,255,0.25);}
+.sim-btn:disabled{opacity:0.3;cursor:default;}
+.sim-counter{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+
+/* ── ML MODELS ── */
+.ml-model-heading{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;color:var(--text);letter-spacing:0.04em;margin-bottom:16px;}
+.ml-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
+.ml-row{background:var(--bg);padding:18px 22px;display:grid;grid-template-columns:190px 1fr;gap:24px;}
+.ml-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding-top:2px;}
+.ml-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;}
+.ml-val strong{color:var(--text);font-weight:500;}
+.feat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.feat-chip{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);}
+
+/* ── HITL SPEC ── */
+.hitl-checkpoint-heading{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;color:var(--text);letter-spacing:0.04em;margin-bottom:16px;}
+.hitl-spec-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
+.hitl-spec-row{background:var(--bg);padding:18px 22px;display:grid;grid-template-columns:170px 1fr;gap:24px;}
+.hitl-spec-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding-top:2px;}
+.hitl-spec-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;}
+.hitl-spec-val strong{color:var(--text);font-weight:500;}
+
+/* ── INTEGRATIONS ── */
+.int-table{width:100%;border-collapse:collapse;border:1px solid var(--border);}
+.int-table th{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:14px 18px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);font-weight:400;}
+.int-table td{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;padding:16px 18px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;color:var(--muted);}
+.int-table tr:last-child td{border-bottom:none;}
+.int-dir-badge{font-size:10px;padding:2px 8px;border:1px solid var(--border2);letter-spacing:0.06em;font-weight:500;display:inline-block;}
+.int-dir-badge.read{color:#6aab80;border-color:rgba(60,120,80,0.3);}
+.int-dir-badge.write{color:#78a8cc;border-color:rgba(60,120,160,0.3);}
+.sys-name{color:var(--text);font-weight:500;font-size:13px;margin-bottom:3px;}
+.sys-sub{font-size:11px;color:var(--faint);}
+
+/* ── ADR ── */
+.adr-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
+.adr-card{background:var(--bg);padding:24px 26px;}
+.adr-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.adr-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px;}
+.adr-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
+.adr-status{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
+
+/* ── COST ── */
+.cost-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px;}
+.cost-stat{background:var(--bg);padding:28px 24px;}
+.cost-num{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:300;letter-spacing:-0.03em;margin-bottom:8px;}
+.cost-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);margin-bottom:4px;}
+.cost-src{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
+.cost-src a{color:var(--faint);border-bottom:1px solid rgba(136,135,128,0.2);}
+.cost-breakdowns{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:1px;margin-bottom:24px;}
+.cost-block{background:var(--bg);padding:24px;}
+.cost-block-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;color:var(--text);margin-bottom:16px;letter-spacing:0.02em;}
+.cost-line{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.cost-line-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+.cost-line-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--text);font-weight:500;}
+.cost-line-val.green{color:#6aab80;}
+.cost-line.total{border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
+.cost-line.total .cost-line-label{color:var(--text);font-weight:500;}
+.roi-note{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.75;padding:20px 22px;border:1px solid var(--border);background:var(--bg3);}
+.roi-note strong{color:var(--text);font-weight:500;}
+.roi-note a{color:var(--faint);border-bottom:1px solid rgba(136,135,128,0.2);}
+
+/* ── PAGE NAV ── */
+.page-nav{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:72px;}
+.page-nav-card{background:var(--bg);padding:24px 28px;text-decoration:none;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;}
+.page-nav-card:hover{background:var(--bg2);}
+.page-nav-pg{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
+.page-nav-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;color:var(--text);}
+.page-nav-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:4px;}
+.page-nav-arrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:20px;color:var(--muted);}
+
+/* ── FOOTER ── */
+.footer-bar{border-top:1px solid var(--border);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;}
+.footer-brand{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
+.footer-brand em{font-style:italic;}
+.footer-brand strong{font-weight:600;}
+.footer-links a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+.footer-links a:hover{color:var(--muted);}
+.footer-copy{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <span class="nav-trail sans">
+    <a href="page-03.html">← PG 03</a>
+    <span style="margin:0 10px;color:var(--faint);">·</span>
+    <strong>PG 04 — Contract Negotiation &amp; Award</strong>
+    <span style="margin:0 10px;color:var(--faint);">·</span>
+    <a href="page-05.html">PG 05 →</a>
+  </span>
+  <div class="nav-right">
+    <a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a>
+  </div>
+</nav>
+
+<div class="layout">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sb-links" id="sb">
+    <span class="sb-sep sans">Module</span>
+    <a href="#hero" class="sans">Overview</a>
+    <a href="#statemachine" class="sans">State Machine</a>
+    <a href="#pipeline" class="sans">Dual-Pipeline</a>
+    <a href="#workflow" class="sans">Workflow Simulation</a>
+    <span class="sb-sep sans">Specification</span>
+    <a href="#mlmodel" class="sans">ML Models</a>
+    <a href="#hitlspec" class="sans">HITL Specification</a>
+    <a href="#integrations" class="sans">Integration Points</a>
+    <a href="#adrs" class="sans">ADR References</a>
+    <span class="sb-sep sans">Economics</span>
+    <a href="#cost" class="sans">Cost &amp; ROI</a>
+  </div>
+</aside>
+
+<!-- ══ CONTENT ══ -->
+<main class="content">
+
+<!-- §1 HERO -->
+<div id="hero">
+  <p class="page-eyebrow sans">PG 04 · The Autonomous Buyer · Contract Negotiation &amp; Award</p>
+  <h1 class="page-title">From 156 pages of supplier draft<br>to <em>two executed contracts.</em><br><strong>Every clause scored. Every redline explained.</strong></h1>
+  <p class="page-desc sans">The Contract Agent receives the <code style="font-size:13px;">rfx.awarded</code> event from PG 03, loads both supplier draft contracts from Ariba Contract Workspace, extracts and classifies every clause using a rule-based NLP pipeline, scores each clause for risk with an XGBoost model whose SHAP output is written to Firestore before any redline is generated, and routes all high-risk clauses to Legal for review. No clause is autonomously accepted above the risk threshold. No contract is autonomously executed — ever.</p>
+  <div class="hero-tags">
+    <span class="htag sans">Clause Extraction</span>
+    <span class="htag sans">Risk Scoring</span>
+    <span class="htag sans">Redline Agent</span>
+    <span class="htag sans">CSRD Clause Enforcement</span>
+    <span class="htag sans">Dual-Pipeline</span>
+    <span class="htag sans">Rule-Based NLP</span>
+    <span class="htag sans">HITL Legal Review</span>
+    <span class="htag sans">HITL Sign-off</span>
+    <span class="htag sans">SAP Ariba Contract Workspace</span>
+    <span class="htag risk sans">EU AI Act — High Risk</span>
+    <span class="htag risk sans">GDPR Art. 22</span>
+  </div>
+  <p class="hero-adrs sans">Governed by ADR-004 · ADR-006 · ADR-007 · ADR-008</p>
+</div>
+
+<!-- §2 STATE MACHINE -->
+<div class="section" id="statemachine">
+  <p class="sec-id sans">Agent Architecture · State Machine</p>
+  <h2 class="sec-h2">Ten states. <em>Two human checkpoints.</em><br><strong>HITL nodes wider by design.</strong></h2>
+  <p class="sec-intro sans">HITL_LEGAL and HITL_SIGN are rendered taller and wider than agent states — a visual statement that they carry proportionally more weight in the architecture. The machine cannot advance past either without a named human decision written to Firestore. Step through the simulation below to watch the active state update in real time.</p>
+
+  <div class="sm-wrap">
+    <div class="sm-grid" id="sm">
+      <div class="sm-node" data-state="0"><div class="sn-id sans">S0</div><div class="sn-name sans">IDLE</div></div>
+      <div class="sm-node" data-state="1"><div class="sn-id sans">S1</div><div class="sn-name sans">INTAKE</div></div>
+      <div class="sm-node" data-state="2"><div class="sn-id sans">S2</div><div class="sn-name sans">CLAUSE_EXTRACT</div></div>
+      <div class="sm-node" data-state="3"><div class="sn-id sans">S3</div><div class="sn-name sans">RISK_SCORE</div></div>
+      <div class="sm-node" data-state="4"><div class="sn-id sans">S4</div><div class="sn-name sans">REDLINE_DRAFT</div></div>
+      <div class="sm-node hitl-node" data-state="5"><div class="sn-id sans">⏸ HITL-1</div><div class="sn-name sans">HITL_LEGAL</div></div>
+      <div class="sm-node" data-state="6"><div class="sn-id sans">S6</div><div class="sn-name sans">NEGOTIATE</div></div>
+      <div class="sm-node" data-state="7"><div class="sn-id sans">S7</div><div class="sn-name sans">FINAL_REVIEW</div></div>
+      <div class="sm-node hitl-node" data-state="8"><div class="sn-id sans">⏸ HITL-2</div><div class="sn-name sans">HITL_SIGN</div></div>
+      <div class="sm-node" data-state="9"><div class="sn-id sans">S9</div><div class="sn-name sans">EXECUTED</div></div>
+    </div>
+  </div>
+  <div class="sm-legend">
+    <div class="sm-leg-item sans"><div class="sm-leg-swatch active"></div>Current state</div>
+    <div class="sm-leg-item sans"><div class="sm-leg-swatch hitl"></div>HITL checkpoint (taller — first-class state)</div>
+    <div class="sm-leg-item sans"><div class="sm-leg-swatch done"></div>Completed state</div>
+  </div>
+</div>
+
+<!-- §2b DUAL PIPELINE -->
+<div class="section" id="pipeline">
+  <p class="sec-id sans">Agent Architecture · Dual-Pipeline Design</p>
+  <h2 class="sec-h2">Two contracts. <em>One agent.</em><br><strong>Shared HITL checkpoints.</strong></h2>
+  <p class="sec-intro sans">The Contract Agent processes both supplier contracts in parallel. Track A (Medpack SE, 62 pages, standard GTC) and Track B (Sterimäk AG, 94 pages, heavily modified terms) converge at both HITL nodes — Legal reviews clauses from both contracts in a single session, CPO signs both in a single decision. Processing them separately would double HITL overhead and create negotiation timing asymmetry. See ADR-007.</p>
+
+  <div class="pipeline-wrap">
+    <div class="pipe-row trigger">
+      <div class="pipe-row-label sans">Trigger</div>
+      <div class="pipe-full">
+        <div>
+          <div class="pipe-cell-title sans">rfx.awarded — from PG 03 Sourcing / RFx</div>
+          <div class="pipe-cell-sub sans">Medpack SE 62% · €2.1M · Sterimäk AG 38% · €1.3M · 3-year term · CSRD Annex I mandatory · sterile packaging film ISO 11607</div>
+        </div>
+      </div>
+    </div>
+    <div class="pipe-row">
+      <div class="pipe-row-label sans">Parallel tracks</div>
+      <div class="pipe-half track-a">
+        <div class="track-badge a sans">TRACK A</div>
+        <div class="pipe-cell-title sans">Medpack SE — Munich, DE</div>
+        <div class="pipe-cell-sub sans">62 pages · Standard GTC · 8 deviating clauses · liability cap below ClaraVis floor · payment terms non-standard</div>
+      </div>
+      <div class="pipe-half track-b">
+        <div class="track-badge b sans">TRACK B</div>
+        <div class="pipe-cell-title sans">Sterimäk AG — Vienna, AT</div>
+        <div class="pipe-cell-sub sans">94 pages · Heavily modified terms · 23 deviating clauses · CSRD clause absent · IP assignment overbroad · force majeure scope expanded</div>
+      </div>
+    </div>
+    <div class="pipe-row shared">
+      <div class="pipe-row-label sans">Shared pipeline</div>
+      <div class="pipe-full">
+        <div class="pipe-inner-grid">
+          <div class="pipe-inner-cell">
+            <div class="pipe-inner-title sans">CLAUSE_EXTRACT</div>
+            <div class="pipe-inner-sub sans">218 clauses · 9 types · rule-based NLP + ML classifier</div>
+          </div>
+          <div class="pipe-inner-cell">
+            <div class="pipe-inner-title sans">RISK_SCORE</div>
+            <div class="pipe-inner-sub sans">XGBoost v1.4 · 14 high-risk · SHAP to Firestore</div>
+          </div>
+          <div class="pipe-inner-cell">
+            <div class="pipe-inner-title sans">REDLINE_DRAFT</div>
+            <div class="pipe-inner-sub sans">31 redlines · 14 held for HITL · 17 autonomous</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pipe-row hitl-row">
+      <div class="pipe-row-label sans" style="color:var(--amber);">HITL-1</div>
+      <div class="pipe-full">
+        <div>
+          <div class="pipe-cell-title sans">⏸ HITL_LEGAL — Legal Counsel reviews 14 high-risk clauses across both contracts</div>
+          <div class="pipe-cell-sub sans">EU AI Act Art. 14 · 48h SLA · clause-by-clause: approve / modify / accept-as-is · immutable audit record per clause decision</div>
+        </div>
+      </div>
+    </div>
+    <div class="pipe-row shared">
+      <div class="pipe-row-label sans">Negotiate</div>
+      <div class="pipe-full">
+        <div class="pipe-inner-grid">
+          <div class="pipe-inner-cell">
+            <div class="pipe-inner-title sans">NEGOTIATE</div>
+            <div class="pipe-inner-sub sans">Redlines sent to both via Ariba · Medpack 7/8 accept · Sterimäk 19/23 accept · 5 counter-proposals received</div>
+          </div>
+          <div class="pipe-inner-cell">
+            <div class="pipe-inner-title sans">FINAL_REVIEW</div>
+            <div class="pipe-inner-sub sans">Re-score negotiated text · portfolio risk 0.71→0.44 · 2 unresolved clauses flagged (Sterimäk AG)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pipe-row hitl-row">
+      <div class="pipe-row-label sans" style="color:var(--amber);">HITL-2</div>
+      <div class="pipe-full">
+        <div>
+          <div class="pipe-cell-title sans">⏸ HITL_SIGN — CPO executes both contracts · GDPR Art. 22 unconditional</div>
+          <div class="pipe-cell-sub sans">No autonomous execution under any circumstances · 72h SLA · unresolved clause summary + risk delta presented · both contracts signed in single CPO decision</div>
+        </div>
+      </div>
+    </div>
+    <div class="pipe-row output">
+      <div class="pipe-row-label sans">Outputs</div>
+      <div class="pipe-half">
+        <div class="pipe-cell-title sans">SAP Ariba Contract Workspace</div>
+        <div class="pipe-cell-sub sans">Two executed contract records · full clause audit trail attached · renewal triggers set</div>
+      </div>
+      <div class="pipe-half">
+        <div class="pipe-cell-title sans">SAP S/4HANA + Pub/Sub</div>
+        <div class="pipe-cell-sub sans">Both vendor masters activated · <code style="font-size:12px;">contract.executed</code> → PG 05 PO Agent</div>
+      </div>
+    </div>
+  </div>
+  <p style="font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:8px;">Track A — Medpack SE &nbsp;·&nbsp; Track B — Sterimäk AG &nbsp;·&nbsp; Amber rows = HITL checkpoints — human decision required to advance</p>
+</div>
+
+<!-- §3 WORKFLOW SIMULATION -->
+<div class="section" id="workflow">
+  <p class="sec-id sans">Workflow Simulation · Contract Negotiation · ClaraVis Medical Systems GmbH</p>
+  <h2 class="sec-h2">Sterile packaging film — <em>two supplier drafts.</em><br><strong>156 pages. 218 clauses. Two HITL gates.</strong></h2>
+  <p class="sec-intro sans">The Contract Agent works through both supplier drafts simultaneously. Step through each state to see clause extraction output, risk scoring with SHAP, the CSRD clause diff (full text), Legal HITL review with clause-by-clause interface, negotiation tracking, and CPO sign-off.</p>
+
+  <div class="sim-wrap">
+    <div class="sim-progress" id="sim-progress"></div>
+    <div class="sim-panel" id="sim-panel"></div>
+    <div class="sim-controls">
+      <button class="sim-btn sans" id="btn-prev" onclick="simStep(-1)">← Previous</button>
+      <span class="sim-counter sans" id="sim-counter"></span>
+      <button class="sim-btn sans" id="btn-next" onclick="simStep(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- §4 ML MODELS -->
+<div class="section" id="mlmodel">
+  <p class="sec-id sans">ML Model Specifications · Two Models</p>
+  <h2 class="sec-h2">Two models. <em>Different jobs.</em><br><strong>Both auditable. Both explainable.</strong></h2>
+  <p class="sec-intro sans">Clause extraction and clause risk scoring are distinct problems requiring distinct architectures. The extractor is deterministic and classification-only — no SHAP required. The risk scorer is probabilistic and high-stakes — SHAP is mandatory before any HITL presentation.</p>
+
+  <div class="ml-model-heading sans">Model A — Clause Risk Scorer</div>
+  <div class="ml-grid" style="margin-bottom:32px;">
+    <div class="ml-row">
+      <div class="ml-label sans">Model type</div>
+      <div class="ml-val sans"><strong>XGBoost classifier (v1.4)</strong> — trained on 6 years of ClaraVis contract negotiation outcomes. Retrained semi-annually via Vertex AI Pipelines. Deterministic output for identical inputs — required for reproducible audit under EU AI Act Article 13.</div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Input features</div>
+      <div class="ml-val sans">Eight features per clause, all derivable from the extracted clause text and ClaraVis standard playbook:
+        <div class="feat-chips">
+          <span class="feat-chip sans">Clause type</span>
+          <span class="feat-chip sans">Deviation magnitude</span>
+          <span class="feat-chip sans">Jurisdiction flag</span>
+          <span class="feat-chip sans">Liability cap ratio</span>
+          <span class="feat-chip sans">Termination notice days</span>
+          <span class="feat-chip sans">IP assignment breadth</span>
+          <span class="feat-chip sans">CSRD coverage score</span>
+          <span class="feat-chip sans">Force majeure scope</span>
+        </div>
+      </div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Output</div>
+      <div class="ml-val sans"><strong>Risk score 0.0–1.0</strong> per clause, plus 4-dimension breakdown: Financial · Operational · Compliance · IP. SHAP values for all high-risk clauses (≥0.75) written to Firestore <em>before</em> HITL_LEGAL is presented — EU AI Act Article 13 compliance.</div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Thresholds</div>
+      <div class="ml-val sans">
+        <div style="margin-bottom:8px;"><strong style="color:#e08070;">≥ 0.75</strong> — High Risk: HITL_LEGAL mandatory · agent cannot autonomously accept or redline</div>
+        <div style="margin-bottom:8px;"><strong style="color:var(--amber);">0.45–0.74</strong> — Medium: agent redlines autonomously using ClaraVis standard playbook</div>
+        <div><strong style="color:#6aab80;">&lt; 0.45</strong> — Low: agent accepts supplier clause or applies standard playbook substitution</div>
+      </div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">SHAP contract</div>
+      <div class="ml-val sans">Top-2 risk dimensions per high-risk clause rendered as horizontal bars in the Legal HITL interface. Legal Counsel sees <em>why</em> a clause is high-risk — not just the score. This is the EU AI Act Article 13 transparency obligation expressed as a per-clause UX contract, not a post-hoc audit report.</div>
+    </div>
+  </div>
+
+  <div class="ml-model-heading sans">Model B — Clause Extractor</div>
+  <div class="ml-grid">
+    <div class="ml-row">
+      <div class="ml-label sans">Architecture</div>
+      <div class="ml-val sans"><strong>Rule-based NLP + ML classifier hybrid.</strong> Stage 1 (deterministic): rule engine segments both contract documents into clause units using section header patterns, numbered-list markers, and defined-term anchors. Stage 2 (learned): fine-tuned BERT classifier assigns each clause to one of 9 types. See ADR-006.</div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Clause types</div>
+      <div class="ml-val sans">
+        <div class="feat-chips">
+          <span class="feat-chip sans">Liability</span>
+          <span class="feat-chip sans">Termination</span>
+          <span class="feat-chip sans">IP Assignment</span>
+          <span class="feat-chip sans">Payment Terms</span>
+          <span class="feat-chip sans">Confidentiality</span>
+          <span class="feat-chip sans">Force Majeure</span>
+          <span class="feat-chip sans">Compliance / CSRD</span>
+          <span class="feat-chip sans">Warranty</span>
+          <span class="feat-chip sans">Governing Law</span>
+        </div>
+      </div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Explainability</div>
+      <div class="ml-val sans">Classification only — no risk decision, no SHAP required. BERT classifier confidence score written to audit log per clause. Stage 1 rule output is fully deterministic and human-readable: a compliance auditor can re-run it and get identical clause boundaries. This reproducibility is the reason the hybrid was selected over a pure LLM approach.</div>
+    </div>
+    <div class="ml-row">
+      <div class="ml-label sans">Model registry</div>
+      <div class="ml-val sans">Both models stored in <strong>Vertex AI Model Registry</strong> with versioned Model Cards. Every inference log entry references the model version hash — enabling point-in-time audit of any past clause classification or risk score.</div>
+    </div>
+  </div>
+</div>
+
+<!-- §5 HITL SPECIFICATION -->
+<div class="section" id="hitlspec">
+  <p class="sec-id sans">HITL Specification · Two Checkpoints</p>
+  <h2 class="sec-h2">Legal review. <em>Then sign-off.</em><br><strong>No contract executes without a human.</strong></h2>
+  <p class="sec-intro sans">GDPR Article 22 prohibits automated decisions that produce significant legal effects. A contract execution is the definition of such a decision. HITL-2 is therefore unconditional — no risk score, no spend threshold, no clause count can trigger or bypass it.</p>
+
+  <div class="hitl-checkpoint-heading sans">HITL-1 — Legal Clause Review</div>
+  <div class="hitl-spec-grid" style="margin-bottom:36px;">
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Entry condition</div>
+      <div class="hitl-spec-val sans">Any clause risk score <strong>≥ 0.75</strong> (High Risk) OR any clause deviating from mandatory ClaraVis standard terms (CSRD Annex I disclosure, data protection minimum, liability cap floor)</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Routed to</div>
+      <div class="hitl-spec-val sans"><strong>General Counsel / Legal (S-04)</strong> — named approver per legal governance policy. Deputy Counsel if primary unavailable beyond 8 hours.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Presentation contract</div>
+      <div class="hitl-spec-val sans">Original clause text · Agent redline · Risk dimension SHAP bars (top-2 dimensions) · Plain-English justification · ClaraVis playbook reference clause · Supplier track label (A — Medpack SE or B — Sterimäk AG)</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Decision interface</div>
+      <div class="hitl-spec-val sans">Clause-by-clause: <strong>Approve redline</strong> / <strong>Modify redline inline</strong> / <strong>Accept supplier clause as-is</strong> (mandatory justification ≥50 characters). Each decision written to Firestore independently before advancing to the next clause.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Timeout behaviour</div>
+      <div class="hitl-spec-val sans"><strong>48 hours</strong> from routing → escalate to CPO + engage outside counsel. Agent remains paused. No autonomous redline on any timed-out high-risk clause — ever.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Audit record</div>
+      <div class="hitl-spec-val sans"><code style="font-size:12px;">{approver_id, clause_id, timestamp, decision, modified_text, justification, risk_score, shap_ref}</code> → Firestore per clause (immutable append — IAM write-only, no update or delete permitted)</div>
+    </div>
+  </div>
+
+  <div class="hitl-checkpoint-heading sans">HITL-2 — Contract Sign-off</div>
+  <div class="hitl-spec-grid">
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Entry condition</div>
+      <div class="hitl-spec-val sans"><strong>Always — unconditional.</strong> GDPR Article 22 prohibits automated execution of contracts that produce significant legal effects on ClaraVis or its suppliers. No risk score, spend threshold, or clause count overrides this gate under any circumstances.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Routed to</div>
+      <div class="hitl-spec-val sans"><strong>CPO (S-01)</strong> — single approver for both contracts in a single decision session. CFO (S-02) notified (not co-signature required) when combined contract value exceeds €3M.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Presentation contract</div>
+      <div class="hitl-spec-val sans">Final portfolio risk score delta (pre vs post negotiation) · Unresolved clause summary with Legal Counsel recommendation · CSRD Annex I status per supplier · Combined contract value · Supply continuity countdown (days to incumbent contract expiry)</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Decision interface</div>
+      <div class="hitl-spec-val sans"><strong>Execute both contracts</strong> / <strong>Execute Track A only, return Track B to NEGOTIATE</strong> / <strong>Reject both — return to NEGOTIATE</strong>. On Execute: agent writes both contracts to Ariba Contract Workspace, activates both S/4HANA vendor masters, and fires <code style="font-size:12px;">contract.executed</code> to Pub/Sub — all in a single atomic sequence.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Timeout behaviour</div>
+      <div class="hitl-spec-val sans"><strong>72 hours</strong> from routing → escalate to CPO + CFO with supply continuity risk flag (incumbent contract expiry countdown displayed). Agent remains paused. No autonomous execution under timeout.</div>
+    </div>
+    <div class="hitl-spec-row">
+      <div class="hitl-spec-label sans">Audit record</div>
+      <div class="hitl-spec-val sans"><code style="font-size:12px;">{approver_id, timestamp, decision, unresolved_clauses_acknowledged, contract_value_a, contract_value_b, model_version}</code> → Firestore (immutable append)</div>
+    </div>
+  </div>
+</div>
+
+<!-- §6 INTEGRATION POINTS -->
+<div class="section" id="integrations">
+  <p class="sec-id sans">Integration Points</p>
+  <h2 class="sec-h2">What the agent <em>reads.</em> What it <em>writes.</em></h2>
+  <p class="sec-intro sans">The Contract Agent reads supplier drafts and the ClaraVis standard playbook. It writes only on human approval — no Ariba contract record is created, no S/4HANA vendor master is activated, until CPO sign-off is logged in Firestore.</p>
+  <table class="int-table sans">
+    <thead>
+      <tr><th style="width:90px;">Direction</th><th style="width:220px;">System</th><th>Data</th><th style="width:160px;">Protocol</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="int-dir-badge read sans">READ</span></td>
+        <td><div class="sys-name">SAP Ariba Contract Workspace</div><div class="sys-sub">Contract document source</div></td>
+        <td>Supplier draft contracts (PDF/DOCX) · existing contract templates · award metadata from PG 03</td>
+        <td style="font-size:12px;">Ariba Contract API (read scope)</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge read sans">READ</span></td>
+        <td><div class="sys-name">GCP Pub/Sub</div><div class="sys-sub">Event trigger from PG 03</div></td>
+        <td><code style="font-size:12px;">rfx.awarded</code> event payload — supplier IDs, award split, contract value, CSRD status, contract term</td>
+        <td style="font-size:12px;">Pub/Sub subscription</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge read sans">READ</span></td>
+        <td><div class="sys-name">ClaraVis Contract Playbook</div><div class="sys-sub">Standard clause library — Firestore</div></td>
+        <td>Standard clause templates by type · minimum acceptable fallback positions · mandatory CSRD / GDPR clause text · current version: v2.4</td>
+        <td style="font-size:12px;">Firestore SDK (read-only)</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge write sans">WRITE</span></td>
+        <td><div class="sys-name">SAP Ariba Contract Workspace</div><div class="sys-sub">Executed contract records — post HITL-2 only</div></td>
+        <td>Two executed contract records with full negotiated clause text · effective date · renewal triggers · CSRD compliance tier</td>
+        <td style="font-size:12px;">Ariba Contract API (write scope)</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge write sans">WRITE</span></td>
+        <td><div class="sys-name">SAP S/4HANA</div><div class="sys-sub">Vendor master activation — post HITL-2 only</div></td>
+        <td>Vendor master status: Active · contract reference · agreed payment terms · CSRD compliance tier · effective date</td>
+        <td style="font-size:12px;">SAP OData v4 (write scope)</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge write sans">WRITE</span></td>
+        <td><div class="sys-name">Firestore</div><div class="sys-sub">Audit log — immutable append (IAM write-only)</div></td>
+        <td>All clause risk scores · SHAP values per high-risk clause · HITL-1 per-clause decisions · HITL-2 sign-off record · all state transitions with timestamps</td>
+        <td style="font-size:12px;">Firestore SDK (append-only IAM)</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge write sans">WRITE</span></td>
+        <td><div class="sys-name">GCP Pub/Sub</div><div class="sys-sub">Event bus → PG 05 PO Agent</div></td>
+        <td><code style="font-size:12px;">contract.executed</code> — supplier IDs, Ariba contract IDs, effective date, payment terms, CSRD status per supplier</td>
+        <td style="font-size:12px;">Pub/Sub push topic</td>
+      </tr>
+      <tr>
+        <td><span class="int-dir-badge write sans">WRITE</span></td>
+        <td><div class="sys-name">Vertex AI Model Registry</div><div class="sys-sub">Model governance and inference lineage</div></td>
+        <td>Inference log per clause: model version hash · clause_id · risk score · input feature hash · timestamp</td>
+        <td style="font-size:12px;">Vertex AI SDK</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- §7 ADR REFERENCES -->
+<div class="section" id="adrs">
+  <p class="sec-id sans">Architecture Decision Records</p>
+  <h2 class="sec-h2">Every design choice <em>has a record.</em></h2>
+  <p class="sec-intro sans">Four ADRs govern this module. ADR-004 is carried from PG 03 — the same Firestore audit log pattern applies unchanged to every clause decision and HITL record in this module.</p>
+  <div class="adr-grid">
+    <div class="adr-card">
+      <div class="adr-id sans">ADR-004 · Firestore for Audit Log</div>
+      <div class="adr-title sans">Immutable append — carried from PG 03, applies unchanged</div>
+      <div class="adr-body sans">GDPR Article 22 and EU AI Act Article 12 require a complete decision trail for every clause risk inference and every HITL decision. Firestore append-only IAM enforces immutability at infrastructure level — no application code can delete or modify a logged clause decision. Every HITL-1 per-clause decision and the HITL-2 sign-off record are written independently, ensuring a partial review can be audited even if the session is interrupted.</div>
+      <span class="adr-status sans">Status: Accepted</span>
+    </div>
+    <div class="adr-card">
+      <div class="adr-id sans">ADR-006 · Rule-Based NLP + ML Classifier over Pure LLM Extraction</div>
+      <div class="adr-title sans">Determinism and auditability in clause segmentation</div>
+      <div class="adr-body sans">A pure LLM extraction approach produces non-deterministic clause boundaries and classifications — the same document may segment differently across runs. For legal contract analysis, reproducibility is a compliance requirement: a compliance auditor must be able to re-run extraction and get identical clause boundaries and type assignments. The rule-based Stage 1 segmenter is deterministic by construction; Stage 2 BERT classification adds learned signal while maintaining auditability via confidence scores. Alternative rejected: pure LLM extraction (stochastic boundaries, non-reproducible output, no confidence calibration, fails EU AI Act Article 13).</div>
+      <span class="adr-status sans">Status: Accepted</span>
+    </div>
+    <div class="adr-card">
+      <div class="adr-id sans">ADR-007 · Dual-Pipeline with Shared HITL Checkpoints</div>
+      <div class="adr-title sans">Parallel contract tracks — one Legal review session, one CPO sign-off</div>
+      <div class="adr-body sans">Processing Medpack SE and Sterimäk AG contracts sequentially would double HITL overhead and create negotiation timing asymmetry — Sterimäk AG would receive redlines 48+ hours after Medpack SE, creating leverage imbalance between the two suppliers. Parallel processing with shared HITL sessions normalises the negotiation timeline and reduces total calendar time from 28 days to under 8. Alternative rejected: sequential processing (doubles HITL wait time, creates supplier leverage asymmetry, extends total cycle time beyond incumbent contract expiry window).</div>
+      <span class="adr-status sans">Status: Accepted</span>
+    </div>
+    <div class="adr-card">
+      <div class="adr-id sans">ADR-008 · GDPR Art. 22 as Unconditional HITL-2 Trigger</div>
+      <div class="adr-title sans">No spend threshold, no risk score — always human</div>
+      <div class="adr-body sans">GDPR Article 22 prohibits automated decisions that produce legal effects or significantly affect natural persons or legal entities. A contract execution creates binding legal obligations on ClaraVis and the supplier — it is categorically within Article 22's scope regardless of contract value or risk score. HITL-2 is therefore unconditional by legal necessity, not architectural preference. Implementing a score-gated bypass would constitute a GDPR violation regardless of the threshold chosen. Alternative rejected: score-gated HITL-2 allowing autonomous execution of low-risk contracts — rejected as non-compliant with GDPR Article 22, no acceptable threshold exists.</div>
+      <span class="adr-status sans">Status: Accepted</span>
+    </div>
+  </div>
+</div>
+
+<!-- §8 COST & ROI -->
+<div class="section" id="cost">
+  <p class="sec-id sans">Cost &amp; ROI</p>
+  <h2 class="sec-h2">What the Contract Agent <em>costs.</em><br><strong>What it saves. What it returns.</strong></h2>
+  <p class="sec-intro sans">Infrastructure cost per contract pair processed on GCP europe-west3, annual savings from legal review time reduction and outside counsel avoidance at ClaraVis volumes, and combined year-1 ROI. All figures sourced or referenced below.</p>
+
+  <div class="cost-stats">
+    <div class="cost-stat">
+      <div class="cost-num sans">€6.80</div>
+      <div class="cost-label sans">GCP infrastructure cost per contract pair processed</div>
+      <div class="cost-src sans">Cloud Run + Firestore + Vertex AI + Ariba API · <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Pricing Calculator</a></div>
+    </div>
+    <div class="cost-stat">
+      <div class="cost-num sans">€1.1M</div>
+      <div class="cost-label sans">Estimated annual savings — ClaraVis (180 contract pairs/yr)</div>
+      <div class="cost-src sans">Legal time + outside counsel avoidance · <a href="https://www.worldcc.com/Research-Insight/Reports" target="_blank">World Commerce &amp; Contracting, 2024</a></div>
+    </div>
+    <div class="cost-stat">
+      <div class="cost-num sans">904×</div>
+      <div class="cost-label sans">Year-1 ROI — savings ÷ infrastructure cost</div>
+      <div class="cost-src sans">€1,100,000 savings ÷ €1,224 annual infrastructure cost (180 contract pairs)</div>
+    </div>
+  </div>
+
+  <div class="cost-breakdowns">
+    <div class="cost-block">
+      <div class="cost-block-title sans">Infrastructure cost · per 1,000 contract pairs · GCP europe-west3</div>
+      <div class="cost-line"><span class="cost-line-label sans">Cloud Run (agent + NLP pipeline)</span><span class="cost-line-val sans">€2,800</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Firestore (clause + HITL audit log)</span><span class="cost-line-val sans">€600</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Vertex AI (XGBoost clause scoring)</span><span class="cost-line-val sans">€2,200</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Ariba Contract API calls (read/write)</span><span class="cost-line-val sans">€800</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Pub/Sub (event bus)</span><span class="cost-line-val sans">€80</span></div>
+      <div class="cost-line total"><span class="cost-line-label sans">Total per 1,000 contract pairs</span><span class="cost-line-val sans">€6,480</span></div>
+      <div class="cost-line" style="margin-top:6px;"><span class="cost-line-label sans" style="color:var(--faint);">ClaraVis annual (180 pairs)</span><span class="cost-line-val sans" style="font-weight:400;">€1,224</span></div>
+    </div>
+    <div class="cost-block">
+      <div class="cost-block-title sans">Annual savings model · ClaraVis Medical Systems GmbH</div>
+      <div class="cost-line"><span class="cost-line-label sans">Legal review: 14 days → 2 days per pair</span><span class="cost-line-val green sans">+€540,000</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Outside counsel avoidance (high-risk clauses)</span><span class="cost-line-val green sans">+€280,000</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">CSRD clause enforcement (penalty avoidance)</span><span class="cost-line-val green sans">+€180,000</span></div>
+      <div class="cost-line"><span class="cost-line-label sans">Faster execution (supply continuity)</span><span class="cost-line-val green sans">+€100,000</span></div>
+      <div class="cost-line total"><span class="cost-line-label sans">Total annual savings</span><span class="cost-line-val green sans">€1,100,000</span></div>
+      <div class="cost-line" style="margin-top:6px;"><span class="cost-line-label sans" style="color:var(--faint);">Less: infrastructure cost</span><span class="cost-line-val sans" style="font-weight:400;">−€1,224</span></div>
+    </div>
+  </div>
+
+  <div class="roi-note sans">
+    <strong>Methodology.</strong> Legal review savings assume a blended in-house Legal rate of €180,000/year fully loaded, 180 contract pairs/year, and cycle time reduction from 14 days to 2 days per pair — consistent with <a href="https://www.worldcc.com/Research-Insight/Reports" target="_blank">World Commerce &amp; Contracting 2024 benchmarks on AI-assisted contract review</a>. Outside counsel avoidance modelled at €1,600/hour average rate, 3.5 hours average per high-risk clause currently escalated externally, approximately 50 externally-escalated clauses per year at ClaraVis current volumes. CSRD enforcement savings represent estimated regulatory penalty avoidance based on current ClaraVis CSRD exposure and <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32022L2464" target="_blank">EU CSRD penalty provisions (Directive 2022/2464)</a>. Infrastructure on GCP europe-west3 on-demand pricing via <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Pricing Calculator</a>. All figures are indicative estimates.
+  </div>
+</div>
+
+<!-- PAGE NAV -->
+<div class="page-nav">
+  <a class="page-nav-card" href="page-03.html">
+    <div>
+      <div class="page-nav-pg sans">← PG 03</div>
+      <div class="page-nav-title sans">Sourcing / RFx</div>
+      <div class="page-nav-sub sans">Supplier Shortlisting · RFx Agent · HITL Award</div>
+    </div>
+    <span class="page-nav-arrow sans">←</span>
+  </a>
+  <a class="page-nav-card" href="page-05.html">
+    <div>
+      <div class="page-nav-pg sans">PG 05 →</div>
+      <div class="page-nav-title sans">Purchase Order (PO)</div>
+      <div class="page-nav-sub sans">Requisition Intake · Budget Validation · PO Agent · Approval Routing</div>
+    </div>
+    <span class="page-nav-arrow sans">→</span>
+  </a>
+</div>
+
+</main>
+</div>
+
+<div class="footer-bar">
+  <span class="footer-brand sans">The <em>Autonomous</em> <strong>Buyer</strong></span>
+  <div class="footer-links"><a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a></div>
+  <span class="footer-copy sans">© 2026 Siddharth Rao</span>
+</div>
+
+<script>
+const STEPS=[
+  {state:1,title:"Contract intake — two supplier drafts loaded",badge:"INTAKE",badgeClass:"",
+   body:"The Contract Agent receives the rfx.awarded event from PG 03. It pulls both supplier draft contracts from Ariba Contract Workspace. Medpack SE submits a 62-page document using standard GTC. Sterimäk AG submits a 94-page document with heavily modified terms. Both are logged to Firestore and queued for parallel extraction.",
+   data:[
+     {label:"Trigger",val:"<strong>rfx.awarded</strong> — from PG 03 RFx Agent · event_id: RFX-2026-0341-AWARD · received 2026-04-14 16:35 CET"},
+     {label:"Track A",val:"<strong>Medpack SE</strong> — Munich, DE · 62 pages · Standard GTC · PDF/A format · loaded from Ariba Contract Workspace"},
+     {label:"Track B",val:"<strong>Sterimäk AG</strong> — Vienna, AT · 94 pages · Heavily modified terms · DOCX format · loaded from Ariba Contract Workspace"},
+     {label:"Combined",val:"<strong>156 pages</strong> total · both documents logged to Firestore · extraction queued in parallel<span class='ok'>QUEUED</span>"}
+   ]},
+  {state:2,title:"Clause extraction — 218 clauses across both contracts",badge:"CLAUSE_EXTRACT",badgeClass:"",
+   body:"The rule-based NLP segmenter tokenises both documents using section header patterns, numbered-list markers, and defined-term anchors. The fine-tuned BERT classifier assigns each clause to one of 9 types. 218 clauses total — 87 from Medpack SE, 131 from Sterimäk AG. Average classifier confidence: 0.91.",
+   data:[
+     {label:"Stage 1 — Rules",val:"Deterministic segmenter · section headers + numbered lists + defined-term anchors · 218 clause units extracted · reproducible output"},
+     {label:"Stage 2 — BERT",val:"Fine-tuned classifier · 9 clause types · confidence score per clause · average confidence: 0.91 · 3 low-confidence flagged for manual review"},
+     {label:"Track A breakdown",val:"Medpack SE: <strong>87 clauses</strong> · Liability 12 · Payment 18 · IP 8 · Termination 9 · CSRD 3 · Other 37"},
+     {label:"Track B breakdown",val:"Sterimäk AG: <strong>131 clauses</strong> · Liability 19 · Payment 22 · IP 14 · Force Majeure 11 · CSRD 4 · Other 61"},
+     {label:"Written to",val:"Firestore <code>contract/CNT-2026-0341/clauses/</code> — 218 entries with type classification + confidence score<span class='ok'>LOGGED</span>"}
+   ]},
+  {state:3,title:"Risk scoring — XGBoost across all 218 clauses",badge:"RISK_SCORE",badgeClass:"",
+   body:"XGBoost (v1.4) scores all 218 clauses across 4 risk dimensions — Financial, Operational, Compliance, IP. 14 clauses score ≥0.75 (High Risk): 8 from Medpack SE, 6 from Sterimäk AG. SHAP values are written to Firestore for all 14 high-risk clauses before any redline is drafted.",
+   data:[
+     {label:"Model",val:"<strong>XGBoost v1.4</strong> · Vertex AI endpoint · avg 12ms per clause · 218 clauses scored in 2.6s total"},
+     {label:"High Risk (≥0.75)",val:"<strong>14 clauses</strong> — 8 Medpack SE · 6 Sterimäk AG · HITL_LEGAL mandatory for all 14<span class='flag'>HITL REQUIRED</span>"},
+     {label:"Medium (0.45–0.74)",val:"<strong>47 clauses</strong> — agent will redline autonomously using ClaraVis standard playbook v2.4"},
+     {label:"Low (&lt;0.45)",val:"<strong>157 clauses</strong> — agent accepts or applies standard playbook substitution"},
+     {label:"SHAP written",val:"14 SHAP records → Firestore <code>contract/CNT-2026-0341/shap/</code> · written before any redline is generated<span class='ok'>WRITTEN</span>"}
+   ],
+   shap:{label:"SHAP output — highest risk clause: Sterimäk AG §14.3 CSRD Disclosure (score: 0.93)",rows:[
+     {feat:"CSRD coverage score",val:"+0.61",pct:95,pos:true},
+     {feat:"Deviation magnitude",val:"+0.19",pct:45,pos:true},
+     {feat:"Compliance dimension",val:"+0.08",pct:20,pos:true},
+     {feat:"Jurisdiction flag",val:"+0.05",pct:13,pos:false}
+   ]}},
+  {state:4,title:"Redline draft — CSRD clause · Sterimäk AG §14.3",badge:"REDLINE_DRAFT",badgeClass:"",
+   body:"Sterimäk AG's §14.3 omits the mandatory CSRD Annex I disclosure obligation entirely — the highest-risk clause in either contract (score: 0.93). The agent drafts a mandatory redline reinstating the full ClaraVis standard CSRD clause. Because this clause scores above 0.75, the redline is held for HITL_LEGAL and will not be sent to the supplier until Legal approves.",
+   clauseDiff:true,
+   data:[
+     {label:"Track B deviations",val:"<strong>23 deviating clauses</strong> — Sterimäk AG · 6 scored High Risk (≥0.75) · held for HITL_LEGAL"},
+     {label:"Track A deviations",val:"<strong>8 deviating clauses</strong> — Medpack SE · all 8 scored High Risk · liability cap below floor · payment terms non-standard"},
+     {label:"Autonomous redlines",val:"<strong>17 clauses</strong> (Medium risk, 0.45–0.74) — agent applies playbook redlines · no HITL required"},
+     {label:"HITL-held redlines",val:"<strong>14 clauses</strong> (High Risk) — queued for Legal review · no supplier contact until all 14 are approved"}
+   ]},
+  {state:5,title:"⏸ HITL-1 — Legal Counsel reviews 14 high-risk clauses",badge:"HITL_LEGAL",badgeClass:"hitl",
+   hitl:true,hitlType:1,
+   body:"Legal Counsel receives a single review session covering all 14 high-risk clauses from both contracts — 8 from Medpack SE, 6 from Sterimäk AG. Each clause is presented with original text, agent redline, SHAP risk dimension bars, and ClaraVis playbook reference. Legal decides clause-by-clause. Each decision is written to Firestore independently.",
+   hitlReason:"Trigger: 14 clauses scored ≥0.75 (High Risk). EU AI Act Art. 14 — agent cannot autonomously redline high-risk legal clauses. GDPR Art. 22 — contract terms directly create or modify significant legal obligations.",
+   data:[
+     {label:"Routed to",val:"<strong>General Counsel / Legal (S-04)</strong> — named approver per legal governance policy"},
+     {label:"Session scope",val:"14 clauses · 8 Track A (Medpack SE) · 6 Track B (Sterimäk AG) · single review session covering both contracts"},
+     {label:"SLA",val:"48 hours to complete all 14 clause decisions · 48h+ → escalate to CPO + outside counsel engagement"},
+     {label:"Agent state",val:"HITL_LEGAL — machine paused · no redlines sent to suppliers · no supplier contact · no autonomous action"}
+   ]},
+  {state:6,title:"Legal approved — redlines sent to both suppliers",badge:"NEGOTIATE",badgeClass:"",
+   body:"Legal Counsel approves 12 of 14 redlines and modifies 2 (reducing the CSRD clause from full Annex I disclosure to Annex I summary — a permissible fallback position in the ClaraVis playbook). All 31 redlines are transmitted to both suppliers via Ariba. Response tracking begins on both tracks simultaneously.",
+   data:[
+     {label:"Legal decisions",val:"Approved: <strong>12/14</strong> · Modified: <strong>2/14</strong> (CSRD clause — Annex I summary fallback accepted) · Accepted as-is: 0"},
+     {label:"Total redlines sent",val:"<strong>31 redlines</strong> — 14 Legal-approved + 17 autonomous · transmitted via Ariba sourcing message to both suppliers simultaneously"},
+     {label:"Track A response",val:"Medpack SE: <strong>7/8 accepted</strong> · 1 counter-proposal — payment terms net-60 → net-45 (within playbook tolerance)"},
+     {label:"Track B response",val:"Sterimäk AG: <strong>19/23 accepted</strong> · 4 counter-proposals — force majeure scope · 2 IP clauses · net-30 terms"},
+     {label:"Agent evaluation",val:"5 counter-proposals evaluated against playbook · 3 within acceptable range (accepted) · 2 above threshold — flagged for Final Review"}
+   ]},
+  {state:7,title:"Final review — risk re-scored · 2 unresolved clauses",badge:"FINAL_REVIEW",badgeClass:"",
+   body:"The agent re-scores all negotiated clause text. Portfolio risk drops from 0.71 to 0.44 — a 38% reduction through negotiation. Two Sterimäk AG counter-proposals remain above the preferred threshold but below 0.75: force majeure scope (score 0.61) and one IP assignment clause (score 0.58). Both are flagged in the CPO's HITL-2 brief with the Legal Counsel recommendation.",
+   data:[
+     {label:"Risk delta",val:"Portfolio risk score: <strong>0.71 → 0.44</strong> · 38% reduction through negotiation · 216/218 clauses fully resolved"},
+     {label:"Unresolved",val:"<strong>2 clauses — Sterimäk AG</strong> · force majeure scope (0.61) · IP assignment (0.58) · both below 0.75 but above preferred threshold<span class='warn'>FLAGGED</span>"},
+     {label:"Legal recommendation",val:"'Both remaining clauses within ClaraVis risk tolerance. Recommend proceeding to CPO sign-off and monitoring at 6-month supplier review.' — General Counsel"},
+     {label:"CSRD status",val:"Sterimäk AG: CSRD Annex I summary accepted · GDPR data processing clause agreed · Both suppliers CSRD-compliant<span class='ok'>COMPLIANT</span>"},
+     {label:"Written to",val:"Firestore <code>contract/CNT-2026-0341/final_review</code> · full re-score · unresolved clause refs · Legal recommendation<span class='ok'>LOGGED</span>"}
+   ]},
+  {state:8,title:"⏸ HITL-2 — CPO sign-off · GDPR Art. 22 unconditional",badge:"HITL_SIGN",badgeClass:"hitl",
+   hitl:true,hitlType:2,
+   body:"GDPR Article 22 prohibits autonomous contract execution. The CPO reviews the final negotiated contracts, the risk delta (0.71→0.44), the 2 unresolved clause flags with Legal's recommendation, and the supply continuity countdown. Both contracts require a single CPO decision. No contract record is written to Ariba until this decision is logged to Firestore.",
+   hitlReason:"Trigger: unconditional — GDPR Art. 22 prohibits automated execution of contracts with significant legal effect. No score, spend threshold, or clause count overrides this gate.",
+   data:[
+     {label:"Routed to",val:"<strong>CPO (S-01)</strong> · CFO (S-02) notified — combined value €3.4M exceeds €3M notification threshold"},
+     {label:"Presented",val:"Risk delta 0.71→0.44 · 2 unresolved clauses with Legal recommendation · CSRD status both suppliers · 33 days to incumbent contract expiry"},
+     {label:"SLA",val:"72 hours · 72h+ → CPO + CFO escalation with supply continuity risk flag (33-day countdown visible)"},
+     {label:"Agent state",val:"HITL_SIGN — machine paused · no Ariba contract record · no S/4HANA activation · no supplier notification · no autonomous action"}
+   ]},
+  {state:9,title:"Both contracts executed — PG 05 PO Agent notified",badge:"EXECUTED",badgeClass:"done-badge",
+   body:"CPO approves both contracts, accepting the Legal Counsel recommendation on the 2 unresolved clauses. The agent simultaneously creates both executed contract records in Ariba Contract Workspace, activates both supplier vendor masters in SAP S/4HANA, and fires contract.executed to Pub/Sub. PG 05 PO Agent receives the event and is ready to raise purchase orders against both contracts.",
+   data:[
+     {label:"CPO decision",val:"<strong>'Execute both contracts. Legal recommendation accepted. Supply continuity requires immediate activation.'</strong> — CPO (S-01), 2026-04-14 16:32 CET"},
+     {label:"Ariba — Track A",val:"Contract CNT-2026-0341-A · Medpack SE · €2.1M · 3-year term · executed · effective 2026-05-01<span class='ok'>CREATED</span>"},
+     {label:"Ariba — Track B",val:"Contract CNT-2026-0341-B · Sterimäk AG · €1.3M · 3-year term · executed · effective 2026-05-01<span class='ok'>CREATED</span>"},
+     {label:"S/4HANA",val:"Both vendor masters activated · payment terms confirmed · CSRD tier recorded · effective date set<span class='ok'>ACTIVATED</span>"},
+     {label:"Event fired",val:"<code>contract.executed</code> → Pub/Sub topic <code>ab.contract.events</code> · PG 05 PO Agent notified · both supplier IDs + contract IDs in payload<span class='ok'>FIRED</span>"},
+     {label:"Audit record",val:"Final audit entry written · complete decision trail from rfx.awarded through HITL-1 (14 clauses) + HITL-2 sign-off · immutable · queryable<span class='ok'>COMPLETE</span>"}
+   ]}
+];
+
+const stateMap=[1,2,3,4,5,6,7,8,9];
+let cur=0;
+
+function buildProgress(){
+  document.getElementById('sim-progress').innerHTML=
+    STEPS.map((_,i)=>`<div class="sim-step-dot" id="dot-${i}"></div>`).join('');
+}
+
+function updateProgress(){
+  STEPS.forEach((_,i)=>{
+    const d=document.getElementById('dot-'+i);
+    d.className='sim-step-dot';
+    if(i<cur) d.classList.add('done-dot');
+    else if(i===cur) d.classList.add(STEPS[i].hitl?'hitl-dot':'active-dot');
+  });
+}
+
+function updateSM(){
+  const s=stateMap[Math.min(cur,stateMap.length-1)];
+  document.querySelectorAll('.sm-node').forEach(n=>{
+    const ns=parseInt(n.dataset.state);
+    n.classList.remove('active','done');
+    if(ns===s) n.classList.add('active');
+    else if(ns<s) n.classList.add('done');
+  });
+}
+
+function dataRows(data){
+  return`<div class="sim-data">${data.map(r=>`
+    <div class="sim-data-row">
+      <div class="sim-data-label sans">${r.label}</div>
+      <div class="sim-data-val sans">${r.val}</div>
+    </div>`).join('')}</div>`;
+}
+
+function shapBars(shap){
+  if(!shap)return'';
+  return`<div class="shap-wrap">
+    <div class="shap-label sans">${shap.label}</div>
+    ${shap.rows.map(r=>`
+    <div class="shap-row">
+      <div class="shap-feat sans">${r.feat}</div>
+      <div class="shap-bar-bg"><div class="shap-bar-fill ${r.pos?'pos':'low'}" style="width:${r.pct}%"></div></div>
+      <div class="shap-val sans">${r.val}</div>
+    </div>`).join('')}
+  </div>`;
+}
+
+function clauseDiff(){
+  return`<div class="clause-diff">
+    <div class="clause-diff-header sans">Clause diff — Sterimäk AG §14.3 CSRD Disclosure Obligation · Risk score: 0.93 · Compliance dimension: 0.61</div>
+    <div class="clause-diff-grid">
+      <div class="clause-col">
+        <div class="clause-col-head original sans">Original — Sterimäk AG §14.3</div>
+        <div class="clause-text sans">The Supplier shall maintain internal environmental and social governance policies consistent with applicable law. <del>Annual reporting on supply chain sustainability shall be provided upon written request by ClaraVis, at the Supplier's discretion.</del></div>
+      </div>
+      <div class="clause-col">
+        <div class="clause-col-head redline sans">Agent Redline — ClaraVis Standard §14.3</div>
+        <div class="clause-text sans">The Supplier shall maintain internal environmental and social governance policies consistent with applicable law. <ins>The Supplier shall provide ClaraVis with a complete CSRD Annex I disclosure report within thirty (30) days of contract execution and annually thereafter, as a mandatory condition of continued supply. Failure to provide such disclosure shall constitute a material breach entitling ClaraVis to terminate this agreement with immediate effect.</ins></div>
+      </div>
+    </div>
+    <div class="clause-justification sans">
+      <strong>Agent justification:</strong> Sterimäk AG's original §14.3 replaces ClaraVis's mandatory CSRD Annex I disclosure requirement with a discretionary, request-based reporting obligation. This directly violates ClaraVis's obligations under EU Regulation 2022/2464 (CSRD) and the supply chain due diligence requirements of LkSG §3. The redline reinstates the mandatory annual disclosure with a 30-day execution trigger and defines non-compliance as material breach enabling immediate termination — consistent with ClaraVis Contract Playbook §14 (v2.4). SHAP risk dimensions: Compliance 0.61 · Deviation magnitude 0.19 · Operational 0.08 · Jurisdiction 0.05.
+    </div>
+  </div>`;
+}
+
+function hitlPanel(step){
+  if(!step.hitl)return'';
+  const t=step.hitlType;
+  const legalClauses=`
+    <div style="margin-bottom:10px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);">Sample of queued clauses — Legal reviews all 14 clause-by-clause</div>
+    <div class="hitl-clause-row">
+      <div class="hitl-clause-id sans">Sterimäk AG §14.3 · CSRD Disclosure</div>
+      <div class="hitl-clause-risk sans">0.93 · Compliance</div>
+      <div class="hitl-clause-btns"><button class="hitl-clause-btn approve sans">✓ Approve</button><button class="hitl-clause-btn sans">Modify</button></div>
+    </div>
+    <div class="hitl-clause-row">
+      <div class="hitl-clause-id sans">Sterimäk AG §8.1 · IP Assignment</div>
+      <div class="hitl-clause-risk sans">0.81 · IP / Financial</div>
+      <div class="hitl-clause-btns"><button class="hitl-clause-btn approve sans">✓ Approve</button><button class="hitl-clause-btn sans">Modify</button></div>
+    </div>
+    <div class="hitl-clause-row">
+      <div class="hitl-clause-id sans">Medpack SE §6.2 · Liability Cap</div>
+      <div class="hitl-clause-risk sans">0.78 · Financial</div>
+      <div class="hitl-clause-btns"><button class="hitl-clause-btn approve sans">✓ Approve</button><button class="hitl-clause-btn sans">Modify</button></div>
+    </div>
+    <div class="hitl-clause-row">
+      <div class="hitl-clause-id sans">Medpack SE §11.4 · Termination Notice</div>
+      <div class="hitl-clause-risk sans">0.76 · Operational</div>
+      <div class="hitl-clause-btns"><button class="hitl-clause-btn approve sans">✓ Approve</button><button class="hitl-clause-btn sans">Modify</button></div>
+    </div>`;
+  const signPanel=`
+    <div class="sign-stats">
+      <div class="sign-stat"><div class="sign-stat-label sans">Portfolio risk delta</div><div class="sign-stat-val sans" style="color:#6aab80;">0.71 → 0.44</div></div>
+      <div class="sign-stat"><div class="sign-stat-label sans">Unresolved clauses</div><div class="sign-stat-val sans" style="color:var(--amber);">2 <span style="font-size:13px;font-weight:400;">flagged</span></div></div>
+      <div class="sign-stat" style="border-top:1px solid var(--border);"><div class="sign-stat-label sans">Combined contract value</div><div class="sign-stat-val sans">€3.4M</div></div>
+      <div class="sign-stat" style="border-top:1px solid var(--border);"><div class="sign-stat-label sans">Supply continuity</div><div class="sign-stat-val sans" style="color:#e08070;">33 days</div></div>
+    </div>`;
+  return`<div class="hitl-panel">
+    <div class="hitl-header">
+      <span class="hitl-label sans">⏸ ${t===1?'HITL-1 — Legal Clause Review':'HITL-2 — Contract Sign-off'}</span>
+      <span class="hitl-article sans">${t===1?'EU AI Act Art. 14':'GDPR Art. 22 — unconditional'}</span>
+    </div>
+    <div class="hitl-reason sans">${step.hitlReason}</div>
+    <div class="hitl-body sans">${t===1
+      ?'Review each high-risk clause. Approve the agent redline, modify it inline, or accept the supplier clause with mandatory justification. Each decision is written to Firestore independently before moving to the next clause. The agent cannot send any redlines to suppliers until all 14 clauses are actioned.'
+      :'Review the final negotiated contracts, the risk delta, and the unresolved clause flags. Legal Counsel recommends proceeding with both. Execute both contracts, execute Track A only, or return both to negotiation.'
+    }</div>
+    ${t===1?legalClauses:signPanel}
+    <div class="hitl-actions">
+      ${t===1
+        ?`<button class="hitl-btn approve sans" onclick="hitlApprove()">✓ Complete legal review</button><button class="hitl-btn sans">Request outside counsel</button>`
+        :`<button class="hitl-btn approve sans" onclick="hitlApprove()">✓ Execute both contracts</button><button class="hitl-btn sans">Execute Track A only</button><button class="hitl-btn reject sans">Return to negotiation</button>`
+      }
+    </div>
+    <div class="hitl-timeout sans">Timeout: ${t===1?'48h → CPO + outside counsel engagement · agent remains paused':'72h → CPO + CFO escalation with supply continuity risk flag · 33 days to incumbent contract expiry'}</div>
+  </div>`;
+}
+
+function render(){
+  const step=STEPS[cur];
+  document.getElementById('sim-panel').innerHTML=`
+    <div class="sim-meta">
+      <span class="sim-step-num sans">Step ${cur+1} of ${STEPS.length}</span>
+      <span class="sim-state-badge ${step.badgeClass} sans">${step.badge}</span>
+    </div>
+    <div class="sim-title sans">${step.title}</div>
+    <div class="sim-body sans">${step.body}</div>
+    ${step.hitl?hitlPanel(step):''}
+    ${step.clauseDiff?clauseDiff():''}
+    ${step.data?dataRows(step.data):''}
+    ${step.shap?shapBars(step.shap):''}
+  `;
+  document.getElementById('sim-counter').textContent=`Step ${cur+1} / ${STEPS.length}`;
+  document.getElementById('btn-prev').disabled=cur===0;
+  document.getElementById('btn-next').disabled=cur===STEPS.length-1;
+  updateProgress();
+  updateSM();
+}
+
+function simStep(d){cur=Math.max(0,Math.min(STEPS.length-1,cur+d));render();}
+function hitlApprove(){simStep(1);}
+
+buildProgress();
+render();
+
+/* Sidebar scroll tracking */
+const sections=['hero','statemachine','pipeline','workflow','mlmodel','hitlspec','integrations','adrs','cost'];
+window.addEventListener('scroll',()=>{
+  let a=sections[0];
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<120)a=id;
+  });
+  document.querySelectorAll('.sb-links a').forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('href')==='#'+a);
+  });
+},{passive:true});
+</script>
+</body>
+</html>
