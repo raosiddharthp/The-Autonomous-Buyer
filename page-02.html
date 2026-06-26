@@ -3,416 +3,536 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ClaraVis Procurement Brief — The Autonomous Buyer</title>
+<title>ClaraVis Procurement Brief — The Autonomous Procure-to-Pay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg:#0a0a0a;--bg2:#111111;--bg3:#161616;--bg4:#1a1a1a;
-    --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-    --text:#e8e6df;--muted:#888780;--faint:rgba(136,135,128,0.5);
-    --high:rgba(220,80,60,0.12);--mod:rgba(180,140,60,0.12);--low:rgba(60,120,80,0.10);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  body{background:var(--bg);color:var(--text);font-family:'Georgia','Times New Roman',serif;font-size:16px;line-height:1.65;}
-  .sans{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
-  a{color:var(--muted);text-decoration:none;}
-  a:hover{color:var(--text);}
+:root {
+  --bg: #fafaf8; --bg2: #f2f0eb; --bg3: #e8e5de;
+  --text: #1a1917; --text2: #5a5852; --text3: #8a8880;
+  --border: #d8d5ce; --border2: #c8c5be;
+  --amber: #b07010; --amber-bg: #fdf4e3; --amber-border: #e8c870;
+  --teal: #0a6b52; --teal-bg: #e8f5f0; --teal-border: #80c8b0;
+  --purple: #4a40b0; --purple-bg: #f0effe; --purple-border: #b0a8e8;
+  --coral: #b03820; --coral-bg: #fdf0ec; --coral-border: #e8a090;
+  --blue: #1850a0; --blue-bg: #eaf2fe; --blue-border: #90b8e8;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Inter', system-ui, sans-serif;
+  --r: 6px; --r-lg: 10px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; }
 
-  nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);z-index:100;gap:16px;}
-  .nav-back{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);white-space:nowrap;}
-  .nav-trail{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-  .nav-trail strong{color:var(--text);}
-  .nav-links-right{display:flex;gap:20px;flex-shrink:0;}
-  .nav-links-right a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-  .nav-links-right a:hover{color:var(--text);}
+.page-wrap { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
-  .layout{display:grid;grid-template-columns:200px 1fr;max-width:1100px;margin:0 auto;}
-  .sidebar{padding:48px 0 80px 40px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;}
-  .sidebar-links{display:flex;flex-direction:column;gap:4px;}
-  .sidebar-links a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);padding:6px 0;border-left:2px solid var(--border);padding-left:12px;transition:all 0.15s;}
-  .sidebar-links a:hover{color:var(--text);border-left-color:var(--border2);}
-  .content{padding:60px 40px 80px;border-left:1px solid var(--border);}
+/* SIDEBAR */
+.sidebar {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  background: var(--bg2); border-right: 1px solid var(--border);
+  padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 0;
+}
+.sidebar-logo { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.25rem; }
+.sidebar-project { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 2rem; line-height: 1.2; }
+.sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.sidebar-nav a { display: block; font-size: 12px; color: var(--text2); text-decoration: none; padding: 6px 10px; border-radius: var(--r); transition: background 0.15s, color 0.15s; }
+.sidebar-nav a:hover { background: var(--bg3); color: var(--text); }
+.sidebar-nav a.active { background: var(--text); color: var(--bg); }
+.sidebar-divider { height: 1px; background: var(--border); margin: 1rem 0; }
 
-  .page-eyebrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-  .page-title{font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;margin-bottom:20px;}
-  .page-title strong{font-weight:600;}
-  .page-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:36px;}
-  .hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
-  .htag{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.04em;}
-  .hero-adrs{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);margin-top:8px;}
+.stack-block { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.stack-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 0.75rem; }
+.stack-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.stack-tag { font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; background: var(--bg3); border-radius: 4px; color: var(--text2); line-height: 1.3; border: 1px solid var(--border); }
 
-  .section{border-top:1px solid var(--border);padding:64px 0 0;}
-  .sec-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
-  .sec-h2{font-size:clamp(20px,3vw,30px);font-weight:400;line-height:1.2;letter-spacing:-0.02em;margin-bottom:20px;}
-  .sec-h2 em{font-style:italic;}
-  .sec-h2 strong{font-weight:600;}
-  .sec-intro{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--muted);line-height:1.7;max-width:640px;margin-bottom:40px;}
+/* MAIN */
+.main { padding: 0; min-width: 0; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 2.5rem; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: rgba(250,250,248,0.95); backdrop-filter: blur(8px); z-index: 100;
+}
+.topbar-breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.topbar-breadcrumb a { color: var(--text3); text-decoration: none; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; background: var(--bg3); border-radius: 99px; color: var(--text2); border: 1px solid var(--border); }
 
-  .canonical-box{border:1px solid var(--border2);padding:24px;margin-bottom:32px;background:var(--bg3);}
-  .canonical-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
-  .canonical-text{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;line-height:1.7;color:var(--text);}
-  .canonical-text strong{font-weight:600;}
-  .canonical-adr{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:10px;}
+/* CONTENT */
+.content { padding: 3rem 2.5rem 5rem; max-width: 860px; margin: 0 auto; }
 
-  .domains{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-  .domain{background:var(--bg);padding:24px 28px;display:grid;grid-template-columns:140px 1fr;gap:24px;}
-  .domain-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding-top:2px;line-height:1.6;}
-  .domain-badge{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:8px;}
-  .domain-body h3{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;margin-bottom:8px;}
-  .domain-body p{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.7;}
+/* HEADER */
+.doc-header { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.doc-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+.doc-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.doc-title { font-family: var(--serif); font-size: clamp(24px, 3.5vw, 36px); font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; color: var(--text); margin-bottom: 1.5rem; }
+.doc-title em { font-style: italic; color: var(--teal); font-family: var(--serif); }
+.doc-title strong { font-weight: 600; }
+.page-desc { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 2rem; }
 
-  .int-diagram{display:flex;align-items:stretch;justify-content:center;gap:0;margin:32px 0;overflow-x:auto;}
-  .int-node{background:var(--bg3);border:1px solid var(--border2);padding:16px 20px;text-align:center;width:140px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;}
-  .int-node .int-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:4px;}
-  .int-node .int-role{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);margin-bottom:4px;}
-  .int-node .int-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--faint);}
-  .int-connector{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 6px;flex-shrink:0;}
-  .int-connector .arr{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:16px;color:var(--faint);line-height:1;}
-  .int-connector .arr-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--faint);white-space:nowrap;margin-top:4px;text-align:center;}
+/* HERO TAGS */
+.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.htag { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border: 1px solid var(--border2); border-radius: 99px; color: var(--text3); background: white; }
+.hero-adrs { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 0.5rem; }
 
-  .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
-  .profile-cell{background:var(--bg);padding:20px 24px;}
-  .profile-key{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:6px;}
-  .profile-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--text);line-height:1.5;}
-  .reg-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
-  .reg-row{background:var(--bg);padding:16px 24px;display:grid;grid-template-columns:180px 1fr auto;gap:16px;align-items:start;}
-  .reg-name{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:500;color:var(--text);}
-  .reg-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);}
-  .reg-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.6;}
-  .risk-badge{display:inline-block;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 10px;letter-spacing:0.04em;white-space:nowrap;}
-  .risk-high{background:var(--high);color:#e08070;border:1px solid rgba(220,80,60,0.2);}
-  .risk-mod{background:var(--mod);color:#c0a060;border:1px solid rgba(180,140,60,0.2);}
-  .risk-low{background:var(--low);color:#70a880;border:1px solid rgba(60,120,80,0.2);}
-  .systems-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-  .sys-row{background:var(--bg);padding:20px 24px;display:grid;grid-template-columns:100px 160px 1fr;gap:20px;align-items:start;}
-  .sys-status{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 8px;border:1px solid var(--border2);color:var(--muted);width:fit-content;}
-  .sys-name{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:500;margin-bottom:3px;}
-  .sys-role{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);}
-  .sys-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:6px;}
-  .sys-note{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);font-style:italic;}
+/* SECTIONS */
+.section { margin-bottom: 4.5rem; scroll-margin-top: 70px; }
+.sec-id { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+.sec-id::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sec-h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 1.5rem; }
+.sec-h2 em { font-style: italic; color: var(--teal); font-family: var(--serif); }
+.sec-h2 strong { font-weight: 600; }
+.sec-intro { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 1.5rem; }
 
-  .stakeholders{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-  .sh{background:var(--bg);padding:28px;display:grid;grid-template-columns:180px 1fr;gap:28px;}
-  .sh-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .sh-role{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;margin-bottom:4px;}
-  .sh-dept{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);}
-  .sh-concern-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .sh-concern{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:14px;}
-  .sh-q-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .sh-q{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--text);line-height:1.6;margin-bottom:14px;font-style:italic;}
-  .sh-modules{display:flex;flex-wrap:wrap;gap:6px;}
-  .sh-mod{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 8px;border:1px solid var(--border2);color:var(--muted);}
+/* CANONICAL BOX / CALLOUT */
+.canonical-box { border-left: 2px solid var(--border2); padding: 1rem 1.25rem; margin: 1.5rem 0; background: var(--bg2); }
+.canonical-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 4px; }
+.canonical-text { font-size: 13.5px; line-height: 1.65; color: var(--text2); }
+.canonical-text strong { color: var(--text); font-weight: 500; }
+.canonical-adr { font-family: var(--mono); font-size: 10.5px; color: var(--text3); margin-top: 0.5rem; }
 
-  .diagram-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:500;margin-bottom:6px;}
-  .diagram-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:16px;}
-  .diagram-legend{display:flex;gap:20px;flex-wrap:wrap;margin-bottom:16px;}
-  .leg-item{display:flex;align-items:center;gap:6px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);}
-  .leg-dot{width:10px;height:10px;flex-shrink:0;}
-  .cycle-stat{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:500;color:#c0a060;text-align:right;margin-bottom:8px;}
+/* DOMAINS GRID */
+.domains { display: flex; flex-direction: column; gap: 12px; margin: 2rem 0; }
+.domain { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; display: grid; grid-template-columns: 160px 1fr; gap: 2rem; }
+.domain-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 4px; }
+.domain-badge { font-family: var(--mono); font-size: 10.5px; color: var(--amber); font-weight: 500; line-height: 1.4; }
+.domain-body h3 { font-family: var(--serif); font-size: 18px; font-weight: 400; color: var(--text); margin-bottom: 0.5rem; }
+.domain-body p { font-size: 13.5px; color: var(--text2); line-height: 1.65; }
 
-  .asis-stream{border:1px solid var(--border);margin-bottom:16px;overflow-x:auto;}
-  .stream-lane-row{display:flex;align-items:stretch;min-width:700px;}
-  .lane-label{width:88px;min-width:88px;flex-shrink:0;background:var(--bg3);border-right:1px solid var(--border);padding:12px 10px;display:flex;align-items:center;}
-  .lane-label span{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);line-height:1.4;}
-  .lane-steps{display:flex;align-items:center;padding:16px 12px;gap:0;flex:1;}
+/* INTEGRATION DIAGRAM */
+.int-diagram { display: flex; align-items: stretch; justify-content: center; gap: 0; margin: 2rem 0; overflow-x: auto; padding-bottom: 10px; }
+.int-node { background: white; border: 1px solid var(--border); border-radius: var(--r); padding: 14px 18px; text-align: center; width: 150px; flex-shrink: 0; display: flex; flex-direction: column; justify-content: center; }
+.int-node .int-label { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.int-node .int-role { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
+.int-node .int-sub { font-size: 11px; color: var(--text2); line-height: 1.3; }
+.int-connector { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 10px; flex-shrink: 0; }
+.int-connector .arr { font-size: 16px; color: var(--text3); line-height: 1; }
+.int-connector .arr-label { font-family: var(--mono); font-size: 9.5px; color: var(--text3); white-space: nowrap; margin-top: 4px; text-align: center; line-height: 1.2; }
 
-  .step-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;}
-  .step-box{width:88px;height:72px;border:1px solid var(--border2);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 6px;text-align:center;}
-  .step-box .sn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;font-weight:500;line-height:1.3;margin-bottom:4px;color:var(--text);}
-  .step-box .ss{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;color:var(--muted);line-height:1.3;}
-  .step-delay{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;color:#c0a060;margin-top:5px;text-align:center;height:14px;}
-  .step-arrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);padding:0 6px;flex-shrink:0;align-self:center;margin-bottom:14px;}
+/* PROFILE GRID */
+.profile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; margin: 0 0 2.5rem; }
+.profile-cell { padding: 1.25rem 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); background: white; }
+.profile-key { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+.profile-val { font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--text); line-height: 1.2; }
+.profile-val strong { font-weight: 600; }
 
-  .sb-ariba{border-color:rgba(50,150,255,0.35);background:rgba(50,120,200,0.07);}
-  .sb-sap{border-color:rgba(60,180,100,0.35);background:rgba(60,160,80,0.07);}
-  .sb-manual{border-color:rgba(220,80,60,0.35);background:rgba(220,80,60,0.07);}
-  .sb-legacy{border-color:rgba(180,140,60,0.35);background:rgba(180,140,60,0.07);}
+/* REGULATORY GRID */
+.reg-grid { display: flex; flex-direction: column; gap: 8px; margin: 1.5rem 0; }
+.reg-row { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: grid; grid-template-columns: 200px 1fr auto; gap: 1.5rem; align-items: start; }
+.reg-name { font-weight: 600; color: var(--text); font-size: 14px; }
+.reg-sub { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 2px; }
+.reg-desc { font-size: 13px; color: var(--text2); line-height: 1.6; }
+.risk-badge { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 99px; white-space: nowrap; }
+.risk-high { background: var(--coral-bg); color: var(--coral); border: 1px solid var(--coral-border); }
+.risk-mod { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.risk-low { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
 
-  .pain-boxes{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:10px;}
-  .pain-box{background:var(--bg);padding:16px 18px;}
-  .pain-box-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;margin-bottom:6px;}
-  .pain-box-text{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.6;}
-  .to-be-note{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);font-style:italic;margin-bottom:40px;}
+/* SYSTEMS GRID */
+.systems-grid { display: flex; flex-direction: column; gap: 8px; margin: 1.5rem 0; }
+.sys-row { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: grid; grid-template-columns: 110px 180px 1fr; gap: 1.5rem; align-items: start; }
+.sys-status { font-family: var(--mono); font-size: 10px; padding: 2px 7px; border: 1px solid var(--border2); border-radius: 99px; color: var(--text2); width: fit-content; text-align: center; background: var(--bg2); }
+.sys-name { font-weight: 600; color: var(--text); font-size: 14px; }
+.sys-role { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 2px; }
+.sys-desc { font-size: 13.5px; color: var(--text2); line-height: 1.6; margin-bottom: 6px; }
+.sys-note { font-size: 12px; color: var(--purple); font-style: italic; }
 
-  .landscape{border:1px solid var(--border);padding:24px;margin-bottom:12px;}
-  .land-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;}
-  .land-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border);}
-  .land-cell{background:var(--bg);padding:16px;}
-  .land-cell-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;margin-bottom:4px;}
-  .land-cell-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:6px;}
-  .land-tag{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;padding:2px 6px;border:1px solid var(--border2);color:var(--faint);display:inline-block;margin-top:4px;}
-  .land-gap{grid-column:1/-1;background:rgba(220,80,60,0.05);border:1px dashed rgba(220,80,60,0.25);padding:12px 16px;margin-top:1px;}
-  .land-gap-text{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:rgba(220,80,60,0.7);line-height:1.6;}
+/* STAKEHOLDERS */
+.stakeholders { display: flex; flex-direction: column; gap: 12px; margin: 1.5rem 0; }
+.sh { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; display: grid; grid-template-columns: 200px 1fr; gap: 2rem; }
+.sh-id { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.sh-role { font-family: var(--serif); font-size: 18px; color: var(--text); }
+.sh-dept { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.sh-concern-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 4px; margin-top: 10px; }
+.sh-concern-label:first-child { margin-top: 0; }
+.sh-concern { font-size: 13.5px; color: var(--text2); line-height: 1.6; margin-bottom: 10px; }
+.sh-q-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); margin-bottom: 4px; }
+.sh-q { font-size: 13.5px; color: var(--text); line-height: 1.6; margin-bottom: 12px; font-style: italic; border-left: 2px solid var(--border2); padding-left: 10px; }
+.sh-modules { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 4px; }
+.sh-mod { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border: 1px solid var(--border2); border-radius: 4px; color: var(--text2); background: var(--bg2); }
 
-  .req-tabs{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-bottom:none;}
-  .req-tab{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:12px 20px;cursor:pointer;background:var(--bg3);color:var(--muted);border:none;flex:1;text-align:left;transition:all 0.15s;}
-  .req-tab.active{background:var(--bg);color:var(--text);}
-  .req-panel{display:none;}
-  .req-panel.active{display:block;}
-  .req-table{width:100%;border-collapse:collapse;border:1px solid var(--border);}
-  .req-table th{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:12px 16px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);font-weight:400;}
-  .req-table td{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:16px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;color:var(--muted);}
-  .req-table tr:last-child td{border-bottom:none;}
-  .req-id{color:var(--text);font-weight:500;white-space:nowrap;}
-  .req-title{color:var(--text);font-weight:500;margin-bottom:4px;}
-  .moscow-m{background:var(--high);color:#e08070;border:1px solid rgba(220,80,60,0.2);font-size:11px;padding:2px 8px;white-space:nowrap;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
-  .moscow-s{background:var(--mod);color:#c0a060;border:1px solid rgba(180,140,60,0.2);font-size:11px;padding:2px 8px;white-space:nowrap;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
-  .moscow-c{background:var(--low);color:#70a880;border:1px solid rgba(60,120,80,0.2);font-size:11px;padding:2px 8px;white-space:nowrap;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
-  .req-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:24px;}
-  .req-stat{background:var(--bg);padding:20px 24px;}
-  .req-stat-num{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:28px;font-weight:300;letter-spacing:-0.03em;margin-bottom:6px;}
-  .req-stat-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);margin-bottom:4px;}
-  .req-stat-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+/* DIAGRAM AS-IS SECTIONS */
+.diagram-label { font-family: var(--serif); font-size: 18px; color: var(--text); margin-top: 2rem; margin-bottom: 2px; }
+.diagram-sub { font-size: 13px; color: var(--text3); margin-bottom: 1rem; }
+.diagram-legend { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 1rem; }
+.leg-item { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 10px; color: var(--text3); }
+.leg-dot { width: 8px; height: 8px; border-radius: 50%; }
+.cycle-stat { font-family: var(--mono); font-size: 11px; font-weight: 500; color: var(--amber); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  .readiness-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-  .readiness-row{background:var(--bg);padding:28px;display:grid;grid-template-columns:220px 80px 1fr;gap:24px;align-items:start;}
-  .r-dim{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;margin-bottom:4px;}
-  .r-score{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:28px;font-weight:300;letter-spacing:-0.03em;}
-  .r-score span{font-size:14px;color:var(--muted);}
-  .r-finding{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:10px;}
-  .r-action{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);font-style:italic;}
+/* SWIMLANES */
+.asis-stream { border: 1px solid var(--border); border-radius: var(--r-lg); overflow-x: auto; background: white; margin-bottom: 1.5rem; }
+.stream-lane-row { display: flex; align-items: stretch; min-width: 760px; border-bottom: 1px solid var(--border); }
+.stream-lane-row:last-child { border-bottom: none; }
+.lane-label { width: 100px; min-width: 100px; background: var(--bg2); border-right: 1px solid var(--border); padding: 1rem 0.75rem; display: flex; align-items: center; }
+.lane-label span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text3); line-height: 1.4; }
+.lane-steps { display: flex; align-items: center; padding: 1.25rem 1rem; gap: 0; flex: 1; }
 
-  .uc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:24px;}
-  .uc{background:var(--bg);padding:24px;}
-  .uc-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .uc-name{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:8px;}
-  .uc-headline{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);font-style:italic;margin-bottom:10px;}
-  .uc-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px;}
-  .uc-footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
-  .uc-stakeholder{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
-  .eu-badge{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;padding:2px 8px;letter-spacing:0.04em;}
+.step-wrap { display: flex; flex-direction: column; align-items: center; }
+.step-box { width: 110px; height: 74px; border: 1px solid var(--border); border-radius: var(--r); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px; text-align: center; }
+.step-box .sn { font-size: 11.5px; font-weight: 500; line-height: 1.3; margin-bottom: 3px; color: var(--text); }
+.step-box .ss { font-size: 10px; color: var(--text3); line-height: 1.2; }
+.step-delay { font-family: var(--mono); font-size: 10px; color: var(--amber); margin-top: 4px; text-align: center; height: 14px; }
+.step-arrow { font-size: 13px; color: var(--border2); padding: 0 6px; align-self: center; margin-bottom: 18px; }
 
-  .success-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px;}
-  .success-block{background:var(--bg);padding:28px;}
-  .success-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:6px;}
-  .success-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);font-style:italic;margin-bottom:14px;}
-  .success-criteria{list-style:none;display:flex;flex-direction:column;gap:8px;}
-  .success-criteria li{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.6;padding-left:14px;position:relative;}
-  .success-criteria li::before{content:'—';position:absolute;left:0;color:var(--faint);}
-  .adr-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:40px;}
-  .adr{background:var(--bg);padding:24px;}
-  .adr-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .adr-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;margin-bottom:4px;}
-  .adr-subtitle{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);margin-bottom:12px;font-style:italic;}
-  .adr-text{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:10px;}
-  .adr-status{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 10px;border:1px solid var(--low);color:#70a880;background:var(--low);display:inline-block;}
+.sb-ariba { border-top: 3px solid var(--blue-border); background: var(--blue-bg); }
+.sb-sap { border-top: 3px solid var(--teal-border); background: var(--teal-bg); }
+.sb-manual { border-top: 3px solid var(--coral-border); background: var(--coral-bg); }
+.sb-legacy { border-top: 3px solid var(--amber-border); background: var(--amber-bg); }
 
-  .next-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-  .next-card{background:var(--bg);padding:24px 28px;display:flex;justify-content:space-between;align-items:flex-start;transition:background 0.15s;text-decoration:none;color:var(--text);}
-  .next-card:hover{background:var(--bg3);}
-  .next-pg{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-  .next-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;margin-bottom:4px;}
-  .next-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);}
-  .next-status{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);white-space:nowrap;flex-shrink:0;margin-left:16px;margin-top:4px;}
-  .footer-bar{border-top:1px solid var(--border);padding:40px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);display:flex;justify-content:space-between;align-items:center;max-width:1100px;margin:0 auto;}
+/* PAIN BOXES GRID */
+.pain-boxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 0.75rem; }
+.pain-box { border: 1px solid var(--border); border-radius: var(--r-lg); background: white; padding: 1.25rem; }
+.pain-box-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.02em; }
+.pain-box-text { font-size: 12.5px; color: var(--text2); line-height: 1.6; }
+.to-be-note { font-size: 13px; color: var(--teal); font-style: italic; margin-bottom: 2.5rem; padding-left: 4px; }
 
-  @media(max-width:800px){
-    .layout{grid-template-columns:1fr;}
-    .sidebar{display:none;}
-    .content{padding:40px 20px;}
-    .domain,.sh,.readiness-row{grid-template-columns:1fr;}
-    .uc-grid,.adr-grid,.profile-grid{grid-template-columns:1fr;}
-    .pain-boxes,.land-grid{grid-template-columns:1fr;}
-    nav{padding:12px 20px;}
-    .req-stats{grid-template-columns:1fr 1fr;}
-    .sys-row{grid-template-columns:1fr;}
-    .reg-row{grid-template-columns:1fr;}
-  }
+/* SYSTEM LANDSCAPE */
+.landscape { border: 1px solid var(--border); border-radius: var(--r-lg); background: white; padding: 1.5rem; margin: 1.5rem 0; }
+.land-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 1rem; }
+.land-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.land-cell { border: 1px solid var(--border); border-radius: var(--r); padding: 1.25rem; background: var(--bg); }
+.land-cell-title { font-size: 13.5px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.land-cell-sub { font-size: 12px; color: var(--text2); line-height: 1.5; margin-bottom: 6px; }
+.land-tag { font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border: 1px solid var(--border2); border-radius: 4px; color: var(--text3); display: inline-block; background: white; }
+.land-gap { grid-column: 1 / -1; border: 1px dashed var(--coral-border); background: var(--coral-bg); padding: 12px 16px; border-radius: var(--r); margin-top: 4px; }
+.land-gap-text { font-size: 13px; color: var(--coral); line-height: 1.6; }
+
+/* REQUIREMENTS CATALOGUE */
+.req-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; }
+.req-stat { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; }
+.req-stat-num { font-family: var(--serif); font-size: 32px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.req-stat-label { font-size: 13px; font-weight: 600; color: var(--text2); margin-bottom: 4px; }
+.req-stat-sub { font-size: 11.5px; color: var(--text3); line-height: 1.4; }
+
+.req-tabs { display: flex; gap: 4px; margin-bottom: -1px; position: relative; z-index: 2; }
+.req-tab { font-family: var(--sans); font-size: 12.5px; font-weight: 500; padding: 10px 16px; cursor: pointer; background: var(--bg3); color: var(--text2); border: 1px solid var(--border); border-bottom: none; border-radius: var(--r) var(--r) 0 0; transition: all 0.15s; }
+.req-tab.active { background: white; color: var(--text); border-color: var(--border); padding-bottom: 11px; }
+.req-panel { display: none; background: white; border: 1px solid var(--border); border-radius: 0 var(--r-lg) var(--r-lg) var(--r-lg); overflow: hidden; margin-bottom: 2rem; }
+.req-panel.active { display: block; }
+
+.req-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.req-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; background: var(--bg2); }
+.req-table td { padding: 12px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.6; }
+.req-table tr:last-child td { border-bottom: none; }
+.req-id { font-family: var(--mono); font-weight: 600; color: var(--text); }
+.req-title { font-weight: 600; color: var(--text); margin-bottom: 2px; }
+.moscow-m { background: var(--coral-bg); color: var(--coral); border: 1px solid var(--coral-border); font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border-radius: 99px; }
+.moscow-s { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border-radius: 99px; }
+.moscow-c { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border-radius: 99px; }
+
+/* READINESS GRID */
+.readiness-grid { display: flex; flex-direction: column; gap: 12px; margin: 1.5rem 0; }
+.readiness-row { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; display: grid; grid-template-columns: 200px 80px 1fr; gap: 1.5rem; align-items: start; }
+.r-dim { font-family: var(--serif); font-size: 17px; color: var(--text); }
+.r-score { font-family: var(--serif); font-size: 32px; color: var(--purple); line-height: 1; }
+.r-score span { font-size: 13px; color: var(--text3); font-family: var(--sans); }
+.r-finding { font-size: 13.5px; color: var(--text2); line-height: 1.65; margin-bottom: 8px; }
+.r-action { font-size: 12.5px; color: var(--teal); font-style: italic; background: var(--teal-bg); padding: 6px 10px; border-radius: var(--r); border: 1px solid var(--teal-border); display: inline-block; }
+
+/* USE CASES GRID */
+.uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1.5rem 0; }
+.uc { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: flex; flex-direction: column; justify-content: space-between; }
+.uc-id { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.uc-name { font-family: var(--serif); font-size: 16px; color: var(--text); margin-bottom: 4px; }
+.uc-headline { font-size: 12.5px; color: var(--amber); font-style: italic; margin-bottom: 8px; font-weight: 500; }
+.uc-desc { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+.uc-footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; border-top: 1px solid var(--bg2); padding-top: 8px; margin-top: auto; }
+.uc-stakeholder { font-size: 11.5px; color: var(--text3); }
+.eu-badge { font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border-radius: 99px; }
+
+/* SUCCESS CRITERIA */
+.success-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2.5rem; }
+.success-block { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; }
+.success-title { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 2px; }
+.success-sub { font-size: 12.5px; color: var(--text3); font-style: italic; margin-bottom: 12px; }
+.success-criteria { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.success-criteria li { font-size: 13px; color: var(--text2); line-height: 1.55; padding-left: 14px; position: relative; }
+.success-criteria li::before { content: '—'; position: absolute; left: 0; color: var(--text3); }
+
+/* ADR CARDS */
+.adr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 2.5rem; }
+.adr { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; display: flex; flex-direction: column; justify-content: space-between; }
+.adr-id { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.adr-title { font-family: var(--serif); font-size: 17px; color: var(--text); margin-bottom: 2px; }
+.adr-subtitle { font-size: 12.5px; color: var(--text3); margin-bottom: 10px; font-style: italic; }
+.adr-text { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 14px; }
+.adr-status { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 99px; background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); align-self: flex-start; }
+
+/* NEXT LINKS / CONTINUATION */
+.next-grid { display: flex; flex-direction: column; gap: 8px; margin-top: 1rem; }
+.next-card { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; transition: border-color 0.15s, background-color 0.15s; }
+.next-card:hover { border-color: var(--border2); background-color: var(--bg2); }
+.next-pg { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; }
+.next-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.next-sub { font-size: 12.5px; color: var(--text2); }
+.next-status { font-family: var(--mono); font-size: 10px; padding: 3px 8px; border-radius: 99px; border: 1px solid var(--border2); color: var(--text3); background: var(--bg); transition: all 0.15s; }
+.next-card:hover .next-status { color: var(--text); border-color: var(--text); }
+
+/* FOOTER BAR */
+.footer-bar { padding: 2rem 2.5rem; border-top: 1px solid var(--border); background: var(--bg2); font-family: var(--mono); font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; align-items: center; }
+
+@media(max-width:920px){
+  .page-wrap { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .topbar { padding: 0.75rem 1.5rem; }
+  .content { padding: 2rem 1.5rem 4rem; }
+  .profile-grid, .req-stats, .uc-grid, .success-grid, .adr-grid, .pain-boxes, .land-grid { grid-template-columns: 1fr; }
+  .domain, .sh, .readiness-row, .sys-row, .reg-row { grid-template-columns: 1fr; gap: 0.5rem; }
+}
 </style>
 </head>
 <body>
+<div class="page-wrap">
 
-<nav>
-  <a class="nav-back sans" href="index.html">← Back</a>
-  <span class="nav-trail sans">The Autonomous Buyer &nbsp;/&nbsp; <strong>Page 02 — ClaraVis Procurement Brief</strong></span>
-  <div class="nav-links-right">
-    <a href="index.html">Overview</a>
-    <a href="#">Page 03 →</a>
-    <a href="https://github.com/raosiddharthp" target="_blank">GitHub →</a>
+<!-- SIDEBAR NAVIGATION -->
+<aside class="sidebar">
+  <div class="sidebar-logo">Architecture Portfolio</div>
+  <div class="sidebar-project">Autonomous P2P</div>
+  <nav>
+    <ul class="sidebar-nav">
+      <li><a href="#positioning">Positioning</a></li>
+      <li><a href="#profile">Org Profile</a></li>
+      <li><a href="#stakeholders">Stakeholders</a></li>
+      <li><a href="#asis">As-Is Architecture</a></li>
+      <li><a href="#requirements">Requirements</a></li>
+      <li><a href="#readiness">AI Readiness</a></li>
+      <li><a href="#usecases">Use Cases</a></li>
+      <li><a href="#success">Success Criteria</a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><a href="index.html">← Back Overview</a></li>
+    </ul>
+  </nav>
+
+  <div class="stack-block">
+    <div class="stack-title">Pillar Blueprint</div>
+    <div class="stack-tags">
+      <span class="stack-tag">TOGAF Phase A</span>
+      <span class="stack-tag">MoSCoW</span>
+      <span class="stack-tag">EU AI Act</span>
+      <span class="stack-tag">GDPR Art. 22</span>
+      <span class="stack-tag">CSRD · LkSG</span>
+    </div>
   </div>
-</nav>
+</aside>
 
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sidebar-links">
-      <a href="#positioning">Positioning</a>
-      <a href="#profile">Org Profile</a>
-      <a href="#stakeholders">Stakeholders</a>
-      <a href="#asis">As-Is Architecture</a>
-      <a href="#requirements">Requirements</a>
-      <a href="#readiness">AI Readiness</a>
-      <a href="#usecases">Use Cases</a>
-      <a href="#success">Success Criteria</a>
+<!-- MAIN CONTENT CONTENT -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">The Autonomous Procure-to-Pay</a> &nbsp;/&nbsp; <strong>Page 02 — ClaraVis Procurement Brief</strong>
     </div>
-  </aside>
-
-  <main class="content">
-
-    <div class="page-eyebrow sans">The Autonomous Buyer / Page 02</div>
-    <h1 class="page-title"><strong>ClaraVis</strong> Medical Systems<br>Procurement Brief &amp; Requirements</h1>
-    <p class="page-desc sans">The requirements layer of the TOGAF ADM. Every architectural decision in the six P2P design modules traces back to a documented requirement on this page. This is the single source of truth for what the Autonomous Buyer is designed to achieve for ClaraVis Procurement.</p>
-    <div class="hero-tags">
-      <span class="htag sans">TOGAF Phase A Input</span>
-      <span class="htag sans">MoSCoW Prioritisation</span>
-      <span class="htag sans">EU AI Act · GDPR Art. 22</span>
-      <span class="htag sans">9 Stakeholders</span>
-      <span class="htag sans">8 Use Cases</span>
-      <span class="htag sans">CSRD · LkSG</span>
+    <div class="topbar-right">
+      <span class="topbar-tag">Requirements Fabric</span>
+      <a class="topbar-tag" href="index.html" style="text-decoration: none;">Overview</a>
+      <a class="topbar-tag" href="#" style="text-decoration: none;">Page 03 →</a>
+      <a class="topbar-tag" href="https://github.com/raosiddharthp" target="_blank" style="text-decoration: none;">GitHub →</a>
     </div>
-    <p class="hero-adrs sans">ADR-001 · ADR-002 referenced on this page</p>
+  </div>
+
+  <div class="content">
+
+    <!-- HEADER -->
+    <header class="doc-header">
+      <div class="doc-eyebrow">The Autonomous Procure-to-Pay / Page 02</div>
+      <h1 class="doc-title"><strong>ClaraVis</strong> Medical Systems<br>Procurement Brief &amp; Requirements</h1>
+      <p class="page-desc">The requirements layer of the TOGAF ADM[cite: 3]. Every architectural decision in the six P2P design modules traces back to a documented requirement on this page[cite: 3]. This is the single source of truth for what the Autonomous Procure-to-Pay is designed to achieve for ClaraVis Procurement[cite: 3].</p>
+      
+      <div class="hero-tags">
+        <span class="htag">TOGAF Phase A Input</span>
+        <span class="htag">MoSCoW Prioritisation</span>
+        <span class="htag">EU AI Act · GDPR Art. 22</span>
+        <span class="htag">9 Stakeholders</span>
+        <span class="htag">8 Use Cases</span>
+        <span class="htag">CSRD · LkSG</span>
+      </div>
+      <div class="hero-adrs">ADR-001 · ADR-002 referenced on this page[cite: 3]</div>
+    </header>
 
     <!-- 01 POSITIONING -->
-    <div class="section" id="positioning">
-      <div class="sec-id sans">Architectural Positioning</div>
-      <h2 class="sec-h2">The AB alongside <em>SAP SRM / legacy SAP procurement</em> — five domains that determine the boundary.</h2>
-      <p class="sec-intro sans">ClaraVis runs SAP S/4HANA with legacy SRM modules for procurement. SAP's built-in procurement automation handles catalogue purchasing and standard PO workflows within the SAP boundary. The first question any CPO or enterprise architect asks is: why build on GCP when SAP covers procurement? The answer is architectural, not commercial.</p>
+    <section class="section" id="positioning">
+      <div class="sec-id">Architectural Positioning</div>
+      <h2 class="sec-h2">The Autonomous Procure-to-Pay alongside <em>SAP SRM / legacy SAP procurement</em> — five domains that determine the boundary.</h2>
+      <p class="sec-intro">ClaraVis runs SAP S/4HANA with legacy SRM modules for procurement[cite: 3]. SAP's built-in procurement automation handles catalogue purchasing and standard PO workflows within the SAP boundary[cite: 3]. The first question any CPO or enterprise architect asks is: why build on GCP when SAP covers procurement? The answer is architectural, not commercial[cite: 3].</p>
 
       <div class="canonical-box">
-        <div class="canonical-label sans">Canonical Positioning Statement</div>
-        <p class="canonical-text sans">SAP SRM and standard S/4HANA procurement deliver automation <strong>within the SAP data model.</strong> The Autonomous Buyer delivers intelligence <strong>across the full P2P landscape</strong> — spanning the supplier ecosystem, the contract corpus, the AP platform, and the CSRD/LkSG compliance obligations that no single ERP boundary contains. Where SAP automates transactional procurement, the AB orchestrates the full Source-to-Pay-to-Compliance lifecycle, with explainability and human oversight engineered in to satisfy EU AI Act and GDPR Article 22 requirements that SAP's ML models cannot meet.</p>
-        <p class="canonical-adr sans">ADR-002 · GCP alongside SAP, not instead of it</p>
+        <div class="canonical-label">Canonical Positioning Statement</div>
+        <p class="canonical-text">SAP SRM and standard S/4HANA procurement deliver automation <strong>within the SAP data model.</strong> The Autonomous Procure-to-Pay delivers intelligence <strong>across the full P2P landscape</strong> — spanning the supplier ecosystem, the contract corpus, the AP platform, and the CSRD/LkSG compliance obligations that no single ERP boundary contains[cite: 3]. Where SAP automates transactional procurement, the Autonomous Procure-to-Pay orchestrates the full Source-to-Pay-to-Compliance lifecycle, with explainability and human oversight engineered in to satisfy EU AI Act and GDPR Article 22 requirements that SAP's ML models cannot meet[cite: 3].</p>
+        <p class="canonical-adr">ADR-002 · GCP alongside SAP, not instead of it[cite: 3]</p>
       </div>
 
       <div class="domains">
         <div class="domain">
-          <div><div class="domain-label sans">DOMAIN — 01</div><div class="domain-badge sans">AB on GCP — SAP has no access to this domain</div></div>
-          <div class="domain-body"><h3>Supplier intelligence across 1,400 external counterparties</h3><p>Supplier risk data, CSRD compliance signals, LkSG due diligence records, and market intelligence about 1,400 suppliers do not live in SAP and never will. SAP SRM is a transactional platform, not a supplier intelligence fabric. Scoring supplier risk across financial, ESG, and delivery dimensions requires Vertex AI, BigQuery, and external data enrichment pipelines — none of which SAP provides with explainability or HITL by design.</p></div>
+          <div>
+            <div class="domain-label">DOMAIN — 01</div>
+            <div class="domain-badge">Autonomous Procure-to-Pay on GCP — SAP has no access to this domain[cite: 3]</div>
+          </div>
+          <div class="domain-body">
+            <h3>Supplier intelligence across 1,400 external counterparties</h3>
+            <p>Supplier risk data, CSRD compliance signals, LkSG due diligence records, and market intelligence about 1,400 suppliers do not live in SAP and never will[cite: 3]. SAP SRM is a transactional platform, not a supplier intelligence fabric[cite: 3]. Scoring supplier risk across financial, ESG, and delivery dimensions requires Vertex AI, BigQuery, and external data enrichment pipelines — none of which SAP provides with explainability or HITL by design[cite: 3].</p>
+          </div>
         </div>
         <div class="domain">
-          <div><div class="domain-label sans">DOMAIN — 02</div><div class="domain-badge sans">AB on GCP — architectural requirement SAP cannot satisfy</div></div>
-          <div class="domain-body"><h3>EU AI Act Annex III &amp; GDPR Art. 22 — explainability that satisfies the law</h3><p>GDPR Article 22 prohibits fully automated decisions with significant effects on suppliers without a human in the loop. EU AI Act Annex III requires SHAP explanations per inference, written to an immutable audit log before any action commits. SAP's ML models are proprietary — feature attribution is not exposed to the operator. For a German medical OEM, this is a structural disqualification, not a configuration gap.</p></div>
+          <div>
+            <div class="domain-label">DOMAIN — 02</div>
+            <div class="domain-badge">Autonomous Procure-to-Pay on GCP — architectural requirement SAP cannot satisfy[cite: 3]</div>
+          </div>
+          <div class="domain-body">
+            <h3>EU AI Act Annex III &amp; GDPR Art. 22 — explainability that satisfies the law</h3>
+            <p>GDPR Article 22 prohibits fully automated decisions with significant effects on suppliers without a human in the loop[cite: 3]. EU AI Act Annex III requires SHAP explanations per inference, written to an immutable audit log before any action commits[cite: 3]. SAP's ML models are proprietary — feature attribution is not exposed to the operator[cite: 3]. For a German medical OEM, this is a structural disqualification, not a configuration gap[cite: 3].</p>
+          </div>
         </div>
         <div class="domain">
-          <div><div class="domain-label sans">DOMAIN — 03</div><div class="domain-badge sans">AB on GCP — cross-system orchestration outside SAP boundary</div></div>
-          <div class="domain-body"><h3>3-way match across SAP S/4HANA, SAP Ariba, and legacy AP</h3><p>ClaraVis's 3-way match requires reconciling purchase orders from SAP S/4HANA, goods receipt notes from the warehouse system, and invoices arriving via the legacy AP platform and Ariba Network. These three data sources have no common event stream. SAP's standard matching operates within the ERP boundary. The AB is the orchestration layer that unifies them — with exception ML, tolerance-band logic, and HITL routing built in.</p></div>
+          <div>
+            <div class="domain-label">DOMAIN — 03</div>
+            <div class="domain-badge">Autonomous Procure-to-Pay on GCP — cross-system orchestration outside SAP boundary[cite: 3]</div>
+          </div>
+          <div class="domain-body">
+            <h3>3-way match across SAP S/4HANA, SAP Ariba, and legacy AP</h3>
+            <p>ClaraVis's 3-way match requires reconciling purchase orders from SAP S/4HANA, goods receipt notes from the warehouse system, and invoices arriving via the legacy AP platform and Ariba Network[cite: 3]. These three data sources have no common event stream[cite: 3]. SAP's standard matching operates within the ERP boundary[cite: 3]. The Autonomous Procure-to-Pay is the orchestration layer that unifies them — with exception ML, tolerance-band logic, and HITL routing built in[cite: 3].</p>
+          </div>
         </div>
         <div class="domain">
-          <div><div class="domain-label sans">DOMAIN — 04</div><div class="domain-badge sans">AB on GCP — document-native reasoning beyond ERP metadata</div></div>
-          <div class="domain-body"><h3>Full-document contract and SOW intelligence</h3><p>Clause-level risk scoring, non-standard term detection, and supplier MSA analysis require reasoning across the full contract document. Gemini 1.5 Pro reads an entire supplier framework agreement in one pass via its 1M token context window. SAP Ariba CLM operates on structured contract metadata — not the source document. The gap is every non-standard clause that lives in unstructured text.</p></div>
+          <div>
+            <div class="domain-label">DOMAIN — 04</div>
+            <div class="domain-badge">Autonomous Procure-to-Pay on GCP — document-native reasoning beyond ERP metadata[cite: 3]</div>
+          </div>
+          <div class="domain-body">
+            <h3>Full-document contract and SOW intelligence</h3>
+            <p>Clause-level risk scoring, non-standard term detection, and supplier MSA analysis require reasoning across the full contract document[cite: 3]. Gemini 1.5 Pro reads an entire supplier framework agreement in one pass via its 1M token context window[cite: 3]. SAP Ariba CLM operates on structured contract metadata — not the source document[cite: 3]. The gap is every non-standard clause that lives in unstructured text[cite: 3].</p>
+          </div>
         </div>
         <div class="domain">
-          <div><div class="domain-label sans">DOMAIN — 05</div><div class="domain-badge sans">AB on GCP — purpose-built for cross-system P2P scope</div></div>
-          <div class="domain-body"><h3>Cross-system P2P orchestration — the layer nobody owns</h3><p>ClaraVis's procurement landscape spans SAP Ariba (sourcing), SAP S/4HANA (ERP), a legacy AP platform, a supplier portal, a document management store, and a CSRD compliance register. No single vendor owns all of that. The AB is the connective tissue — a coherent, explainable, human-supervised orchestration layer across every system ClaraVis operates for procurement.</p></div>
+          <div>
+            <div class="domain-label">DOMAIN — 05</div>
+            <div class="domain-badge">Autonomous Procure-to-Pay on GCP — purpose-built for cross-system P2P scope[cite: 3]</div>
+          </div>
+          <div class="domain-body">
+            <h3>Cross-system P2P orchestration — the layer nobody owns</h3>
+            <p>ClaraVis's procurement landscape spans SAP Ariba (sourcing), SAP S/4HANA (ERP), a legacy AP platform, a supplier portal, a document management store, and a CSRD compliance register[cite: 3]. No single vendor owns all of that[cite: 3]. The Autonomous Procure-to-Pay is the connective tissue — a coherent, explainable, human-supervised orchestration layer across every system ClaraVis operates for procurement[cite: 3].</p>
+          </div>
         </div>
       </div>
 
       <div class="int-diagram">
         <div class="int-node">
-          <div class="int-label sans">SAP Ariba</div>
-          <div class="int-role sans">Sourcing · CLM</div>
-          <div class="int-sub sans">Requisitions · RFx · Contracts</div>
+          <div class="int-label">SAP Ariba</div>
+          <div class="int-role">Sourcing · CLM</div>
+          <div class="int-sub">Requisitions · RFx · Contracts</div>
         </div>
         <div class="int-connector">
-          <span class="arr sans">⇄</span>
-          <span class="arr-label sans">REST API<br>ADR-001</span>
+          <span class="arr">⇄</span>
+          <span class="arr-label">REST API<br>ADR-001</span>
         </div>
-        <div class="int-node" style="border-color:var(--border2);background:var(--bg3);">
-          <div class="int-label sans">AB</div>
-          <div class="int-role sans">Autonomous Buyer</div>
-          <div class="int-sub sans">Orchestration · XAI · HITL</div>
+        <div class="int-node" style="border-color:var(--purple-border); background:var(--purple-bg);">
+          <div class="int-label">Autonomous P2P</div>
+          <div class="int-role" style="color:var(--purple);">Orchestration Layer</div>
+          <div class="int-sub">Orchestration · XAI · HITL</div>
         </div>
         <div class="int-connector">
-          <span class="arr sans">⇄</span>
-          <span class="arr-label sans">BAPI / IDoc<br>via middleware</span>
+          <span class="arr">⇄</span>
+          <span class="arr-label">BAPI / IDoc<br>via middleware</span>
         </div>
         <div class="int-node">
-          <div class="int-label sans">SAP S/4HANA</div>
-          <div class="int-role sans">ERP · Finance</div>
-          <div class="int-sub sans">PO · GRN · AP · Payment</div>
+          <div class="int-label">SAP S/4HANA</div>
+          <div class="int-role">ERP · Finance</div>
+          <div class="int-sub">PO · GRN · AP · Payment</div>
         </div>
         <div class="int-connector">
-          <span class="arr sans">→</span>
-          <span class="arr-label sans">Pub/Sub<br>streaming</span>
+          <span class="arr">→</span>
+          <span class="arr-label">Pub/Sub<br>streaming</span>
         </div>
         <div class="int-node">
-          <div class="int-label sans">GCP</div>
-          <div class="int-role sans">Google Cloud</div>
-          <div class="int-sub sans">Vertex AI · BigQuery · MLOps</div>
+          <div class="int-label">GCP</div>
+          <div class="int-role">Google Cloud</div>
+          <div class="int-sub">Vertex AI · BigQuery · MLOps</div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- 02 ORG PROFILE -->
-    <div class="section" id="profile">
-      <div class="sec-id sans">Organisation Profile</div>
+    <section class="section" id="profile">
+      <div class="sec-id">Organisation Profile</div>
       <h2 class="sec-h2">ClaraVis Medical Systems — <em>the anchor client.</em></h2>
-      <p class="sec-intro sans">A composite of real regulated-industry enterprise patterns. Every requirement, constraint, and architectural decision on this page is grounded in the specific procurement context of a medical imaging OEM operating under EU AI Act, GDPR, CSRD, and LkSG simultaneously.</p>
+      <p class="sec-intro">A composite of real regulated-industry enterprise patterns[cite: 3]. Every requirement, constraint, and architectural decision on this page is grounded in the specific procurement context of a medical imaging OEM operating under EU AI Act, GDPR, CSRD, and LkSG simultaneously[cite: 3].</p>
 
       <div class="profile-grid">
-        <div class="profile-cell"><div class="profile-key sans">Legal name</div><div class="profile-val sans">ClaraVis Medical Systems GmbH</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Headquarters</div><div class="profile-val sans">Munich, Bavaria, Germany</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Revenue</div><div class="profile-val sans">€1.2B (FY2025)</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Employees</div><div class="profile-val sans">4,200 across 12 countries</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Active suppliers</div><div class="profile-val sans"><strong>1,400+</strong> across 34 countries</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Annual procurement spend</div><div class="profile-val sans">~€340M direct + indirect</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Invoice volume</div><div class="profile-val sans">~22,000 invoices / year</div></div>
-        <div class="profile-cell"><div class="profile-key sans">Avg. invoice cycle time</div><div class="profile-val sans">11 days · €3.2M late payment penalties</div></div>
+        <div class="profile-cell"><div class="profile-key">Legal name</div><div class="profile-val">ClaraVis Medical Systems GmbH</div></div>
+        <div class="profile-cell"><div class="profile-key">Headquarters</div><div class="profile-val">Munich, Bavaria, Germany</div></div>
+        <div class="profile-cell"><div class="profile-key">Revenue</div><div class="profile-val">€1.2B (FY2025)</div></div>
+        <div class="profile-cell"><div class="profile-key">Employees</div><div class="profile-val">4,200 across 12 countries</div></div>
+        <div class="profile-cell"><div class="profile-key">Active suppliers</div><div class="profile-val"><strong>1,400+</strong> across 34 countries</div></div>
+        <div class="profile-cell"><div class="profile-key">Annual spend</div><div class="profile-val">~€340M direct + indirect</div></div>
+        <div class="profile-cell"><div class="profile-key">Invoice volume</div><div class="profile-val">~22,000 invoices / year</div></div>
+        <div class="profile-cell"><div class="profile-key">Invoice cycle</div><div class="profile-val">11 days · €3.2M late penalties</div></div>
       </div>
 
-      <p class="sans" style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;">Regulatory Environment</p>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:10px;font-weight:600;text-transform:uppercase;font-family:var(--mono);">Regulatory Environment</p>
       <div class="reg-grid">
-        <div class="reg-row"><div><div class="reg-name sans">EU AI Act — Annex III</div><div class="reg-sub sans">High-Risk AI Systems</div></div><div class="reg-desc sans">2 procurement ML models flagged in Q3 2025 audit. No SHAP. No HITL. Supplier delistment with no explanation path.</div><span class="risk-badge risk-high sans">High Risk</span></div>
-        <div class="reg-row"><div><div class="reg-name sans">GDPR — Article 22</div><div class="reg-sub sans">Automated Decision-Making</div></div><div class="reg-desc sans">Supplier scoring and payment blocking require human oversight. No current HITL architecture. Structural non-compliance.</div><span class="risk-badge risk-high sans">High Risk</span></div>
-        <div class="reg-row"><div><div class="reg-name sans">CSRD / LkSG / EUDR</div><div class="reg-sub sans">Supply Chain Due Diligence</div></div><div class="reg-desc sans">63% of suppliers not assessed in 18 months. Manual spreadsheet process. No continuous monitoring.</div><span class="risk-badge risk-mod sans">Moderate</span></div>
-        <div class="reg-row"><div><div class="reg-name sans">ISO 20400 : 2017</div><div class="reg-sub sans">Sustainable Procurement</div></div><div class="reg-desc sans">ESG criteria not encoded in sourcing evaluation logic. Sustainability scoring is manual and inconsistent across categories.</div><span class="risk-badge risk-mod sans">Moderate</span></div>
-        <div class="reg-row"><div><div class="reg-name sans">GDPR / EU DPDP</div><div class="reg-sub sans">Data Protection</div></div><div class="reg-desc sans">Supplier PII in procurement systems. Data residency enforced at infrastructure layer via VPC-SC. CMEK required.</div><span class="risk-badge risk-low sans">Native to Infra</span></div>
-        <div class="reg-row"><div><div class="reg-name sans">ISO 27001</div><div class="reg-sub sans">Information Security</div></div><div class="reg-desc sans">BeyondCorp zero-trust. All service-to-service calls via Workload Identity. Secrets via Secret Manager only.</div><span class="risk-badge risk-low sans">Native to Infra</span></div>
+        <div class="reg-row"><div><div class="reg-name">EU AI Act — Annex III</div><div class="reg-sub">High-Risk AI Systems</div></div><div class="reg-desc">2 procurement ML models flagged in Q3 2025 audit. No SHAP. No HITL. Supplier delistment with no explanation path[cite: 3].</div><span class="risk-badge risk-high">High Risk</span></div>
+        <div class="reg-row"><div><div class="reg-name">GDPR — Article 22</div><div class="reg-sub">Automated Decision-Making</div></div><div class="reg-desc">Supplier scoring and payment blocking require human oversight. No current HITL architecture. Structural non-compliance[cite: 3].</div><span class="risk-badge risk-high">High Risk</span></div>
+        <div class="reg-row"><div><div class="reg-name">CSRD / LkSG / EUDR</div><div class="reg-sub">Supply Chain Due Diligence</div></div><div class="reg-desc">63% of suppliers not assessed in 18 months. Manual spreadsheet process. No continuous monitoring[cite: 3].</div><span class="risk-badge risk-mod">Moderate</span></div>
+        <div class="reg-row"><div><div class="reg-name">ISO 20400 : 2017</div><div class="reg-sub">Sustainable Procurement</div></div><div class="reg-desc">ESG criteria not encoded in sourcing evaluation logic. Sustainability scoring is manual and inconsistent across categories[cite: 3].</div><span class="risk-badge risk-mod">Moderate</span></div>
+        <div class="reg-row"><div><div class="reg-name">GDPR / EU DPDP</div><div class="reg-sub">Data Protection</div></div><div class="reg-desc">Supplier PII in procurement systems. Data residency enforced at infrastructure layer via VPC-SC. CMEK required[cite: 3].</div><span class="risk-badge risk-low">Native to Infra</span></div>
+        <div class="reg-row"><div><div class="reg-name">ISO 27001</div><div class="reg-sub">Information Security</div></div><div class="reg-desc">BeyondCorp zero-trust. All service-to-service calls via Workload Identity. Secrets via Secret Manager only[cite: 3].</div><span class="risk-badge risk-low">Native to Infra</span></div>
       </div>
 
-      <p class="sans" style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;">Procurement Systems Landscape</p>
+      <p style="font-size:13px;color:var(--text3);margin-bottom:10px;font-weight:600;text-transform:uppercase;font-family:var(--mono);">Procurement Systems Landscape</p>
       <div class="systems-grid">
-        <div class="sys-row"><span class="sys-status sans">Live</span><div><div class="sys-name sans">SAP Ariba</div><div class="sys-role sans">Sourcing · CLM · Supplier Mgmt</div></div><div><p class="sys-desc sans">Strategic sourcing, RFx events, contract lifecycle management, and supplier onboarding. AB integrates via Ariba REST APIs. Ariba remains system of record for sourcing events.</p><p class="sys-note sans">AB reads and writes via Ariba APIs — augments, does not replace</p></div></div>
-        <div class="sys-row"><span class="sys-status sans">Live</span><div><div class="sys-name sans">SAP S/4HANA</div><div class="sys-role sans">ERP · Finance · Logistics</div></div><div><p class="sys-desc sans">Purchase orders, goods receipt notes, accounts payable, general ledger, and payment execution. Source of truth for financial transactions. AB writes PO and payment instructions via middleware after HITL approval.</p><p class="sys-note sans">AB writes to SAP only after HITL checkpoint — immutable audit record created first</p></div></div>
-        <div class="sys-row"><span class="sys-status sans" style="color:rgba(220,80,60,0.7);border-color:rgba(220,80,60,0.2);">EU AI Act Risk</span><div><div class="sys-name sans">2 ML Models in Production</div><div class="sys-role sans">Supplier Risk · Spend Anomaly</div></div><div><p class="sys-desc sans">Built by ClaraVis data science team. Both classified as high-risk under EU AI Act Annex III and GDPR Art. 22. Neither produces SHAP explanations. Neither has documented HITL checkpoints. Flagged in Q3 2025 audit.</p><p class="sys-note sans">Both models require AB XAI and HITL retrofit before next compliance review</p></div></div>
-        <div class="sys-row"><span class="sys-status sans" style="color:#c0a060;border-color:rgba(180,140,60,0.2);">Legacy</span><div><div class="sys-name sans">Legacy AP Platform</div><div class="sys-role sans">Invoice Processing · Payment</div></div><div><p class="sys-desc sans">Standalone AP platform handling invoice capture, 3-way match (manual), and payment scheduling. No integration with Ariba or SAP event streams. 3-way match done in spreadsheets by a team of six.</p><p class="sys-note sans">3-Way Match Agent addresses this domain — replaces manual spreadsheet process</p></div></div>
-        <div class="sys-row"><span class="sys-status sans" style="color:var(--faint);border-color:var(--border);">Disconnected</span><div><div class="sys-name sans">Supplier Portal</div><div class="sys-role sans">Onboarding · Self-Service</div></div><div><p class="sys-desc sans">Basic self-service portal for onboarding forms and document uploads. No integration with Ariba vendor master or SAP supplier records. Onboarding cycle averages 18 days. No automated compliance checks.</p><p class="sys-note sans">Supplier Onboarding Agent addresses this domain — automated compliance screening at intake</p></div></div>
-        <div class="sys-row"><span class="sys-status sans" style="color:var(--faint);border-color:var(--border);">Disconnected</span><div><div class="sys-name sans">Compliance Register</div><div class="sys-role sans">CSRD · LkSG · Audit</div></div><div><p class="sys-desc sans">Manual spreadsheet maintained by a two-person compliance team. Annual supplier questionnaires. No real-time monitoring. 63% of suppliers not assessed in 18 months.</p><p class="sys-note sans">Supplier Performance Agent + CSRD continuous monitoring addresses this domain entirely</p></div></div>
+        <div class="sys-row"><span class="sys-status">Live</span><div><div class="sys-name">SAP Ariba</div><div class="sys-role">Sourcing · CLM · Supplier Mgmt</div></div><div><p class="sys-desc">Strategic sourcing, RFx events, contract lifecycle management, and supplier onboarding[cite: 3]. Autonomous Procure-to-Pay integrates via Ariba REST APIs[cite: 3]. Ariba remains system of record for sourcing events[cite: 3].</p><p class="sys-note">Autonomous Procure-to-Pay reads and writes via Ariba APIs — augments, does not replace[cite: 3]</p></div></div>
+        <div class="sys-row"><span class="sys-status">Live</span><div><div class="sys-name">SAP S/4HANA</div><div class="sys-role">ERP · Finance · Logistics</div></div><div><p class="sys-desc">Purchase orders, goods receipt notes, accounts payable, general ledger, and payment execution[cite: 3]. Source of truth for financial transactions[cite: 3]. Autonomous Procure-to-Pay writes PO and payment instructions via middleware after HITL approval[cite: 3].</p><p class="sys-note">Autonomous Procure-to-Pay writes to SAP only after HITL checkpoint — immutable audit record created first[cite: 3]</p></div></div>
+        <div class="sys-row"><span class="sys-status" style="color:var(--coral);border-color:var(--coral-border);background:var(--coral-bg)">EU AI Act Risk</span><div><div class="sys-name">2 ML Models in Production</div><div class="sys-role">Supplier Risk · Spend Anomaly</div></div><div><p class="sys-desc">Built by ClaraVis data science team[cite: 3]. Both classified as high-risk under EU AI Act Annex III and GDPR Art. 22[cite: 3]. Neither produces SHAP explanations[cite: 3]. Neither has documented HITL checkpoints[cite: 3]. Flagged in Q3 2025 audit[cite: 3].</p><p class="sys-note">Both models require Autonomous Procure-to-Pay XAI and HITL retrofit before next compliance review[cite: 3]</p></div></div>
+        <div class="sys-row"><span class="sys-status" style="color:var(--amber);border-color:var(--amber-border);background:var(--amber-bg)">Legacy</span><div><div class="sys-name">Legacy AP Platform</div><div class="sys-role">Invoice Processing · Payment</div></div><div><p class="sys-desc">Standalone AP platform handling invoice capture, 3-way match (manual), and payment scheduling[cite: 3]. No integration with Ariba or SAP event streams[cite: 3]. 3-way match done in spreadsheets by a team of six[cite: 3].</p><p class="sys-note">3-Way Match Agent addresses this domain — replaces manual spreadsheet process[cite: 3]</p></div></div>
+        <div class="sys-row"><span class="sys-status">Disconnected</span><div><div class="sys-name">Supplier Portal</div><div class="sys-role">Onboarding · Self-Service</div></div><div><p class="sys-desc">Basic self-service portal for onboarding forms and document uploads[cite: 3]. No integration with Ariba vendor master or SAP supplier records[cite: 3]. Onboarding cycle averages 18 days[cite: 3]. No automated compliance checks[cite: 3].</p><p class="sys-note">Supplier Onboarding Agent addresses this domain — automated compliance screening at intake[cite: 3]</p></div></div>
+        <div class="sys-row"><span class="sys-status">Disconnected</span><div><div class="sys-name">Compliance Register</div><div class="sys-role">CSRD · LkSG · Audit</div></div><div><p class="sys-desc">Manual spreadsheet maintained by a two-person compliance team[cite: 3]. Annual supplier questionnaires[cite: 3]. No real-time monitoring[cite: 3]. 63% of suppliers not assessed in 18 months[cite: 3].</p><p class="sys-note">Supplier Performance Agent + CSRD continuous monitoring addresses this domain entirely[cite: 3]</p></div></div>
       </div>
-    </div>
+    </section>
 
     <!-- 03 STAKEHOLDERS -->
-    <div class="section" id="stakeholders">
-      <div class="sec-id sans">Stakeholder Register</div>
+    <section class="section" id="stakeholders">
+      <div class="sec-id">Stakeholder Register</div>
       <h2 class="sec-h2">Nine stakeholders. <em>Nine different conversations.</em></h2>
-      <p class="sec-intro sans">An autonomous procurement architecture that satisfies the CPO's efficiency requirements but cannot answer the Compliance Officer's audit question will not be adopted. Each stakeholder has a primary concern, a specific question the AB must answer, and the modules that address their domain.</p>
+      <p class="sec-intro">An autonomous procurement architecture that satisfies the CPO's efficiency requirements but cannot answer the Compliance Officer's audit question will not be adopted[cite: 3]. Each stakeholder has a primary concern, a specific question the Autonomous Procure-to-Pay must answer, and the modules that address their domain[cite: 3].</p>
+      
       <div class="stakeholders">
-        <div class="sh"><div><div class="sh-id sans">S-01 · Executive Sponsor</div><div class="sh-role sans">Chief Procurement Officer</div><div class="sh-dept sans">Procurement &amp; Supply Chain</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">End-to-end P2P cycle time and spend visibility. Whether the AB creates genuine procurement intelligence or adds another system to manage. ROI must be measurable in cycle time, cost per invoice, and compliance posture.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"Show me the P2P cycle time before and after — and show me which agent handled which step and what a human approved."</div><div class="sh-modules"><span class="sh-mod sans">All Modules</span><span class="sh-mod sans">ADR-002</span><span class="sh-mod sans">Spend Analytics</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-02 · Financial Governance</div><div class="sh-role sans">Chief Financial Officer</div><div class="sh-dept sans">Finance &amp; Treasury</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">The €3.2M annual late payment penalties and 11-day average invoice cycle. Early payment discount capture — currently near-zero — is also a CFO priority worth ~€280K/year.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"How does this eliminate the late payment penalties and unlock early payment discounts — with evidence, not projections?"</div><div class="sh-modules"><span class="sh-mod sans">3-Way Match Agent</span><span class="sh-mod sans">Payment Agent</span><span class="sh-mod sans">Spend Analytics</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-03 · Risk &amp; Compliance</div><div class="sh-role sans">Chief Compliance Officer</div><div class="sh-dept sans">Legal &amp; Regulatory Affairs</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">EU AI Act Annex III and GDPR Article 22 exposure on the two production procurement ML models. Whether the AB brings them into compliance before the next regulatory review without full re-architecture.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"Show me the audit trail for a supplier risk decision made last Tuesday. Every feature weight. Every human approval. Every system it touched."</div><div class="sh-modules"><span class="sh-mod sans">Supplier Performance</span><span class="sh-mod sans">XAI Layer</span><span class="sh-mod sans">HITL</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-04 · Legal &amp; Contracts</div><div class="sh-role sans">General Counsel</div><div class="sh-dept sans">Legal Affairs</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">Non-standard supplier contract terms passing through procurement without legal review. Indemnity caps, liability exclusions, and IP ownership clauses carry material financial risk if not flagged before countersigning.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"What is the agent's confidence threshold for escalating a clause to Legal, and can I see the precedents it compared against?"</div><div class="sh-modules"><span class="sh-mod sans">Contract Agent</span><span class="sh-mod sans">HITL Checkpoint</span><span class="sh-mod sans">Clause Scoring</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-05 · Procurement Operations</div><div class="sh-role sans">Head of Category Management</div><div class="sh-dept sans">Strategic Procurement</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">Sourcing cycle time and RFx quality. Strategic categories — MRI components, rare earth magnets, gradient coils — require rigorous supplier evaluation. The AB must enhance, not shortcut, category management discipline.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"Does the Sourcing Agent understand category-specific evaluation criteria, or does it apply generic scoring to every RFx?"</div><div class="sh-modules"><span class="sh-mod sans">Sourcing Agent</span><span class="sh-mod sans">Contract Agent</span><span class="sh-mod sans">Supplier Performance</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-06 · Supplier Relations</div><div class="sh-role sans">Head of Supplier Relations</div><div class="sh-dept sans">Supplier &amp; Partner Management</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">Supplier experience. Delayed PO confirmations, slow onboarding, and opaque dispute resolution damage strategic supplier relationships. The AB must make ClaraVis a preferred customer, not just a faster one.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"What does a supplier see when they interact with the AB? Can I show them a dispute resolution trail without calling my AP team?"</div><div class="sh-modules"><span class="sh-mod sans">PO Agent</span><span class="sh-mod sans">Supplier Onboarding</span><span class="sh-mod sans">Supplier Performance</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-07 · Accounts Payable</div><div class="sh-role sans">AP &amp; Finance Operations Manager</div><div class="sh-dept sans">Finance Operations</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">The manual 3-way match process consuming six people's time. Invoice exceptions, missing GRNs, and price discrepancies are resolved by email. Every exception is a re-keying event. The team is underwater at month-end.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"What percentage of invoices will flow straight-through without my team touching them, and what does the exception queue look like?"</div><div class="sh-modules"><span class="sh-mod sans">3-Way Match Agent</span><span class="sh-mod sans">Payment Agent</span><span class="sh-mod sans">HITL Approval UI</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-08 · IT Architecture</div><div class="sh-role sans">Enterprise Architect</div><div class="sh-dept sans">IT &amp; Digital Transformation</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">Integration complexity. The AB touches SAP Ariba, SAP S/4HANA, the legacy AP platform, and the supplier portal. Each integration point is a failure mode. The net integration surface must shrink, not grow.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"Show me the TOGAF Phase D diagram. Where are the integration points, the event contracts, and the failure recovery patterns?"</div><div class="sh-modules"><span class="sh-mod sans">TOGAF Phase D</span><span class="sh-mod sans">All ADRs</span><span class="sh-mod sans">Layer 04 Infra</span></div></div></div>
-        <div class="sh"><div><div class="sh-id sans">S-09 · Information Security</div><div class="sh-role sans">Chief Information Security Officer</div><div class="sh-dept sans">Security &amp; Risk</div></div><div><div class="sh-concern-label sans">Primary Concern</div><div class="sh-concern sans">Supplier PII and commercially sensitive contract data. No supplier financial data, pricing data, or contract terms leave the EU boundary. Every access is authenticated, every agent action is logged, every log is tamper-evident.</div><div class="sh-q-label sans">Question the AB must answer</div><div class="sh-q sans">"What is the data residency guarantee and how is it enforced at the infrastructure layer — not just configured in a policy document?"</div><div class="sh-modules"><span class="sh-mod sans">VPC-SC</span><span class="sh-mod sans">CMEK</span><span class="sh-mod sans">BeyondCorp</span><span class="sh-mod sans">Layer 04</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-01 · Executive Sponsor</div><div class="sh-role">Chief Procurement Officer</div><div class="sh-dept">Procurement &amp; Supply Chain</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">End-to-end P2P cycle time and spend visibility[cite: 3]. Whether the Autonomous Procure-to-Pay creates genuine procurement intelligence or adds another system to manage[cite: 3]. ROI must be measurable in cycle time, cost per invoice, and compliance posture[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"Show me the P2P cycle time before and after — and show me which agent handled which step and what a human approved."[cite: 3]</div><div class="sh-modules"><span class="sh-mod">All Modules</span><span class="sh-mod">ADR-002</span><span class="sh-mod">Spend Analytics</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-02 · Financial Governance</div><div class="sh-role">Chief Financial Officer</div><div class="sh-dept">Finance &amp; Treasury</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">The €3.2M annual late payment penalties and 11-day average invoice cycle[cite: 3]. Early payment discount capture — currently near-zero — is also a CFO priority worth ~€280K/year[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"How does this eliminate the late payment penalties and unlock early payment discounts — with evidence, not projections?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">3-Way Match Agent</span><span class="sh-mod">Payment Agent</span><span class="sh-mod">Spend Analytics</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-03 · Risk &amp; Compliance</div><div class="sh-role">Chief Compliance Officer</div><div class="sh-dept">Legal &amp; Regulatory Affairs</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">EU AI Act Annex III and GDPR Article 22 exposure on the two production procurement ML models[cite: 3]. Whether the Autonomous Procure-to-Pay brings them into compliance before the next regulatory review without full re-architecture[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"Show me the audit trail for a supplier risk decision made last Tuesday. Every feature weight. Every human approval. Every system it touched."[cite: 3]</div><div class="sh-modules"><span class="sh-mod">Supplier Performance</span><span class="sh-mod">XAI Layer</span><span class="sh-mod">HITL</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-04 · Legal &amp; Contracts</div><div class="sh-role">General Counsel</div><div class="sh-dept">Legal Affairs</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">Non-standard supplier contract terms passing through procurement without legal review[cite: 3]. Indemnity caps, liability exclusions, and IP ownership clauses carry material financial risk if not flagged before countersigning[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"What is the agent's confidence threshold for escalating a clause to Legal, and can I see the precedents it compared against?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">Contract Agent</span><span class="sh-mod">HITL Checkpoint</span><span class="sh-mod">Clause Scoring</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-05 · Procurement Operations</div><div class="sh-role">Head of Category Management</div><div class="sh-dept">Strategic Procurement</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">Sourcing cycle time and RFx quality[cite: 3]. Strategic categories — MRI components, rare earth magnets, gradient coils — require rigorous supplier evaluation[cite: 3]. The Autonomous Procure-to-Pay must enhance, not shortcut, category management discipline[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"Does the Sourcing Agent understand category-specific evaluation criteria, or does it apply generic scoring to every RFx?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">Sourcing Agent</span><span class="sh-mod">Contract Agent</span><span class="sh-mod">Supplier Performance</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-06 · Supplier Relations</div><div class="sh-role">Head of Supplier Relations</div><div class="sh-dept">Supplier &amp; Partner Management</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">Supplier experience[cite: 3]. Delayed PO confirmations, slow onboarding, and opaque dispute resolution damage strategic supplier relationships[cite: 3]. The Autonomous Procure-to-Pay must make ClaraVis a preferred customer, not just a faster one[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"What does a supplier see when they interact with the Autonomous Procure-to-Pay? Can I show them a dispute resolution trail without calling my AP team?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">PO Agent</span><span class="sh-mod">Supplier Onboarding</span><span class="sh-mod">Supplier Performance</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-07 · Accounts Payable</div><div class="sh-role">AP &amp; Finance Operations Manager</div><div class="sh-dept">Finance Operations</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">The manual 3-way match process consuming six people's time[cite: 3]. Invoice exceptions, missing GRNs, and price discrepancies are resolved by email[cite: 3]. Every exception is a re-keying event[cite: 3]. The team is underwater at month-end[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"What percentage of invoices will flow straight-through without my team touching them, and what does the exception queue look like?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">3-Way Match Agent</span><span class="sh-mod">Payment Agent</span><span class="sh-mod">HITL Approval UI</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-08 · IT Architecture</div><div class="sh-role">Enterprise Architect</div><div class="sh-dept">IT &amp; Digital Transformation</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">Integration complexity[cite: 3]. The Autonomous Procure-to-Pay touches SAP Ariba, SAP S/4HANA, the legacy AP platform, and the supplier portal[cite: 3]. Each integration point is a failure mode[cite: 3]. The net integration surface must shrink, not grow[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"Show me the TOGAF Phase D diagram. Where are the integration points, the event contracts, and the failure recovery patterns?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">TOGAF Phase D</span><span class="sh-mod">All ADRs</span><span class="sh-mod">Layer 04 Infra</span></div></div></div>
+        <div class="sh"><div><div class="sh-id">S-09 · Information Security</div><div class="sh-role">Chief Information Security Officer</div><div class="sh-dept">Security &amp; Risk</div></div><div><div class="sh-concern-label">Primary Concern</div><div class="sh-concern">Supplier PII and commercially sensitive contract data[cite: 3]. No supplier financial data, pricing data, or contract terms leave the EU boundary[cite: 3]. Every access is authenticated, every agent action is logged, every log is tamper-evident[cite: 3].</div><div class="sh-q-label">Question the system must answer</div><div class="sh-q">"What is the data residency guarantee and how is it enforced at the infrastructure layer — not just configured in a policy document?"[cite: 3]</div><div class="sh-modules"><span class="sh-mod">VPC-SC</span><span class="sh-mod">CMEK</span><span class="sh-mod">BeyondCorp</span><span class="sh-mod">Layer 04</span></div></div></div>
       </div>
-    </div>
+    </section>
 
     <!-- 04 AS-IS ARCHITECTURE -->
-    <div class="section" id="asis">
-      <div class="sec-id sans">As-Is Architecture</div>
+    <section class="section" id="asis">
+      <div class="sec-id">As-Is Architecture</div>
       <h2 class="sec-h2">The current state — <em>mapped precisely.</em></h2>
-      <p class="sec-intro sans">The TOGAF ADM Phase B input. Understanding where process latency and architectural debt accumulate in the current state is the prerequisite for designing the To-Be architecture. The diagrams below represent ClaraVis procurement as it operates today.</p>
+      <p class="sec-intro">The TOGAF ADM Phase B input[cite: 3]. Understanding where process latency and architectural debt accumulate in the current state is the prerequisite for designing the To-Be architecture[cite: 3]. The diagrams below represent ClaraVis procurement as it operates today[cite: 3].</p>
 
-      <div class="diagram-label sans">Diagram 01 — As-Is Sourcing Value Stream</div>
-      <div class="diagram-sub sans">Seven organisational handoffs · Average sourcing cycle: 28 days · No end-to-end owner</div>
+      <div class="diagram-label">Diagram 01 — As-Is Sourcing Value Stream</div>
+      <div class="diagram-sub">Seven organisational handoffs · Average sourcing cycle: 28 days · No end-to-end owner[cite: 3]</div>
       <div class="diagram-legend">
-        <div class="leg-item sans"><div class="leg-dot" style="background:rgba(50,120,200,0.55);"></div>Ariba-managed</div>
-        <div class="leg-item sans"><div class="leg-dot" style="background:rgba(220,80,60,0.55);"></div>Manual handoff</div>
-        <div class="leg-item sans"><div class="leg-dot" style="background:rgba(60,160,80,0.5);"></div>SAP-managed</div>
-        <div class="leg-item sans"><div class="leg-dot" style="background:rgba(180,140,60,0.5);"></div>No audit trail</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--blue-border);"></div>Ariba-managed</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--coral-border);"></div>Manual handoff</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--teal-border);"></div>SAP-managed</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--amber-border);"></div>No audit trail</div>
       </div>
-      <div class="cycle-stat sans">28 days average sourcing cycle time</div>
+      <div class="cycle-stat">28 days average sourcing cycle time[cite: 3]</div>
 
       <div class="asis-stream">
-        <div class="stream-lane-row" style="border-bottom:1px solid var(--border);">
+        <div class="stream-lane-row">
           <div class="lane-label"><span>Procurement</span></div>
           <div class="lane-steps">
             <div class="step-wrap"><div class="step-box sb-ariba"><div class="sn">Need Identified</div><div class="ss">Requisition</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">RFx Prepared</div><div class="ss">Manual / Ariba</div></div><div class="step-delay">~4 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-ariba"><div class="sn">RFx Published</div><div class="ss">Ariba Network</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">Responses Scored</div><div class="ss">Manual / Excel</div></div><div class="step-delay">~5 days</div></div>
           </div>
         </div>
@@ -420,36 +540,36 @@
           <div class="lane-label"><span>Legal / Finance</span></div>
           <div class="lane-steps">
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">Supplier Selected</div><div class="ss">No audit trail</div></div><div class="step-delay">~3 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-legacy"><div class="sn">Contract Negotiated</div><div class="ss">Email / Word</div></div><div class="step-delay">~10 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-ariba"><div class="sn">Contract Signed</div><div class="ss">Ariba CLM</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-sap"><div class="sn">Vendor Created</div><div class="ss">SAP S/4HANA</div></div><div class="step-delay">~6 days</div></div>
           </div>
         </div>
       </div>
       <div class="pain-boxes">
-        <div class="pain-box"><div class="pain-box-title sans">No SLA on evaluation</div><div class="pain-box-text sans">RFx scoring and supplier selection have no defined SLA. Delays accumulate invisibly across Category Management, Legal, and Finance.</div></div>
-        <div class="pain-box"><div class="pain-box-title sans">Contract negotiation in email</div><div class="pain-box-text sans">Redlines exchanged via email and Word. No clause-level risk scoring. Legal review triggered by relationship, not by risk threshold.</div></div>
-        <div class="pain-box"><div class="pain-box-title sans">Manual SAP vendor creation</div><div class="pain-box-text sans">Vendor master data re-keyed from Ariba into SAP. Average 6-day lag. Error rate ~3.5%. CSRD compliance check not performed at onboarding.</div></div>
+        <div class="pain-box"><div class="pain-box-title">No SLA on evaluation</div><div class="pain-box-text">RFx scoring and supplier selection have no defined SLA[cite: 3]. Delays accumulate invisibly across Category Management, Legal, and Finance[cite: 3].</div></div>
+        <div class="pain-box"><div class="pain-box-title">Contract negotiation in email</div><div class="pain-box-text">Redlines exchanged via email and Word[cite: 3]. No clause-level risk scoring[cite: 3]. Legal review triggered by relationship, not by risk threshold[cite: 3].</div></div>
+        <div class="pain-box"><div class="pain-box-title">Manual SAP vendor creation</div><div class="pain-box-text">Vendor master data re-keyed from Ariba into SAP[cite: 3]. Average 6-day lag[cite: 3]. Error rate ~3.5%[cite: 3]. CSRD compliance check not performed at onboarding[cite: 3].</div></div>
       </div>
-      <p class="to-be-note sans">AB To-Be: Agent-mediated sourcing state machine · HITL at award decision · Contract Agent replaces email redlines · Automated vendor master sync · CSRD screening at intake</p>
+      <div class="to-be-note">To-Be: Agent-mediated sourcing state machine · HITL at award decision · Contract Agent replaces email redlines · Automated vendor master sync · CSRD screening at intake[cite: 3]</div>
 
-      <div class="diagram-label sans">Diagram 02 — As-Is AP &amp; Payment Value Stream</div>
-      <div class="diagram-sub sans">Eight handoffs · Average invoice cycle: 11 days · 3-way match done manually in spreadsheets</div>
-      <div class="cycle-stat sans">11 days avg. invoice cycle · €3.2M annual late payment penalties</div>
+      <div class="diagram-label">Diagram 02 — As-Is AP &amp; Payment Value Stream</div>
+      <div class="diagram-sub">Eight handoffs · Average invoice cycle: 11 days · 3-way match done manually in spreadsheets[cite: 3]</div>
+      <div class="cycle-stat">11 days avg. invoice cycle · €3.2M annual late payment penalties[cite: 3]</div>
 
       <div class="asis-stream">
-        <div class="stream-lane-row" style="border-bottom:1px solid var(--border);">
+        <div class="stream-lane-row">
           <div class="lane-label"><span>Accounts Payable</span></div>
           <div class="lane-steps">
             <div class="step-wrap"><div class="step-box sb-legacy"><div class="sn">Invoice Received</div><div class="ss">Email / Post</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">Data Entry</div><div class="ss">Manual keying</div></div><div class="step-delay">~2 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">3-Way Match</div><div class="ss">Spreadsheet</div></div><div class="step-delay">~3 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">Exception Review</div><div class="ss">Email chain</div></div><div class="step-delay">~4 days</div></div>
           </div>
         </div>
@@ -457,169 +577,353 @@
           <div class="lane-label"><span>Finance / Treasury</span></div>
           <div class="lane-steps">
             <div class="step-wrap"><div class="step-box sb-sap"><div class="sn">Invoice Posted</div><div class="ss">SAP S/4HANA</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-manual"><div class="sn">Payment Run</div><div class="ss">Manual batch</div></div><div class="step-delay">~2 days</div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-sap"><div class="sn">Payment Executed</div><div class="ss">SAP / Bank</div></div><div class="step-delay"></div></div>
-            <div class="step-arrow sans">→</div>
+            <div class="step-arrow">→</div>
             <div class="step-wrap"><div class="step-box sb-legacy"><div class="sn">Supplier Notified</div><div class="ss">Email</div></div><div class="step-delay"></div></div>
           </div>
         </div>
       </div>
       <div class="pain-boxes">
-        <div class="pain-box"><div class="pain-box-title sans">Manual 3-way match</div><div class="pain-box-text sans">Team of 6 matching invoices against POs and GRNs in spreadsheets. First-time match rate: ~58%. Every exception is an email chain.</div></div>
-        <div class="pain-box"><div class="pain-box-title sans">No early pay discount capture</div><div class="pain-box-text sans">11-day cycle makes early payment discount windows (typically 10 days) structurally unavailable. Estimated missed savings: €280K/year.</div></div>
-        <div class="pain-box"><div class="pain-box-title sans">Batch payment runs only</div><div class="pain-box-text sans">Payment runs executed twice weekly. Dynamic discounting and real-time payment optimisation are not possible with batch-only treasury operations.</div></div>
+        <div class="pain-box"><div class="pain-box-title">Manual 3-way match</div><div class="pain-box-text">Team of 6 matching invoices against POs and GRNs in spreadsheets[cite: 3]. First-time match rate: ~58%[cite: 3]. Every exception is an email chain[cite: 3].</div></div>
+        <div class="pain-box"><div class="pain-box-title">No early pay discount capture</div><div class="pain-box-text">11-day cycle makes early payment discount windows (typically 10 days) structurally unavailable[cite: 3]. Estimated missed savings: €280K/year[cite: 3].</div></div>
+        <div class="pain-box"><div class="pain-box-title">Batch payment runs only</div><div class="pain-box-text">Payment runs executed twice weekly[cite: 3]. Dynamic discounting and real-time payment optimisation are not possible with batch-only treasury operations[cite: 3].</div></div>
       </div>
-      <p class="to-be-note sans">AB To-Be: 3-Way Match Agent with tolerance-band logic · &gt;90% straight-through rate · Exception ML with HITL routing · Dynamic discount optimisation · Real-time payment scheduling</p>
+      <div class="to-be-note">To-Be: 3-Way Match Agent with tolerance-band logic · &gt;90% straight-through rate · Exception ML with HITL routing · Dynamic discount optimisation · Real-time payment scheduling[cite: 3]</div>
 
-      <div class="diagram-label sans">Diagram 03 — As-Is System Landscape</div>
-      <div class="diagram-sub sans">Five disconnected domains · Two EU AI Act-exposed models · No cross-system P2P orchestration layer</div>
+      <div class="diagram-label">Diagram 03 — As-Is System Landscape</div>
+      <div class="diagram-sub">Five disconnected domains · Two EU AI Act-exposed models · No cross-system P2P orchestration layer[cite: 3]</div>
       <div class="landscape">
-        <div class="land-title sans">CLARAVIS PROCUREMENT BOUNDARY (AS-IS)</div>
+        <div class="land-title">CLARAVIS PROCUREMENT BOUNDARY (AS-IS)[cite: 3]</div>
         <div class="land-grid">
-          <div class="land-cell"><div class="land-cell-title sans">SAP Ariba</div><div class="land-cell-sub sans">Sourcing · CLM · Supplier Mgmt<br>Requisitions · RFx · Contracts</div><span class="land-tag sans">Ariba Network</span></div>
-          <div class="land-cell"><div class="land-cell-title sans">SAP S/4HANA</div><div class="land-cell-sub sans">ERP · Finance · Logistics<br>PO · GRN · AP · GL</div><span class="land-tag sans" style="color:rgba(220,80,60,0.6);border-color:rgba(220,80,60,0.2);">Manual re-key from Ariba</span></div>
-          <div class="land-cell"><div class="land-cell-title sans">Legacy AP Platform</div><div class="land-cell-sub sans">Invoice Processing<br>Manual 3-way match · Batch payment</div><span class="land-tag sans" style="color:#c0a060;border-color:rgba(180,140,60,0.2);">No event stream</span></div>
-          <div class="land-cell" style="background:rgba(220,80,60,0.04);border-left:2px solid rgba(220,80,60,0.2);"><div class="land-cell-title sans" style="color:#e08070;">2 ML Models — EU AI Act Risk</div><div class="land-cell-sub sans">Supplier Risk Scoring · Spend Anomaly<br>No SHAP · No HITL · Audit flagged Q3 2025</div><span class="land-tag sans" style="color:rgba(220,80,60,0.6);border-color:rgba(220,80,60,0.2);">Annex III · GDPR Art. 22</span></div>
-          <div class="land-cell"><div class="land-cell-title sans">Supplier Portal</div><div class="land-cell-sub sans">Onboarding forms · Doc uploads<br>18-day avg. onboarding · No compliance check</div><span class="land-tag sans">Disconnected</span></div>
-          <div class="land-cell"><div class="land-cell-title sans">Compliance Register</div><div class="land-cell-sub sans">CSRD · LkSG · Manual spreadsheet<br>63% suppliers not assessed — 18 months</div><span class="land-tag sans">Disconnected</span></div>
+          <div class="land-cell"><div class="land-cell-title">SAP Ariba</div><div class="land-cell-sub">Sourcing · CLM · Supplier Mgmt<br>Requisitions · RFx · Contracts[cite: 3]</div><span class="land-tag">Ariba Network</span></div>
+          <div class="land-cell"><div class="land-cell-title">SAP S/4HANA</div><div class="land-cell-sub">ERP · Finance · Logistics<br>PO · GRN · AP · GL[cite: 3]</div><span class="land-tag" style="color:var(--coral);">Manual re-key from Ariba[cite: 3]</span></div>
+          <div class="land-cell"><div class="land-cell-title">Legacy AP Platform</div><div class="land-cell-sub">Invoice Processing<br>Manual 3-way match · Batch payment[cite: 3]</div><span class="land-tag" style="color:var(--amber);">No event stream[cite: 3]</span></div>
+          <div class="land-cell" style="background:var(--coral-bg); border-left:2px solid var(--coral-border);"><div class="land-cell-title" style="color:var(--coral)">2 ML Models — EU AI Act Risk</div><div class="land-cell-sub">Supplier Risk Scoring · Spend Anomaly<br>No SHAP · No HITL · Audit flagged Q3 2025[cite: 3]</div><span class="land-tag" style="color:var(--coral);">Annex III · GDPR Art. 22[cite: 3]</span></div>
+          <div class="land-cell"><div class="land-cell-title">Supplier Portal</div><div class="land-cell-sub">Onboarding forms · Doc uploads<br>18-day avg. onboarding · No compliance check[cite: 3]</div><span class="land-tag">Disconnected[cite: 3]</span></div>
+          <div class="land-cell"><div class="land-cell-title">Compliance Register</div><div class="land-cell-sub">CSRD · LkSG · Manual spreadsheet<br>63% suppliers not assessed — 18 months[cite: 3]</div><span class="land-tag">Disconnected[cite: 3]</span></div>
         </div>
-        <div class="land-gap"><div class="land-gap-text sans">Architectural gap: No orchestration layer connects SAP Ariba · SAP S/4HANA · Legacy AP · ML Models · Supplier Portal into a coherent, auditable, human-supervised P2P flow</div></div>
+        <div class="land-gap"><div class="land-gap-text">Architectural gap: No orchestration layer connects SAP Ariba · SAP S/4HANA · Legacy AP · ML Models · Supplier Portal into a coherent, auditable, human-supervised P2P flow[cite: 3]</div></div>
       </div>
-    </div>
+    </section>
 
     <!-- 05 REQUIREMENTS -->
-    <div class="section" id="requirements">
-      <div class="sec-id sans">Requirements Catalogue</div>
+    <section class="section" id="requirements">
+      <div class="sec-id">Requirements Catalogue</div>
       <h2 class="sec-h2">What ClaraVis requires — <em>documented and prioritised.</em></h2>
-      <p class="sec-intro sans">Every requirement below is traceable to a stakeholder concern, a regulatory obligation, or a procurement pain point. Prioritised using MoSCoW.</p>
+      <p class="sec-intro">Every requirement below is traceable to a stakeholder concern, a regulatory obligation, or a procurement pain point[cite: 3]. Prioritised using MoSCoW[cite: 3].</p>
+      
       <div class="req-stats">
-        <div class="req-stat"><div class="req-stat-num sans">8</div><div class="req-stat-label sans">Business Requirements</div><div class="req-stat-sub sans">Commercial outcomes ClaraVis requires the AB to achieve.</div></div>
-        <div class="req-stat"><div class="req-stat-num sans">12</div><div class="req-stat-label sans">Architecture Requirements</div><div class="req-stat-sub sans">Structural properties — explainability, HITL, compliance. Non-negotiable.</div></div>
-        <div class="req-stat"><div class="req-stat-num sans">7</div><div class="req-stat-label sans">Constraints</div><div class="req-stat-sub sans">Fixed boundaries — systems, regulatory, integration.</div></div>
+        <div class="req-stat"><div class="req-stat-num">8</div><div class="req-stat-label">Business Requirements</div><div class="req-stat-sub">Commercial outcomes ClaraVis requires the Autonomous Procure-to-Pay to achieve[cite: 3].</div></div>
+        <div class="req-stat"><div class="req-stat-num">12</div><div class="req-stat-label">Architecture Requirements</div><div class="req-stat-sub">Structural properties — explainability, HITL, compliance. Non-negotiable[cite: 3].</div></div>
+        <div class="req-stat"><div class="req-stat-num">7</div><div class="req-stat-label">Constraints</div><div class="req-stat-sub">Fixed boundaries — systems, regulatory, integration[cite: 3].</div></div>
       </div>
+
       <div class="req-tabs">
-        <button class="req-tab active sans" onclick="showTab('br',this)">Business Requirements</button>
-        <button class="req-tab sans" onclick="showTab('ar',this)">Architecture Requirements</button>
-        <button class="req-tab sans" onclick="showTab('co',this)">Constraints</button>
+        <button class="req-tab active" onclick="showTab('br',this)">Business Requirements</button>
+        <button class="req-tab" onclick="showTab('ar',this)">Architecture Requirements</button>
+        <button class="req-tab" onclick="showTab('co',this)">Constraints</button>
       </div>
+
       <div id="br" class="req-panel active">
         <table class="req-table">
-          <thead><tr><th style="width:55px;">ID</th><th style="width:190px;">Requirement</th><th>Description</th><th style="width:68px;">MoSCoW</th><th style="width:130px;">AB Module</th></tr></thead>
+          <thead><tr><th style="width:60px;">ID</th><th style="width:200px;">Requirement</th><th>Description</th><th style="width:80px;">MoSCoW</th><th style="width:140px;">Pillar Module</th></tr></thead>
           <tbody>
-            <tr><td><span class="req-id sans">BR-01</span></td><td><div class="req-title sans">P2P cycle time reduction</div></td><td>The end-to-end P2P cycle must be orchestrated with defined SLAs per transition and an immutable audit record at every handoff. The current 11-day invoice cycle and 28-day sourcing cycle are the primary operational pain points.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">PO Agent · 3-Way Match · Payment Agent</td></tr>
-            <tr><td><span class="req-id sans">BR-02</span></td><td><div class="req-title sans">EU AI Act &amp; GDPR Art. 22 compliance for 2 production models</div></td><td>Both procurement ML models must be brought into EU AI Act Annex III and GDPR Art. 22 compliance — SHAP explanations per inference, documented HITL checkpoints, and a versioned risk management system before next compliance review.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Supplier Performance · XAI Layer</td></tr>
-            <tr><td><span class="req-id sans">BR-03</span></td><td><div class="req-title sans">3-way match automation</div></td><td>The manual 3-way match process — PO vs GRN vs invoice — must be automated with tolerance-band logic, exception ML classification, and HITL routing. Target: &gt;90% straight-through processing. Current first-time match rate: 58%.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">3-Way Match Agent</td></tr>
-            <tr><td><span class="req-id sans">BR-04</span></td><td><div class="req-title sans">CSRD / LkSG continuous compliance monitoring</div></td><td>Supplier due diligence obligations must be satisfied continuously. Every supplier must have a real-time compliance score. Threshold breaches must trigger automated HITL escalation to the Compliance Officer with a full evidence brief.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Supplier Performance · Sourcing Agent</td></tr>
-            <tr><td><span class="req-id sans">BR-05</span></td><td><div class="req-title sans">Contract clause intelligence</div></td><td>Every inbound supplier contract must be analysed at clause level — indemnity caps, liability exclusions, IP ownership, governing law — with non-standard terms flagged to Legal with a risk score, precedent references, and a draft counter-position before countersigning.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Contract Agent</td></tr>
-            <tr><td><span class="req-id sans">BR-06</span></td><td><div class="req-title sans">Data sovereignty — no procurement data leaves EU boundary</div></td><td>All supplier PII, contract data, pricing data, and procurement transaction records must remain within the EU GCP region boundary. Enforcement must be architectural — VPC-SC — not policy-based.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Layer 04 Infra · VPC-SC</td></tr>
-            <tr><td><span class="req-id sans">BR-07</span></td><td><div class="req-title sans">Early payment discount capture</div></td><td>The Payment Agent must identify early payment discount opportunities on every eligible invoice and schedule payment within the discount window when cash position permits. Estimated annual savings: €280K.</td><td><span class="moscow-s">Should</span></td><td style="font-size:11px;" class="sans">Payment Agent · Spend Analytics</td></tr>
-            <tr><td><span class="req-id sans">BR-08</span></td><td><div class="req-title sans">Tail spend visibility and control</div></td><td>The ~23% of spend currently classified as unmanaged tail spend must be made visible, categorised, and routed to preferred suppliers where possible. Tail Spend Intelligence module addresses this domain with spend classification ML and policy enforcement.</td><td><span class="moscow-s">Should</span></td><td style="font-size:11px;" class="sans">Tail Spend Intelligence</td></tr>
+            <tr><td><span class="req-id">BR-01</span></td><td><div class="req-title">P2P cycle time reduction</div></td><td>The end-to-end P2P cycle must be orchestrated with defined SLAs per transition and an immutable audit record at every handoff[cite: 3]. The current 11-day invoice cycle and 28-day sourcing cycle are the primary operational pain points[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>PO Agent · 3-Way Match · Payment Agent[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-02</span></td><td><div class="req-title">EU AI Act &amp; GDPR compliance</div></td><td>Both procurement ML models must be brought into EU AI Act Annex III and GDPR Art. 22 compliance — SHAP explanations per inference, documented HITL checkpoints, and a versioned risk management system before next compliance review[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Supplier Performance · XAI Layer[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-03</span></td><td><div class="req-title">3-way match automation</div></td><td>The manual 3-way match process — PO vs GRN vs invoice — must be automated with tolerance-band logic, exception ML classification, and HITL routing[cite: 3]. Target: &gt;90% straight-through processing[cite: 3]. Current first-time match rate: 58%[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>3-Way Match Agent[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-04</span></td><td><div class="req-title">CSRD / LkSG monitoring</div></td><td>Supplier due diligence obligations must be satisfied continuously[cite: 3]. Every supplier must have a real-time compliance score[cite: 3]. Threshold breaches must trigger automated HITL escalation to the Compliance Officer with a full evidence brief[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Supplier Performance · Sourcing Agent[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-05</span></td><td><div class="req-title">Contract clause intelligence</div></td><td>Every inbound supplier contract must be analysed at clause level — indemnity caps, liability exclusions, IP ownership, governing law — with non-standard terms flagged to Legal with a risk score, precedent references, and a draft counter-position before countersigning[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Contract Agent[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-06</span></td><td><div class="req-title">Data sovereignty constraint</div></td><td>All supplier PII, contract data, pricing data, and procurement transaction records must remain within the EU GCP region boundary[cite: 3]. Enforcement must be architectural — VPC-SC — not policy-based[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Layer 04 Infra · VPC-SC[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-07</span></td><td><div class="req-title">Early payment discount</div></td><td>The Payment Agent must identify early payment discount opportunities on every eligible invoice and schedule payment within the discount window when cash position permits[cite: 3]. Estimated annual savings: €280K[cite: 3].</td><td><span class="moscow-s">Should</span></td><td>Payment Agent · Spend Analytics[cite: 3]</td></tr>
+            <tr><td><span class="req-id">BR-08</span></td><td><div class="req-title">Tail spend visibility</div></td><td>The ~23% of spend currently classified as unmanaged tail spend must be made visible, categorised, and routed to preferred suppliers where possible[cite: 3]. Tail Spend Intelligence module addresses this domain with spend classification ML and policy enforcement[cite: 3].</td><td><span class="moscow-s">Should</span></td><td>Tail Spend Intelligence[cite: 3]</td></tr>
           </tbody>
         </table>
       </div>
+
       <div id="ar" class="req-panel">
         <table class="req-table">
-          <thead><tr><th style="width:55px;">ID</th><th style="width:190px;">Requirement</th><th>Description</th><th style="width:68px;">MoSCoW</th><th style="width:130px;">Regulatory Basis</th></tr></thead>
+          <thead><tr><th style="width:60px;">ID</th><th style="width:200px;">Requirement</th><th>Description</th><th style="width:80px;">MoSCoW</th><th style="width:140px;">Regulatory Basis</th></tr></thead>
           <tbody>
-            <tr><td><span class="req-id sans">AR-01</span></td><td><div class="req-title sans">SHAP explanation per ML inference</div></td><td>Every ML model inference informing a procurement decision must produce a SHAP explanation identifying the top contributing features, their directional effect, and the model confidence score — written to the audit log before any downstream action executes.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">EU AI Act Art. 13 &amp; 14</td></tr>
-            <tr><td><span class="req-id sans">AR-02</span></td><td><div class="req-title sans">HITL as formal state machine node</div></td><td>Every high-risk procurement decision must route through a named human approver via a formal HITL state with defined entry condition, presentation contract, decision interface, timeout behaviour, and immutable audit record. HITL is a first-class architectural component, not a process note.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">EU AI Act Art. 14 · GDPR Art. 22</td></tr>
-            <tr><td><span class="req-id sans">AR-03</span></td><td><div class="req-title sans">Immutable audit trail for all agent actions</div></td><td>Every agent action — tool call, state transition, HITL event, model inference — must be written to an immutable audit store (Firestore) before the action is considered complete. The audit record must be queryable but not modifiable.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">EU AI Act Art. 12 · GDPR</td></tr>
-            <tr><td><span class="req-id sans">AR-04</span></td><td><div class="req-title sans">SAP Ariba as sourcing system of record — AB augments</div></td><td>The AB reads from and writes back to SAP Ariba via REST API. Ariba remains the source of truth for sourcing events and contract metadata. Any data written to Ariba by the AB is tagged with the agent action ID that produced it.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">ADR-001 · ADR-002</td></tr>
-            <tr><td><span class="req-id sans">AR-05</span></td><td><div class="req-title sans">Model Cards for every ML model</div></td><td>Every model in production must have a Model Card documenting intended use, training data summary, evaluation metrics, known limitations, bias analysis, and the HITL checkpoint specification. Versioned alongside the model in Vertex AI Model Registry.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">EU AI Act Art. 11</td></tr>
-            <tr><td><span class="req-id sans">AR-06</span></td><td><div class="req-title sans">VPC-SC perimeter for data sovereignty</div></td><td>All data processing must occur within a VPC-SC perimeter configured to prevent data exfiltration outside the EU GCP region. The perimeter is enforced at the infrastructure layer via Terraform — not a network policy overridable by application configuration.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">GDPR · EU DPDP · BR-06</td></tr>
-            <tr><td><span class="req-id sans">AR-07</span></td><td><div class="req-title sans">CMEK encryption — ClaraVis key custody</div></td><td>All data at rest and in transit must be encrypted using Customer-Managed Encryption Keys via Cloud KMS. ClaraVis retains key custody. Key rotation policy: 90 days.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">ISO 27001 · GDPR</td></tr>
-            <tr><td><span class="req-id sans">AR-08</span></td><td><div class="req-title sans">3-way match tolerance-band logic as write-path constraint</div></td><td>Tolerance rules — ±2% price variance, ±5% quantity variance — encoded as write-path constraints applied at match time, before any payment action executes. Configurable per category by the AP Manager without a code deployment. Out-of-tolerance invoices route to HITL automatically.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">P2P Domain · BR-03</td></tr>
-            <tr><td><span class="req-id sans">AR-09</span></td><td><div class="req-title sans">Atomic vendor master sync — Ariba to SAP</div></td><td>Every new supplier approved in Ariba must write simultaneously to the SAP vendor master, the CSRD compliance register, and the AB supplier risk profile — in a single atomic transaction. Vendor activation in SAP must not precede CSRD screening completion.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">CSRD · LkSG · BR-04</td></tr>
-            <tr><td><span class="req-id sans">AR-10</span></td><td><div class="req-title sans">ADR documentation for every significant decision</div></td><td>Every significant architectural decision must be documented as an Architecture Decision Record with status, context, decision, alternatives considered, and consequences. ADRs are version-controlled and linked from the relevant module page.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">TOGAF ADM · Portfolio Standard</td></tr>
-            <tr><td><span class="req-id sans">AR-11</span></td><td><div class="req-title sans">Pub/Sub event fabric as P2P integration bus</div></td><td>All cross-system procurement events — Ariba sourcing events, SAP PO confirmations, GRN receipts, invoice arrivals — must be published to a Pub/Sub topic before downstream systems consume them. Decouples producers from consumers and enables event replay for audit purposes.</td><td><span class="moscow-s">Should</span></td><td style="font-size:11px;" class="sans">Architecture Principle · BR-01</td></tr>
-            <tr><td><span class="req-id sans">AR-12</span></td><td><div class="req-title sans">Drift detection and retraining trigger for procurement models</div></td><td>Both procurement ML models must have Vertex AI monitoring jobs configured to detect data and concept drift. Drift beyond threshold triggers an alert and routes to the ML Engineer HITL checkpoint before any automated retraining executes.</td><td><span class="moscow-s">Should</span></td><td style="font-size:11px;" class="sans">EU AI Act Art. 9 · MLOps Standard</td></tr>
+            <tr><td><span class="req-id">AR-01</span></td><td><div class="req-title">SHAP explanation per inference</div></td><td>Every ML model inference informing a procurement decision must produce a SHAP explanation identifying the top contributing features, their directional effect, and the model confidence score — written to the audit log before any downstream action executes[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>EU AI Act Art. 13 &amp; 14[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-02</span></td><td><div class="req-title">HITL as formal state node</div></td><td>Every high-risk procurement decision must route through a named human approver via a formal HITL state with defined entry condition, presentation contract, decision interface, timeout behaviour, and immutable audit record[cite: 3]. HITL is a first-class architectural component, not a process note[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>EU AI Act Art. 14 · GDPR Art. 22[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-03</span></td><td><div class="req-title">Immutable audit trail</div></td><td>Every agent action — tool call, state transition, HITL event, model inference — must be written to an immutable audit store (Firestore) before the action is considered complete[cite: 3]. The audit record must be queryable but not modifiable[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>EU AI Act Art. 12 · GDPR[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-04</span></td><td><div class="req-title">SAP Ariba system of record</div></td><td>The Autonomous Procure-to-Pay reads from and writes back to SAP Ariba via REST API[cite: 3]. Ariba remains the source of truth for sourcing events and contract metadata[cite: 3]. Any data written to Ariba by the Autonomous Procure-to-Pay is tagged with the agent action ID that produced it[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>ADR-001 · ADR-002[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-05</span></td><td><div class="req-title">Model Cards for architecture</div></td><td>Every model in production must have a Model Card documenting intended use, training data summary, evaluation metrics, known limitations, bias analysis, and the HITL checkpoint specification[cite: 3]. Versioned alongside the model in Vertex AI Model Registry[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>EU AI Act Art. 11[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-06</span></td><td><div class="req-title">VPC-SC perimeter tracking</div></td><td>All data processing must occur within a VPC-SC perimeter configured to prevent data exfiltration outside the EU GCP region[cite: 3]. The perimeter is enforced at the infrastructure layer via Terraform — not a network policy overridable by application configuration[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>GDPR · EU DPDP · BR-06[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-07</span></td><td><div class="req-title">CMEK encryption setup</div></td><td>All data at rest and in transit must be encrypted using Customer-Managed Encryption Keys via Cloud KMS[cite: 3]. ClaraVis retains key custody[cite: 3]. Key rotation policy: 90 days[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>ISO 27001 · GDPR[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-08</span></td><td><div class="req-title">3-way tolerance rules</div></td><td>Tolerance rules — ±2% price variance, ±5% quantity variance — encoded as write-path constraints applied at match time, before any payment action executes[cite: 3]. Configurable per category by the AP Manager without a code deployment[cite: 3]. Out-of-tolerance invoices route to HITL automatically[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>P2P Domain · BR-03[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-09</span></td><td><div class="req-title">Atomic vendor master sync</div></td><td>Every new supplier approved in Ariba must write simultaneously to the SAP vendor master, the CSRD compliance register, and the Autonomous Procure-to-Pay supplier risk profile — in a single atomic transaction[cite: 3]. Vendor activation in SAP must not precede CSRD screening completion[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>CSRD · LkSG · BR-04[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-10</span></td><td><div class="req-title">ADR documentation rules</div></td><td>Every significant architectural decision must be documented as an Architecture Decision Record with status, context, decision, alternatives considered, and consequences[cite: 3]. ADRs are version-controlled and linked from the relevant module page[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>TOGAF ADM · Portfolio Standard[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-11</span></td><td><div class="req-title">Pub/Sub event bus bus</div></td><td>All cross-system procurement events — Ariba sourcing events, SAP PO confirmations, GRN receipts, invoice arrivals — must be published to a Pub/Sub topic before downstream systems consume them[cite: 3]. Decouples producers from consumers and enables event replay for audit purposes[cite: 3].</td><td><span class="moscow-s">Should</span></td><td>Architecture Principle · BR-01[cite: 3]</td></tr>
+            <tr><td><span class="req-id">AR-12</span></td><td><div class="req-title">Drift detection pipelines</div></td><td>Both procurement ML models must have Vertex AI monitoring jobs configured to detect data and concept drift[cite: 3]. Drift beyond threshold triggers an alert and routes to the ML Engineer HITL checkpoint before any automated retraining executes[cite: 3].</td><td><span class="moscow-s">Should</span></td><td>EU AI Act Art. 9 · MLOps Standard[cite: 3]</td></tr>
           </tbody>
         </table>
       </div>
+
       <div id="co" class="req-panel">
         <table class="req-table">
-          <thead><tr><th style="width:55px;">ID</th><th style="width:190px;">Constraint</th><th>Description &amp; Impact on Design</th><th style="width:68px;">MoSCoW</th><th style="width:100px;">Source</th></tr></thead>
+          <thead><tr><th style="width:60px;">ID</th><th style="width:200px;">Constraint</th><th>Description &amp; Impact on Design</th><th style="width:80px;">MoSCoW</th><th style="width:140px;">Source</th></tr></thead>
           <tbody>
-            <tr><td><span class="req-id sans">C-01</span></td><td><div class="req-title sans">Zero additional software licensing cost</div></td><td>The AB portfolio is a demonstration system built on free-tier and open-source components. No paid API subscriptions, no commercial data connectors, no licensed dataset providers. All GCP services operate within the free tier or GCP credits until the build phase begins.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Portfolio Constraint</td></tr>
-            <tr><td><span class="req-id sans">C-02</span></td><td><div class="req-title sans">SAP Ariba integration via REST API pattern</div></td><td>Ariba integration uses the Ariba Network APIs and SAP Open Connectors pattern only — no paid middleware, no licensed SAP BTP integration flows. The integration pattern must be demonstrable with Ariba Developer sandbox data (ADR-001).</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">ADR-001 · C-01</td></tr>
-            <tr><td><span class="req-id sans">C-03</span></td><td><div class="req-title sans">SAP S/4HANA integration via middleware abstraction</div></td><td>Direct SAP S/4HANA integration is not implemented in the portfolio demo (SAP license cost). The AB design shows the integration architecture — BAPI/IDoc via middleware — and the demo uses BigQuery tables seeded with SAP-schema data to represent the ERP layer.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">C-01 · ADR-002</td></tr>
-            <tr><td><span class="req-id sans">C-04</span></td><td><div class="req-title sans">EU data residency — GCP europe-west3 (Frankfurt)</div></td><td>All GCP resources must be provisioned in europe-west3 or europe-west4 only. No multi-region configurations including non-EU endpoints. Enforced via Terraform variable and Organisation Policy constraint.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">GDPR · BR-06 · AR-06</td></tr>
-            <tr><td><span class="req-id sans">C-05</span></td><td><div class="req-title sans">MVP-plus build standard</div></td><td>Each module is built to demonstrate one complete end-to-end P2P flow — sufficient to demonstrate to a CPO or enterprise architect in a live session. Production hardening is out of scope for the portfolio phase.</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">Portfolio Scope</td></tr>
-            <tr><td><span class="req-id sans">C-06</span></td><td><div class="req-title sans">Existing SAP Ariba and S/4HANA investments preserved</div></td><td>The AB does not replace SAP Ariba or SAP S/4HANA. Both systems remain in place and the AB augments them. Any design decision that requires replacing either system is out of scope. The AB is the orchestration and intelligence layer (ADR-002).</td><td><span class="moscow-m">Must</span></td><td style="font-size:11px;" class="sans">ADR-002 · BR-06</td></tr>
-            <tr><td><span class="req-id sans">C-07</span></td><td><div class="req-title sans">SAFe delivery governance — light touch</div></td><td>The AB modules map to Agile Release Trains consistent with SAFe 6.0 principles. Full Program Board and PI Planning artifacts are documented at the architectural level but not operationally executed for the portfolio build.</td><td><span class="moscow-c">Could</span></td><td style="font-size:11px;" class="sans">SAFe · Delivery Governance</td></tr>
+            <tr><td><span class="req-id">C-01</span></td><td><div class="req-title">Zero additional software cost</div></td><td>The Autonomous Procure-to-Pay portfolio is a demonstration system built on free-tier and open-source components[cite: 3]. No paid API subscriptions, no commercial data connectors, no licensed dataset providers[cite: 3]. All GCP services operate within the free tier or GCP credits until the build phase begins[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Portfolio Constraint[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-02</span></td><td><div class="req-title">SAP Ariba REST integration</div></td><td>Ariba integration uses the Ariba Network APIs and SAP Open Connectors pattern only — no paid middleware, no licensed SAP BTP integration flows[cite: 3]. The integration pattern must be demonstrable with Ariba Developer sandbox data (ADR-001)[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>ADR-001 · C-01[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-03</span></td><td><div class="req-title">SAP S/4HANA middleware abstraction</div></td><td>Direct SAP S/4HANA integration is not implemented in the portfolio demo (SAP license cost)[cite: 3]. The Autonomous Procure-to-Pay design shows the integration architecture — BAPI/IDoc via middleware — and the demo uses BigQuery tables seeded with SAP-schema data to represent the ERP layer[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>C-01 · ADR-002[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-04</span></td><td><div class="req-title">EU data residency limits</div></td><td>All GCP resources must be provisioned in europe-west3 or europe-west4 only[cite: 3]. No multi-region configurations including non-EU endpoints[cite: 3]. Enforced via Terraform variable and Organisation Policy constraint[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>GDPR · BR-06 · AR-06[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-05</span></td><td><div class="req-title">MVP-plus build context</div></td><td>Each module is built to demonstrate one complete end-to-end P2P flow — sufficient to demonstrate to a CPO or enterprise architect in a live session[cite: 3]. Production hardening is out of scope for the portfolio phase[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>Portfolio Scope[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-06</span></td><td><div class="req-title">Preserve existing ERP layer</div></td><td>The Autonomous Procure-to-Pay does not replace SAP Ariba or SAP S/4HANA[cite: 3]. Both systems remain in place and the Autonomous Procure-to-Pay augments them[cite: 3]. Any design decision that requires replacing either system is out of scope[cite: 3]. The Autonomous Procure-to-Pay is the orchestration and intelligence layer (ADR-002)[cite: 3].</td><td><span class="moscow-m">Must</span></td><td>ADR-002 · BR-06[cite: 3]</td></tr>
+            <tr><td><span class="req-id">C-07</span></td><td><div class="req-title">SAFe delivery frameworks</div></td><td>The Autonomous Procure-to-Pay modules map to Agile Release Trains consistent with SAFe 6.0 principles[cite: 3]. Full Program Board and PI Planning artifacts are documented at the architectural level but not operationally executed for the portfolio build[cite: 3].</td><td><span class="moscow-c">Could</span></td><td>SAFe · Delivery Governance[cite: 3]</td></tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
     <!-- 06 AI READINESS -->
-    <div class="section" id="readiness">
-      <div class="sec-id sans">AI Readiness Assessment</div>
+    <section class="section" id="readiness">
+      <div class="sec-id">AI Readiness Assessment</div>
       <h2 class="sec-h2">Where ClaraVis Procurement stands today — <em>five dimensions.</em></h2>
-      <p class="sec-intro sans">The AI Readiness Assessment is the input to the TOGAF Architecture Vision. It defines the starting position across five procurement-specific dimensions and frames the gap the AB is designed to close. Scored 1–5.</p>
+      <p class="sec-intro">The AI Readiness Assessment is the input to the TOGAF Architecture Vision[cite: 3]. It defines the starting position across five procurement-specific dimensions and frames the gap the Autonomous Procure-to-Pay is designed to close[cite: 3]. Scored 1–5[cite: 3].</p>
+      
       <div class="readiness-grid">
-        <div class="readiness-row"><div><div class="r-dim sans">Spend Visibility</div></div><div><div class="r-score sans">3<span>/ 5</span></div></div><div><p class="r-finding sans">Ariba and SAP S/4HANA maintain structured spend data for strategic categories. The gap is the ~23% tail spend — fragmented across purchasing cards, direct requisitions, and non-PO invoices with no common classification. BigQuery spend fabric is not deployed.</p><p class="r-action sans">Action: Unified Pub/Sub spend event pipeline + BigQuery spend fabric + tail spend classification model as AB Day 1 infrastructure.</p></div></div>
-        <div class="readiness-row"><div><div class="r-dim sans">Supplier Data Quality</div></div><div><div class="r-score sans">2<span>/ 5</span></div></div><div><p class="r-finding sans">Supplier master data is fragmented across Ariba, SAP, the supplier portal, and the compliance register. No golden supplier record exists. Deduplication is manual. 18% of supplier records have conflicting data across systems.</p><p class="r-action sans">Action: Supplier master data unification is a prerequisite for the Supplier Risk Model and CSRD monitoring — blocks all supplier intelligence modules.</p></div></div>
-        <div class="readiness-row"><div><div class="r-dim sans">Process Automation Maturity</div></div><div><div class="r-score sans">2<span>/ 5</span></div></div><div><p class="r-finding sans">Ariba automates RFx publishing and basic approval routing. SAP handles standard PO workflow. Everything else — 3-way match, exception resolution, contract redlining, compliance checks, payment scheduling — is manual. Straight-through processing rate across the full P2P cycle is below 30%.</p><p class="r-action sans">Action: 3-Way Match Agent and PO Agent are the highest-ROI Day 1 automations — they address the two largest manual effort concentrations.</p></div></div>
-        <div class="readiness-row"><div><div class="r-dim sans">Regulatory Posture</div></div><div><div class="r-score sans">2<span>/ 5</span></div></div><div><p class="r-finding sans">ISO 27001 and GDPR baseline compliance is established. AI-specific obligations under EU AI Act Annex III and GDPR Article 22 are not addressed for the two production ML models. CSRD/LkSG supplier monitoring is manual and 18 months behind. Q3 2025 audit flagged structural non-compliance across all three domains.</p><p class="r-action sans">Action: XAI layer + HITL spec + Model Cards + CSRD continuous monitoring — all required before next compliance review. Blocks production deployment of any new ML model.</p></div></div>
-        <div class="readiness-row"><div><div class="r-dim sans">Org Change Readiness</div></div><div><div class="r-score sans">3<span>/ 5</span></div></div><div><p class="r-finding sans">CPO and CFO are active sponsors. The AP Manager team is enthusiastic about eliminating manual 3-way match. Legal and Compliance are cautious but engaged following the Q3 2025 audit. Category Management requires assurance that the Sourcing Agent enhances, not replaces, strategic sourcing discipline.</p><p class="r-action sans">Action: HITL visibility and the SHAP explanation interface are the organisational unlock for Legal and Compliance. Demonstrate them first. Expand second.</p></div></div>
+        <div class="readiness-row">
+          <div><div class="r-dim">Spend Visibility</div></div>
+          <div><div class="r-score">3<span>/ 5</span></div></div>
+          <div>
+            <p class="r-finding">Ariba and SAP S/4HANA maintain structured spend data for strategic categories[cite: 3]. The gap is the ~23% tail spend — fragmented across purchasing cards, direct requisitions, and non-PO invoices with no common classification[cite: 3]. BigQuery spend fabric is not deployed[cite: 3].</p>
+            <p class="r-action">Action: Unified Pub/Sub spend event pipeline + BigQuery spend fabric + tail spend classification model as Day 1 infrastructure[cite: 3].</p>
+          </div>
+        </div>
+        <div class="readiness-row">
+          <div><div class="r-dim">Supplier Data Quality</div></div>
+          <div><div class="r-score">2<span>/ 5</span></div></div>
+          <div>
+            <p class="r-finding">Supplier master data is fragmented across Ariba, SAP, the supplier portal, and the compliance register[cite: 3]. No golden supplier record exists[cite: 3]. Deduplication is manual[cite: 3]. 18% of supplier records have conflicting data across systems[cite: 3].</p>
+            <p class="r-action">Action: Supplier master data unification is a prerequisite for the Supplier Risk Model and CSRD monitoring — blocks all supplier intelligence modules[cite: 3].</p>
+          </div>
+        </div>
+        <div class="readiness-row">
+          <div><div class="r-dim">Process Maturity</div></div>
+          <div><div class="r-score">2<span>/ 5</span></div></div>
+          <div>
+            <p class="r-finding">Ariba automates RFx publishing and basic approval routing[cite: 3]. SAP handles standard PO workflow[cite: 3]. Everything else — 3-way match, exception resolution, contract redlining, compliance checks, payment scheduling — is manual[cite: 3]. Straight-through processing rate across the full P2P cycle is below 30%[cite: 3].</p>
+            <p class="r-action">Action: 3-Way Match Agent and PO Agent are the highest-ROI Day 1 automations — they address the two largest manual effort concentrations[cite: 3].</p>
+          </div>
+        </div>
+        <div class="readiness-row">
+          <div><div class="r-dim">Regulatory Posture</div></div>
+          <div><div class="r-score">2<span>/ 5</span></div></div>
+          <div>
+            <p class="r-finding">ISO 27001 and GDPR baseline compliance is established[cite: 3]. AI-specific obligations under EU AI Act Annex III and GDPR Article 22 are not addressed for the two production ML models[cite: 3]. CSRD/LkSG supplier monitoring is manual and 18 months behind[cite: 3]. Q3 2025 audit flagged structural non-compliance across all three domains[cite: 3].</p>
+            <p class="r-action">Action: XAI layer + HITL spec + Model Cards + CSRD continuous monitoring — all required before next compliance review[cite: 3]. Blocks production deployment of any new ML model[cite: 3].</p>
+          </div>
+        </div>
+        <div class="readiness-row">
+          <div><div class="r-dim">Org Change Readiness</div></div>
+          <div><div class="r-score">3<span>/ 5</span></div></div>
+          <div>
+            <p class="r-finding">CPO and CFO are active sponsors[cite: 3]. The AP Manager team is enthusiastic about eliminating manual 3-way match[cite: 3]. Legal and Compliance are cautious but engaged following the Q3 2025 audit[cite: 3]. Category Management requires assurance that the Sourcing Agent enhances, not replaces, strategic sourcing discipline[cite: 3].</p>
+            <p class="r-action">Action: HITL visibility and the SHAP explanation interface are the organisational unlock for Legal and Compliance[cite: 3]. Demonstrate them first[cite: 3]. Expand second[cite: 3].</p>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- 07 USE CASES -->
-    <div class="section" id="usecases">
-      <div class="sec-id sans">Use Case Catalogue</div>
+    <section class="section" id="usecases">
+      <div class="sec-id">Use Case Catalogue</div>
       <h2 class="sec-h2">Eight flagship use cases — <em>one per module.</em></h2>
-      <p class="sec-intro sans">Each use case is a specific, demonstrable P2P capability the AB delivers for ClaraVis. Structured for stakeholder mapping, regulatory classification, and MoSCoW priority.</p>
+      <p class="sec-intro">Each use case is a specific, demonstrable P2P capability the Autonomous Procure-to-Pay delivers for ClaraVis[cite: 3]. Structured for stakeholder mapping, regulatory classification, and MoSCoW priority[cite: 3].</p>
+      
       <div class="uc-grid">
-        <div class="uc"><div class="uc-id sans">UC-01 · Sourcing Agent</div><div class="uc-name sans">Autonomous RFx orchestration with scored supplier shortlisting</div><div class="uc-headline sans">From need identified to RFx published in under 24 hours</div><div class="uc-desc sans">Strategic category sourcing requires 4–5 days to prepare an RFx and shortlist suppliers. The Sourcing Agent reads the requirement, queries the supplier master, applies category-specific evaluation criteria, generates the RFx, and publishes to Ariba Network — with HITL at the award decision point.</div><div class="uc-footer"><span class="uc-stakeholder sans">CPO · S-01 · Head of Category Mgmt · S-05</span><span class="eu-badge risk-mod sans">EU AI Act — Limited Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-02 · Contract Agent</div><div class="uc-name sans">Clause-level risk scoring with Legal HITL escalation</div><div class="uc-headline sans">Every supplier MSA analysed before countersigning</div><div class="uc-desc sans">Non-standard liability caps and indemnity clauses pass through procurement without Legal review. The Contract Agent reads the full supplier MSA, classifies 150+ clause types, scores risk against ClaraVis policy, and routes non-standard terms to Legal with precedents and a draft counter-position before any countersigning event.</div><div class="uc-footer"><span class="uc-stakeholder sans">General Counsel · S-04</span><span class="eu-badge risk-high sans">EU AI Act — High Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-03 · PO Agent</div><div class="uc-name sans">Autonomous PO generation with policy-governed approval routing</div><div class="uc-headline sans">Catalogue items under €5,000 — straight-through, no human touch</div><div class="uc-desc sans">Requisition intake, budget validation, preferred supplier selection, and PO generation handled fully autonomously for catalogue items within policy thresholds. Non-catalogue items, new suppliers, and above-threshold values escalate to the Category Manager with a full briefing document the agent prepared.</div><div class="uc-footer"><span class="uc-stakeholder sans">CPO · S-01 · AP Manager · S-07</span><span class="eu-badge risk-mod sans">EU AI Act — Limited Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-04 · 3-Way Match Agent</div><div class="uc-name sans">Automated PO · GRN · invoice reconciliation with exception ML</div><div class="uc-headline sans">From 58% to &gt;90% straight-through match rate</div><div class="uc-desc sans">Manual 3-way match consumes a team of six. The Match Agent reconciles POs from SAP, GRNs from the warehouse system, and invoices from the legacy AP platform — applying tolerance-band logic, classifying exceptions with ML, and routing genuine discrepancies to the AP Manager via the HITL interface with full context.</div><div class="uc-footer"><span class="uc-stakeholder sans">CFO · S-02 · AP Manager · S-07</span><span class="eu-badge risk-high sans">EU AI Act — High Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-05 · Payment Agent</div><div class="uc-name sans">Dynamic payment scheduling with early discount optimisation</div><div class="uc-headline sans">€280K/year in early payment discounts currently uncaptured</div><div class="uc-desc sans">Batch payment runs twice weekly make early payment discount windows structurally unavailable. The Payment Agent monitors the approved invoice queue, identifies discount opportunities, checks treasury cash position, schedules payments dynamically, and executes via SAP — with CFO HITL above configurable payment thresholds.</div><div class="uc-footer"><span class="uc-stakeholder sans">CFO · S-02</span><span class="eu-badge risk-mod sans">EU AI Act — Limited Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-06 · Supplier Performance Agent</div><div class="uc-name sans">Continuous KPI scoring with CSRD/LkSG compliance monitoring</div><div class="uc-headline sans">1,400 suppliers monitored continuously — not annually</div><div class="uc-desc sans">Annual questionnaires leave 63% of suppliers unassessed. The Supplier Performance Agent continuously scores every active supplier on delivery, quality, financial stability, and ESG dimensions — flagging threshold breaches to the Compliance Officer via HITL with a SHAP explanation, evidence brief, and remediation recommendation.</div><div class="uc-footer"><span class="uc-stakeholder sans">CCO · S-03 · Supplier Relations · S-06</span><span class="eu-badge risk-high sans">EU AI Act — High Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-07 · Tail Spend Intelligence</div><div class="uc-name sans">ML-driven spend classification and maverick spend detection</div><div class="uc-headline sans">23% of spend invisible — classified and governed in real time</div><div class="uc-desc sans">~23% of ClaraVis procurement spend is unclassified tail spend. The Tail Spend module classifies every transaction, identifies maverick buying, surfaces consolidation opportunities, and routes policy violations to the appropriate Category Manager.</div><div class="uc-footer"><span class="uc-stakeholder sans">CPO · S-01 · CFO · S-02</span><span class="eu-badge risk-low sans">EU AI Act — Minimal Risk</span></div></div>
-        <div class="uc"><div class="uc-id sans">UC-08 · Supplier Onboarding Agent</div><div class="uc-name sans">Automated compliance screening and vendor master provisioning</div><div class="uc-headline sans">18-day onboarding cycle reduced to under 3 days</div><div class="uc-desc sans">Supplier onboarding averages 18 days with no automated compliance checks. The Onboarding Agent screens new suppliers against CSRD, LkSG, and financial risk criteria at intake — atomically provisioning approved suppliers in Ariba, SAP vendor master, and the CSRD compliance register in a single transaction.</div><div class="uc-footer"><span class="uc-stakeholder sans">CCO · S-03 · Supplier Relations · S-06</span><span class="eu-badge risk-mod sans">EU AI Act — Limited Risk</span></div></div>
+        <div class="uc">
+          <div class="uc-id">UC-01 · Sourcing Agent</div>
+          <div class="uc-name">Autonomous RFx orchestration with scored supplier shortlisting</div>
+          <div class="uc-headline">From need identified to RFx published in under 24 hours[cite: 3]</div>
+          <div class="uc-desc">Strategic category sourcing requires 4–5 days to prepare an RFx and shortlist suppliers[cite: 3]. The Sourcing Agent reads the requirement, queries the supplier master, applies category-specific evaluation criteria, generates the RFx, and publishes to Ariba Network — with HITL at the award decision point[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CPO · S-01 · Head of Category Mgmt · S-05[cite: 3]</span><span class="eu-badge risk-mod">EU AI Act — Limited Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-02 · Contract Agent</div>
+          <div class="uc-name">Clause-level risk scoring with Legal HITL escalation</div>
+          <div class="uc-headline">Every supplier MSA analysed before countersigning[cite: 3]</div>
+          <div class="uc-desc">Non-standard liability caps and indemnity clauses pass through procurement without Legal review[cite: 3]. The Contract Agent reads the full supplier MSA, classifies 150+ clause types, scores risk against ClaraVis policy, and routes non-standard terms to Legal with precedents and a draft counter-position before any countersigning event[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">General Counsel · S-04[cite: 3]</span><span class="eu-badge risk-high">EU AI Act — High Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-03 · PO Agent</div>
+          <div class="uc-name">Autonomous PO generation with policy-governed routing</div>
+          <div class="uc-headline">Catalogue items under €5,000 — straight-through, no human touch[cite: 3]</div>
+          <div class="uc-desc">Requisition intake, budget validation, preferred supplier selection, and PO generation handled fully autonomously for catalogue items within policy thresholds[cite: 3]. Non-catalogue items, new suppliers, and above-threshold values escalate to the Category Manager with a full briefing document the agent prepared[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CPO · S-01 · AP Manager · S-07[cite: 3]</span><span class="eu-badge risk-mod">EU AI Act — Limited Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-04 · 3-Way Match Agent</div>
+          <div class="uc-name">Automated PO · GRN · invoice reconciliation with exception ML</div>
+          <div class="uc-headline">From 58% to &gt;90% straight-through match rate[cite: 3]</div>
+          <div class="uc-desc">Manual 3-way match consumes a team of six[cite: 3]. The Match Agent reconciles POs from SAP, GRNs from the warehouse system, and invoices from the legacy AP platform — applying tolerance-band logic, classifying exceptions with ML, and routing genuine discrepancies to the AP Manager via the HITL interface with full context[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CFO · S-02 · AP Manager · S-07[cite: 3]</span><span class="eu-badge risk-high">EU AI Act — High Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-05 · Payment Agent</div>
+          <div class="uc-name">Dynamic payment scheduling with discount optimisation</div>
+          <div class="uc-headline">€280K/year in early payment discounts currently uncaptured[cite: 3]</div>
+          <div class="uc-desc">Batch payment runs twice weekly make early payment discount windows structurally unavailable[cite: 3]. The Payment Agent monitors the approved invoice queue, identifies discount opportunities, checks treasury cash position, schedules payments dynamically, and executes via SAP — with CFO HITL above configurable payment thresholds[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CFO · S-02[cite: 3]</span><span class="eu-badge risk-mod">EU AI Act — Limited Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-06 · Supplier Performance Agent</div>
+          <div class="uc-name">Continuous KPI scoring with CSRD/LkSG compliance monitoring</div>
+          <div class="uc-headline">1,400 suppliers monitored continuously — not annually[cite: 3]</div>
+          <div class="uc-desc">Annual questionnaires leave 63% of suppliers unassessed[cite: 3]. The Supplier Performance Agent continuously scores every active supplier on delivery, quality, financial stability, and ESG dimensions — flagging threshold breaches to the Compliance Officer via HITL with a SHAP explanation, evidence brief, and remediation recommendation[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CCO · S-03 · Supplier Relations · S-06[cite: 3]</span><span class="eu-badge risk-high">EU AI Act — High Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-07 · Tail Spend Intelligence</div>
+          <div class="uc-name">ML-driven spend classification and maverick spend detection</div>
+          <div class="uc-headline">23% of spend invisible — classified and governed in real time[cite: 3]</div>
+          <div class="uc-desc">~23% of ClaraVis procurement spend is unclassified tail spend[cite: 3]. The Tail Spend module classifies every transaction, identifies maverick buying, surfaces consolidation opportunities, and routes policy violations to the appropriate Category Manager[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CPO · S-01 · CFO · S-02[cite: 3]</span><span class="eu-badge risk-low">EU AI Act — Minimal Risk[cite: 3]</span></div>
+        </div>
+        <div class="uc">
+          <div class="uc-id">UC-08 · Supplier Onboarding Agent</div>
+          <div class="uc-name">Automated compliance screening and vendor master provisioning</div>
+          <div class="uc-headline">18-day onboarding cycle reduced to under 3 days[cite: 3]</div>
+          <div class="uc-desc">Supplier onboarding averages 18 days with no automated compliance checks[cite: 3]. The Onboarding Agent screens new suppliers against CSRD, LkSG, and financial risk criteria at intake — atomically provisioning approved suppliers in Ariba, SAP vendor master, and the CSRD compliance register in a single transaction[cite: 3].</div>
+          <div class="uc-footer"><span class="uc-stakeholder">CCO · S-03 · Supplier Relations · S-06[cite: 3]</span><span class="eu-badge risk-mod">EU AI Act — Limited Risk[cite: 3]</span></div>
+        </div>
       </div>
-    </div>
+    </section>
 
     <!-- 08 SUCCESS CRITERIA -->
-    <div class="section" id="success">
-      <div class="sec-id sans">Success Criteria</div>
-      <h2 class="sec-h2">How ClaraVis Procurement will know the AB <em>is working.</em></h2>
-      <p class="sec-intro sans">Observable architectural outcomes — not percentage projections. Each criterion is measurable at the system level and traceable to a specific requirement.</p>
+    <section class="section" id="success">
+      <div class="sec-id">Success Criteria</div>
+      <h2 class="sec-h2">How ClaraVis Procurement will know the Autonomous Procure-to-Pay <em>is working.</em></h2>
+      <p class="sec-intro">Observable architectural outcomes — not percentage projections[cite: 3]. Each criterion is measurable at the system level and traceable to a specific requirement[cite: 3].</p>
+      
       <div class="success-grid">
-        <div class="success-block"><div class="success-title sans">EU AI Act &amp; GDPR Compliance</div><div class="success-sub sans">Every high-risk procurement inference is explainable and human-supervised</div><ul class="success-criteria"><li>Every ML inference above a defined risk threshold produces a SHAP explanation written to the audit log before the downstream action executes</li><li>Every high-risk supplier decision routes through a named human approver via a formal HITL state — no exceptions, no bypasses</li><li>Every model in production has a versioned Model Card in Vertex AI Model Registry, reviewed and approved before promotion</li><li>A compliance audit query returns a complete, unbroken decision trail for any procurement inference made in the last 24 months</li></ul></div>
-        <div class="success-block"><div class="success-title sans">P2P Cycle Time</div><div class="success-sub sans">Every procurement handoff has a defined SLA and an immutable record</div><ul class="success-criteria"><li>Every state transition in the P2P flow has a defined SLA — the agent tracks elapsed time and escalates automatically on breach</li><li>Every handoff produces an immutable audit record in Firestore before the next state is entered</li><li>Invoice cycle time reduced from 11 days to under 3 days for straight-through invoices</li><li>Ariba sourcing event status and SAP PO status synchronised via the AB event bus — no manual re-keying</li></ul></div>
-        <div class="success-block"><div class="success-title sans">3-Way Match Performance</div><div class="success-sub sans">Straight-through processing above 90% — exceptions routed, not queued</div><ul class="success-criteria"><li>First-time match rate above 90% — measured against PO, GRN, and invoice data from the live Pub/Sub event stream</li><li>Every exception classified by the Match ML model with a confidence score before routing to HITL</li><li>Every tolerance-band approval written to the audit log with the rule that triggered it</li><li>Every HITL exception resolution actioned within the SLA defined in the AP Manager's HITL contract</li></ul></div>
-        <div class="success-block"><div class="success-title sans">CSRD / LkSG Compliance</div><div class="success-sub sans">1,400 suppliers monitored continuously — no annual questionnaire backlog</div><ul class="success-criteria"><li>Every active supplier has a current compliance score updated on every new compliance signal</li><li>Every threshold breach triggers an automated HITL escalation to the Compliance Officer within the defined SLA</li><li>Every new supplier screened against CSRD, LkSG, and EUDR criteria before SAP vendor master activation</li><li>The compliance register is a query against the operational log — not a manually maintained spreadsheet</li></ul></div>
-        <div class="success-block"><div class="success-title sans">Data Sovereignty</div><div class="success-sub sans">No procurement data leaves the EU boundary — enforced at infrastructure layer</div><ul class="success-criteria"><li>VPC-SC perimeter provisioned via Terraform — data residency constraint is in infrastructure code, not network policy</li><li>CMEK keys provisioned and owned by the ClaraVis Cloud KMS project</li><li>All GCP resources deployed to europe-west3 or europe-west4 — enforced by Organisation Policy constraint</li></ul></div>
-        <div class="success-block"><div class="success-title sans">Architecture Decision Records</div><div class="success-sub sans">Every significant design choice documented and traceable</div><ul class="success-criteria"><li>Every module page links to the ADRs that govern its design decisions — no component exists without a traceable decision record</li><li>Every ADR states the alternatives considered and the reasoning for the choice made</li><li>The ADR index is maintained as a living document — updated when decisions change</li></ul></div>
+        <div class="success-block">
+          <div class="success-title">EU AI Act &amp; GDPR Compliance</div>
+          <div class="success-sub">Every high-risk procurement inference is explainable and human-supervised[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>Every ML inference above a defined risk threshold produces a SHAP explanation written to the audit log before the downstream action executes[cite: 3]</li>
+            <li>Every high-risk supplier decision routes through a named human approver via a formal HITL state — no exceptions, no bypasses[cite: 3]</li>
+            <li>Every model in production has a versioned Model Card in Vertex AI Model Registry, reviewed and approved before promotion[cite: 3]</li>
+            <li>A compliance audit query returns a complete, unbroken decision trail for any procurement inference made in the last 24 months[cite: 3]</li>
+          </ul>
+        </div>
+        <div class="success-block">
+          <div class="success-title">P2P Cycle Time</div>
+          <div class="success-sub">Every procurement handoff has a defined SLA and an immutable record[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>Every state transition in the P2P flow has a defined SLA — the agent tracks elapsed time and escalates automatically on breach[cite: 3]</li>
+            <li>Every handoff produces an immutable audit record in Firestore before the next state is entered[cite: 3]</li>
+            <li>Invoice cycle time reduced from 11 days to under 3 days for straight-through invoices[cite: 3]</li>
+            <li>Ariba sourcing event status and SAP PO status synchronised via the platform event bus — no manual re-keying[cite: 3]</li>
+          </ul>
+        </div>
+        <div class="success-block">
+          <div class="success-title">3-Way Match Performance</div>
+          <div class="success-sub">Straight-through processing above 90% — exceptions routed, not queued[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>First-time match rate above 90% — measured against PO, GRN, and invoice data from the live Pub/Sub event stream[cite: 3]</li>
+            <li>Every exception classified by the Match ML model with a confidence score before routing to HITL[cite: 3]</li>
+            <li>Every tolerance-band approval written to the audit log with the rule that triggered it[cite: 3]</li>
+            <li>Every HITL exception resolution actioned within the SLA defined in the AP Manager's HITL contract[cite: 3]</li>
+          </ul>
+        </div>
+        <div class="success-block">
+          <div class="success-title">CSRD / LkSG Compliance</div>
+          <div class="success-sub">1,400 suppliers monitored continuously — no annual questionnaire backlog[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>Every active supplier has a current compliance score updated on every new compliance signal[cite: 3]</li>
+            <li>Every threshold breach triggers an automated HITL escalation to the Compliance Officer within the defined SLA[cite: 3]</li>
+            <li>Every new supplier screened against CSRD, LkSG, and EUDR criteria before SAP vendor master activation[cite: 3]</li>
+            <li>The compliance register is a query against the operational log — not a manually maintained spreadsheet[cite: 3]</li>
+          </ul>
+        </div>
+        <div class="success-block">
+          <div class="success-title">Data Sovereignty</div>
+          <div class="success-sub">No procurement data leaves the EU boundary — enforced at infrastructure layer[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>VPC-SC perimeter provisioned via Terraform — data residency constraint is in infrastructure code, not network policy[cite: 3]</li>
+            <li>CMEK keys provisioned and owned by the ClaraVis Cloud KMS project[cite: 3]</li>
+            <li>All GCP resources deployed to europe-west3 or europe-west4 — enforced by Organisation Policy constraint[cite: 3]</li>
+          </ul>
+        </div>
+        <div class="success-block">
+          <div class="success-title">Architecture Decision Records</div>
+          <div class="success-sub">Every significant design choice documented and traceable[cite: 3]</div>
+          <ul class="success-criteria">
+            <li>Every module page links to the ADRs that govern its design decisions — no component exists without a traceable decision record[cite: 3]</li>
+            <li>Every ADR states the alternatives considered and the reasoning for the choice made[cite: 3]</li>
+            <li>The ADR index is maintained as a living document — updated when decisions change[cite: 3]</li>
+          </ul>
+        </div>
       </div>
 
       <div class="adr-grid">
-        <div class="adr"><div class="adr-id sans">ADR-001 · SAP Ariba Integration Pattern</div><div class="adr-title sans">Ariba REST API — sourcing system of record</div><div class="adr-subtitle sans">Selected over direct SAP SRM API, CSV export, and mock data patterns</div><div class="adr-text sans">Ariba Network API integration was selected because the P2P domain depth of this portfolio is only demonstrable with a live system of record integration. A mock data pattern makes the sourcing intelligence claims unverifiable. Ariba Developer sandbox provides a free, permanent integration target with production-representative data structure.</div><span class="adr-status sans">Status: Accepted</span></div>
-        <div class="adr"><div class="adr-id sans">ADR-002 · GCP alongside SAP Ariba and S/4HANA</div><div class="adr-title sans">Augmentation, not replacement</div><div class="adr-subtitle sans">The AB addresses five domains outside SAP's boundary</div><div class="adr-text sans">The AB addresses five domains structurally outside SAP's capability: supplier ML intelligence with EU AI Act-compliant explainability, cross-system 3-way match across SAP and non-SAP AP, CSRD/LkSG continuous compliance monitoring, full-document contract intelligence, and cross-system P2P orchestration. SAP Ariba and S/4HANA remain the systems of record.</div><span class="adr-status sans">Status: Accepted</span></div>
+        <div class="adr">
+          <div>
+            <div class="adr-id">ADR-001 · SAP Ariba Integration Pattern</div>
+            <div class="adr-title">Ariba REST API — sourcing system of record</div>
+            <div class="adr-subtitle">Selected over direct SAP SRM API, CSV export, and mock data patterns[cite: 3]</div>
+            <div class="adr-text">Ariba Network API integration was selected because the P2P domain depth of this portfolio is only demonstrable with a live system of record integration[cite: 3]. A mock data pattern makes the sourcing intelligence claims unverifiable[cite: 3]. Ariba Developer sandbox provides a free, permanent integration target with production-representative data structure[cite: 3].</div>
+          </div>
+          <span class="adr-status">Status: Accepted[cite: 3]</span>
+        </div>
+        <div class="adr">
+          <div>
+            <div class="adr-id">ADR-002 · GCP alongside SAP Ariba and S/4HANA</div>
+            <div class="adr-title">Augmentation, not replacement</div>
+            <div class="adr-subtitle">The Autonomous Procure-to-Pay addresses five domains outside SAP's boundary[cite: 3]</div>
+            <div class="adr-text">The Autonomous Procure-to-Pay addresses five domains structurally outside SAP's capability: supplier ML intelligence with EU AI Act-compliant explainability, cross-system 3-way match across SAP and non-SAP AP, CSRD/LkSG continuous compliance monitoring, full-document contract intelligence, and cross-system P2P orchestration[cite: 3]. SAP Ariba and S/4HANA remain the systems of record[cite: 3].</div>
+          </div>
+          <span class="adr-status">Status: Accepted[cite: 3]</span>
+        </div>
       </div>
 
-      <p class="sans" style="font-size:13px;font-weight:500;margin-bottom:8px;">Requirements captured. <strong>Architecture follows.</strong></p>
-      <p class="sans" style="font-size:13px;color:var(--muted);margin-bottom:24px;">The following pages take every requirement above and express it as concrete architecture artifacts — agent state machines, ML pipeline designs, and module-level technical specifications.</p>
+      <p style="font-size:13px;font-weight:600;margin-bottom:4px;font-family:var(--sans);text-transform:uppercase;color:var(--text3);letter-spacing:0.02em;">Requirements captured. <strong>Architecture follows[cite: 3].</strong></p>
+      <p style="font-size:13.5px;color:var(--text2);margin-bottom:24px;">The following pages take every requirement above and express it as concrete architecture artifacts — agent state machines, ML pipeline designs, and module-level technical specifications[cite: 3].</p>
+      
       <div class="next-grid">
-        <a class="next-card" href="#"><div><div class="next-pg sans">PG 03</div><div class="next-title sans">Sourcing / RFx Module</div><div class="next-sub sans">Agent State Machine · RFx Workflow · Supplier Scoring · HITL Award</div></div><span class="next-status sans">Coming →</span></a>
-        <a class="next-card" href="#"><div><div class="next-pg sans">PG 04</div><div class="next-title sans">Contract Negotiation &amp; Award</div><div class="next-sub sans">Clause Extraction · Risk Model · Redline Agent · HITL Sign-off</div></div><span class="next-status sans">Coming →</span></a>
-        <a class="next-card" href="index.html"><div><div class="next-pg sans">PG 01</div><div class="next-title sans">← Back to The Autonomous Buyer</div><div class="next-sub sans">Concept · Philosophy · Architecture Overview</div></div><span class="next-status sans">→</span></a>
+        <a class="next-card" href="#">
+          <div class="artifact-left">
+            <div class="next-pg">PG 03</div>
+            <div class="next-title">Sourcing / RFx Module</div>
+            <div class="next-sub">Agent State Machine · RFx Workflow · Supplier Scoring · HITL Award[cite: 3]</div>
+          </div>
+          <span class="next-status">Coming →[cite: 3]</span>
+        </a>
+        <a class="next-card" href="#">
+          <div class="artifact-left">
+            <div class="next-pg">PG 04</div>
+            <div class="next-title">Contract Negotiation &amp; Award</div>
+            <div class="next-sub">Clause Extraction · Risk Model · Redline Agent · HITL Sign-off[cite: 3]</div>
+          </div>
+          <span class="next-status">Coming →[cite: 3]</span>
+        </a>
+        <a class="next-card" href="index.html">
+          <div class="artifact-left">
+            <div class="next-pg">PG 01</div>
+            <div class="next-title">← Back to The Autonomous Procure-to-Pay</div>
+            <div class="next-sub">Concept · Philosophy · Architecture Overview[cite: 3]</div>
+          </div>
+          <span class="next-status">→</span>
+        </a>
       </div>
-    </div>
+    </section>
 
-  </main>
-</div>
+  </div><!-- /content -->
 
-<div class="footer-bar">
-  <span class="sans">The <em>Autonomous</em> Buyer</span>
-  <span class="sans">© 2026 Siddharth Rao</span>
-</div>
+  <!-- FOOTER -->
+  <footer class="footer-bar">
+    <span>The <em>Autonomous</em> Procure-to-Pay[cite: 3]</span>
+    <span>© 2026 Siddharth Rao[cite: 3]</span>
+  </footer>
+
+</main>
+</div><!-- /page-wrap -->
 
 <script>
 function showTab(id, btn) {
@@ -628,6 +932,18 @@ function showTab(id, btn) {
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
+
+/* SIDEBAR ACTIVE STATE ORCHESTRATION */
+const sections = document.querySelectorAll('section[id]');
+const links = document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 120) current = s.id; });
+  links.forEach(a => {
+    const href = a.getAttribute('href').replace('#', '');
+    a.classList.toggle('active', href === current);
+  });
+}, { passive: true });
 </script>
 </body>
 </html>

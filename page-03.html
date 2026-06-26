@@ -3,601 +3,659 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PG 03 — Sourcing / RFx · The Autonomous Buyer</title>
+<title>PG 03 — Sourcing / RFx · The Autonomous Procure-to-Pay</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg:#0a0a0a;--bg2:#111111;--bg3:#161616;--bg4:#1a1a1a;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#e8e6df;--muted:#888780;--faint:rgba(136,135,128,0.5);
-  --high:rgba(220,80,60,0.12);--mod:rgba(180,140,60,0.12);--low:rgba(60,120,80,0.10);
-  --hitl:rgba(180,140,60,0.14);--hitl-border:rgba(180,140,60,0.35);
-  --amber:#b48c3c;--red:#dc503c;--green:#3c7850;
+  --bg: #fafaf8; --bg2: #f2f0eb; --bg3: #e8e5de;
+  --text: #1a1917; --text2: #5a5852; --text3: #8a8880;
+  --border: #d8d5ce; --border2: #c8c5be;
+  --amber: #b07010; --amber-bg: #fdf4e3; --amber-border: #e8c870;
+  --teal: #0a6b52; --teal-bg: #e8f5f0; --teal-border: #80c8b0;
+  --purple: #4a40b0; --purple-bg: #f0effe; --purple-border: #b0a8e8;
+  --coral: #b03820; --coral-bg: #fdf0ec; --coral-border: #e8a090;
+  --blue: #1850a0; --blue-bg: #eaf2fe; --blue-border: #90b8e8;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'Inter', system-ui, sans-serif;
+  --r: 6px; --r-lg: 10px;
 }
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Georgia','Times New Roman',serif;font-size:16px;line-height:1.65;}
-.sans{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;}
-a{color:var(--muted);text-decoration:none;}
-a:hover{color:var(--text);}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.7; }
 
-/* ── NAV ── */
-nav{display:flex;align-items:center;justify-content:space-between;padding:16px 40px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,10,10,0.96);backdrop-filter:blur(12px);z-index:100;gap:16px;}
-.nav-back{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);white-space:nowrap;}
-.nav-trail{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-.nav-trail strong{color:var(--text);}
-.nav-right{display:flex;gap:20px;flex-shrink:0;}
-.nav-right a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-.nav-right a:hover{color:var(--text);}
+.page-wrap { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
 
-/* ── LAYOUT ── */
-.layout{display:grid;grid-template-columns:200px 1fr;max-width:1100px;margin:0 auto;}
-.sidebar{padding:48px 0 80px 40px;position:sticky;top:57px;height:calc(100vh - 57px);overflow-y:auto;}
-.sb-links{display:flex;flex-direction:column;gap:3px;}
-.sb-links a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);padding:5px 0 5px 12px;border-left:2px solid var(--border);text-decoration:none;transition:all 0.15s;display:block;}
-.sb-links a:hover,.sb-links a.active{color:var(--text);border-left-color:var(--border2);}
-.sb-sep{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);padding:14px 0 6px 12px;display:block;}
-.content{padding:60px 40px 80px;border-left:1px solid var(--border);}
+/* SIDEBAR */
+.sidebar {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  background: var(--bg2); border-right: 1px solid var(--border);
+  padding: 2rem 1.25rem; display: flex; flex-direction: column; gap: 0;
+}
+.sidebar-logo { font-family: var(--mono); font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.25rem; }
+.sidebar-project { font-family: var(--serif); font-size: 18px; color: var(--text); margin-bottom: 2rem; line-height: 1.2; }
+.sidebar-nav { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.sidebar-nav a { display: block; font-size: 12px; color: var(--text2); text-decoration: none; padding: 6px 10px; border-radius: var(--r); transition: background 0.15s, color 0.15s; }
+.sidebar-nav a:hover { background: var(--bg3); color: var(--text); }
+.sidebar-nav a.active { background: var(--text); color: var(--bg); }
+.sidebar-divider { height: 1px; background: var(--border); margin: 1rem 0; }
+.sb-sep { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); padding: 10px 10px 4px; display: block; }
 
-/* ── HERO ── */
-.page-eyebrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-.page-title{font-size:clamp(28px,4vw,42px);font-weight:400;line-height:1.15;letter-spacing:-0.02em;margin-bottom:20px;}
-.page-title strong{font-weight:600;}
-.page-title em{font-style:italic;}
-.page-desc{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;color:var(--muted);line-height:1.7;max-width:600px;margin-bottom:32px;}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
-.htag{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.04em;}
-.htag.risk{border-color:rgba(220,80,60,0.3);color:#e08070;background:var(--high);}
-.hero-adrs{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);margin-top:8px;}
+.stack-block { margin-top: auto; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.stack-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); margin-bottom: 0.75rem; }
+.stack-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.stack-tag { font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; background: var(--bg3); border-radius: 4px; color: var(--text2); line-height: 1.3; border: 1px solid var(--border); }
 
-/* ── SECTIONS ── */
-.section{border-top:1px solid var(--border);padding:64px 0 0;}
-.sec-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:40px;}
-.sec-h2{font-size:clamp(20px,3vw,30px);font-weight:400;line-height:1.2;letter-spacing:-0.02em;margin-bottom:20px;}
-.sec-h2 em{font-style:italic;}
-.sec-h2 strong{font-weight:600;}
-.sec-intro{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--muted);line-height:1.7;max-width:640px;margin-bottom:40px;}
+/* MAIN */
+.main { padding: 0; min-width: 0; }
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 2.5rem; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: rgba(250,250,248,0.95); backdrop-filter: blur(8px); z-index: 100;
+}
+.topbar-breadcrumb { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.topbar-breadcrumb a { color: var(--text3); text-decoration: none; }
+.topbar-right { display: flex; align-items: center; gap: 16px; }
+.topbar-tag { font-family: var(--mono); font-size: 10px; padding: 3px 8px; background: var(--bg3); border-radius: 99px; color: var(--text2); border: 1px solid var(--border); }
 
-/* ── STATE MACHINE ── */
-.sm-wrap{overflow-x:auto;margin-bottom:8px;}
-.sm-grid{display:flex;gap:0;border:1px solid var(--border);min-width:700px;}
-.sm-node{flex:1;padding:14px 8px;border-right:1px solid var(--border);text-align:center;transition:all 0.25s;min-width:0;}
-.sm-node:last-child{border-right:none;}
-.sn-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
-.sn-name{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--muted);font-weight:500;line-height:1.3;}
-.sm-node.active{background:rgba(255,255,255,0.06);border-bottom:2px solid var(--text);}
-.sm-node.active .sn-name{color:var(--text);}
-.sm-node.hitl-node{background:var(--hitl);}
-.sm-node.hitl-node .sn-id{color:var(--amber);}
-.sm-node.hitl-node .sn-name{color:#c8a060;}
-.sm-node.hitl-node.active{border-bottom:2px solid var(--amber);}
-.sm-node.done .sn-name{color:rgba(136,135,128,0.5);}
-.sm-node.done{background:rgba(60,120,80,0.06);}
-.sm-legend{display:flex;gap:24px;flex-wrap:wrap;margin-top:10px;margin-bottom:36px;}
-.sm-leg-item{display:flex;align-items:center;gap:7px;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
-.sm-leg-swatch{width:12px;height:12px;border:1px solid var(--border2);}
-.sm-leg-swatch.hitl{background:var(--hitl);border-color:var(--hitl-border);}
-.sm-leg-swatch.active{background:rgba(255,255,255,0.06);}
-.sm-leg-swatch.done{background:rgba(60,120,80,0.06);border-color:rgba(60,120,80,0.25);}
+/* CONTENT */
+.content { padding: 3rem 2.5rem 5rem; max-width: 860px; margin: 0 auto; }
 
-/* ── SIMULATION ── */
-.sim-wrap{border:1px solid var(--border);}
-.sim-progress{display:flex;border-bottom:1px solid var(--border);}
-.sim-step-dot{flex:1;height:3px;background:var(--border);transition:background 0.3s;}
-.sim-step-dot.done-dot{background:var(--green);}
-.sim-step-dot.active-dot{background:var(--text);}
-.sim-step-dot.hitl-dot{background:var(--amber);}
-.sim-panel{padding:32px 32px 28px;}
-.sim-meta{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
-.sim-step-num{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);}
-.sim-state-badge{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:3px 10px;border:1px solid var(--border2);color:var(--muted);letter-spacing:0.06em;font-weight:500;}
-.sim-state-badge.hitl{border-color:var(--hitl-border);color:var(--amber);background:var(--hitl);}
-.sim-state-badge.done-badge{border-color:rgba(60,120,80,0.3);color:#6aab80;background:var(--low);}
-.sim-title{font-size:18px;font-weight:500;font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;margin-bottom:12px;letter-spacing:-0.01em;}
-.sim-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:20px;}
-.sim-data{border:1px solid var(--border);margin-bottom:20px;}
-.sim-data-row{display:grid;grid-template-columns:150px 1fr;border-bottom:1px solid var(--border);}
-.sim-data-row:last-child{border-bottom:none;}
-.sim-data-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);padding:11px 16px;border-right:1px solid var(--border);display:flex;align-items:flex-start;padding-top:13px;}
-.sim-data-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);padding:12px 16px;line-height:1.6;}
-.sim-data-val strong{color:var(--text);font-weight:500;}
-.flag{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid rgba(220,80,60,0.3);color:#e08070;background:var(--high);margin-left:6px;}
-.ok{display:inline-block;font-size:10px;padding:2px 7px;border:1px solid rgba(60,120,80,0.3);color:#6aab80;background:var(--low);margin-left:6px;}
+/* HEADER */
+.doc-header { margin-bottom: 3rem; padding-bottom: 3rem; border-bottom: 1px solid var(--border); }
+.doc-eyebrow { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+.doc-eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.doc-title { font-family: var(--serif); font-size: clamp(24px, 3.5vw, 36px); font-weight: 400; line-height: 1.25; letter-spacing: -0.01em; color: var(--text); margin-bottom: 1.5rem; }
+.doc-title em { font-style: italic; color: var(--teal); font-family: var(--serif); }
+.doc-title strong { font-weight: 600; }
+.page-desc { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 2rem; }
 
-/* SHAP bars */
-.shap-bar-wrap{margin-bottom:20px;}
-.shap-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--faint);margin-bottom:12px;}
-.shap-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.shap-feat{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--muted);width:180px;flex-shrink:0;text-align:right;}
-.shap-bar-bg{flex:1;height:6px;background:var(--border);position:relative;}
-.shap-bar-fill{height:100%;transition:width 0.5s;}
-.shap-bar-fill.pos{background:#6aab80;}
-.shap-bar-fill.neg{background:#e08070;}
-.shap-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);width:40px;text-align:right;}
+/* HERO TAGS */
+.hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.htag { font-family: var(--mono); font-size: 10px; padding: 3px 10px; border: 1px solid var(--border2); border-radius: 99px; color: var(--text3); background: white; }
+.htag.risk { background: var(--coral-bg); color: var(--coral); border-color: var(--coral-border); }
+.hero-adrs { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 0.5rem; }
 
-/* HITL panels */
-.hitl-panel{border:1px solid var(--hitl-border);background:var(--hitl);padding:22px;margin-bottom:20px;}
-.hitl-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
-.hitl-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--amber);font-weight:500;}
-.hitl-article{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:rgba(180,140,60,0.7);border:1px solid rgba(180,140,60,0.25);padding:2px 8px;}
-.hitl-reason{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:rgba(180,140,60,0.8);margin-bottom:14px;padding-left:12px;border-left:2px solid var(--hitl-border);line-height:1.6;}
-.hitl-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:16px;}
-.hitl-actions{display:flex;gap:10px;flex-wrap:wrap;}
-.hitl-btn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:8px 18px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;}
-.hitl-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.3);}
-.hitl-btn.approve{border-color:rgba(60,120,80,0.5);color:#6aab80;}
-.hitl-btn.approve:hover{background:rgba(60,120,80,0.1);}
-.hitl-btn.reject{border-color:rgba(220,80,60,0.4);color:#e08070;}
-.hitl-timeout{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:12px;}
-.sim-controls{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-top:1px solid var(--border);background:var(--bg2);}
-.sim-btn{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;padding:9px 22px;border:1px solid var(--border2);color:var(--muted);background:transparent;cursor:pointer;letter-spacing:0.04em;transition:all 0.15s;}
-.sim-btn:hover:not(:disabled){color:var(--text);border-color:rgba(255,255,255,0.25);}
-.sim-btn:disabled{opacity:0.3;cursor:default;}
-.sim-counter{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+/* SECTIONS */
+.section { margin-bottom: 4.5rem; scroll-margin-top: 70px; }
+.sec-id { display: flex; align-items: center; gap: 12px; font-family: var(--mono); font-size: 10.5px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 1.25rem; }
+.sec-id::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+.sec-h2 { font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--text); margin-bottom: 1.5rem; }
+.sec-h2 em { font-style: italic; color: var(--teal); font-family: var(--serif); }
+.sec-h2 strong { font-weight: 600; }
+.sec-intro { font-size: 14.5px; line-height: 1.75; color: var(--text2); margin-bottom: 1.5rem; }
 
-/* ── ML MODEL ── */
-.ml-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-.ml-row{background:var(--bg);padding:18px 22px;display:grid;grid-template-columns:190px 1fr;gap:24px;}
-.ml-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding-top:2px;}
-.ml-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;}
-.ml-val strong{color:var(--text);font-weight:500;}
-.feat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.feat-chip{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;padding:4px 10px;border:1px solid var(--border2);color:var(--muted);}
+/* STATE MACHINE STYLING */
+.sm-wrap { overflow-x: auto; margin-bottom: 8px; border: 1px solid var(--border); border-radius: var(--r-lg); background: white; }
+.sm-grid { display: flex; gap: 0; min-width: 760px; }
+.sm-node { flex: 1; padding: 16px 8px; border-right: 1px solid var(--border); text-align: center; transition: all 0.2s; min-width: 0; }
+.sm-node:last-child { border-right: none; }
+.sn-id { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 4px; }
+.sn-name { font-size: 11px; color: var(--text2); font-weight: 500; line-height: 1.3; }
+.sm-node.active { background: var(--bg2); }
+.sm-node.active .sn-name { color: var(--text); font-weight: 600; }
+.sm-node.hitl-node { background: var(--amber-bg); }
+.sm-node.hitl-node .sn-id { color: var(--amber); }
+.sm-node.hitl-node .sn-name { color: var(--amber); }
+.sm-node.hitl-node.active { background: var(--amber-bg); border-bottom: 2px solid var(--amber-border); }
+.sm-node.done { background: var(--teal-bg); }
+.sm-node.done .sn-name { color: var(--teal); }
 
-/* ── HITL SPEC ── */
-.hitl-spec-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px;}
-.hitl-spec-row{background:var(--bg);padding:18px 22px;display:grid;grid-template-columns:170px 1fr;gap:24px;}
-.hitl-spec-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding-top:2px;}
-.hitl-spec-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.65;}
-.hitl-spec-val strong{color:var(--text);font-weight:500;}
-.hitl-checkpoint-heading{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;color:var(--text);letter-spacing:0.04em;margin-bottom:16px;}
+.sm-legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 12px; margin-bottom: 2rem; }
+.sm-leg-item { display: flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.sm-leg-swatch { width: 12px; height: 12px; border: 1px solid var(--border); border-radius: 3px; }
+.sm-leg-swatch.active { background: var(--bg2); }
+.sm-leg-swatch.hitl { background: var(--amber-bg); border-color: var(--amber-border); }
+.sm-leg-swatch.done { background: var(--teal-bg); border-color: var(--teal-border); }
 
-/* ── INTEGRATIONS ── */
-.int-table{width:100%;border-collapse:collapse;border:1px solid var(--border);}
-.int-table th{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);padding:14px 18px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg3);font-weight:400;}
-.int-table td{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;padding:16px 18px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6;color:var(--muted);}
-.int-table tr:last-child td{border-bottom:none;}
-.int-dir-badge{font-size:10px;padding:2px 8px;border:1px solid var(--border2);letter-spacing:0.06em;font-weight:500;display:inline-block;}
-.int-dir-badge.read{color:#6aab80;border-color:rgba(60,120,80,0.3);}
-.int-dir-badge.write{color:#78a8cc;border-color:rgba(60,120,160,0.3);}
-.sys-name{color:var(--text);font-weight:500;font-size:13px;margin-bottom:3px;}
-.sys-sub{font-size:11px;color:var(--faint);}
+/* PIPELINE / SIMULATION RUNNER */
+.sim-wrap { border: 1px solid var(--border); border-radius: var(--r-lg); background: white; overflow: hidden; margin: 2rem 0; }
+.sim-progress { display: flex; height: 4px; background: var(--bg2); }
+.sim-step-dot { flex: 1; height: 100%; background: transparent; transition: background 0.3s; }
+.sim-step-dot.done-dot { background: var(--teal); }
+.sim-step-dot.active-dot { background: var(--text); }
+.sim-step-dot.hitl-dot { background: var(--amber); }
 
-/* ── ADR ── */
-.adr-grid{display:grid;gap:1px;background:var(--border);border:1px solid var(--border);}
-.adr-card{background:var(--bg);padding:24px 26px;}
-.adr-id{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
-.adr-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px;}
-.adr-body{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:12px;}
-.adr-status{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
+.sim-panel { padding: 2rem; min-height: 280px; }
+.sim-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; }
+.sim-step-num { font-family: var(--mono); font-size: 10.5px; text-transform: uppercase; color: var(--text3); }
+.sim-state-badge { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border: 1px solid var(--border2); border-radius: 99px; color: var(--text2); background: var(--bg); }
+.sim-state-badge.hitl { border-color: var(--amber-border); color: var(--amber); background: var(--amber-bg); }
+.sim-state-badge.done-badge { border-color: var(--teal-border); color: var(--teal); background: var(--teal-bg); }
 
-/* ── COST ── */
-.cost-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:1px;}
-.cost-stat{background:var(--bg);padding:28px 24px;}
-.cost-num{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:32px;font-weight:300;letter-spacing:-0.03em;margin-bottom:8px;}
-.cost-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);margin-bottom:4px;}
-.cost-src{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);}
-.cost-src a{color:var(--faint);border-bottom:1px solid rgba(136,135,128,0.2);}
-.cost-breakdowns{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:1px;margin-bottom:24px;}
-.cost-block{background:var(--bg);padding:24px;}
-.cost-block-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;font-weight:500;color:var(--text);margin-bottom:16px;letter-spacing:0.02em;}
-.cost-line{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-.cost-line-label{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-.cost-line-val{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--text);font-weight:500;}
-.cost-line-val.green{color:#6aab80;}
-.cost-line.total{border-top:1px solid var(--border);padding-top:10px;margin-top:10px;}
-.cost-line.total .cost-line-label{color:var(--text);font-weight:500;}
-.roi-note{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);line-height:1.75;padding:20px 22px;border:1px solid var(--border);background:var(--bg3);}
-.roi-note strong{color:var(--text);font-weight:500;}
-.roi-note a{color:var(--faint);border-bottom:1px solid rgba(136,135,128,0.2);}
+.sim-title { font-family: var(--serif); font-size: 20px; color: var(--text); margin-bottom: 0.75rem; }
+.sim-body { font-size: 14px; color: var(--text2); line-height: 1.65; margin-bottom: 1.5rem; }
 
-/* ── PAGE NAV ── */
-.page-nav{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:72px;}
-.page-nav-card{background:var(--bg);padding:24px 28px;text-decoration:none;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;}
-.page-nav-card:hover{background:var(--bg2);}
-.page-nav-pg{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--faint);margin-bottom:6px;}
-.page-nav-title{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:14px;font-weight:500;color:var(--text);}
-.page-nav-sub{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:11px;color:var(--faint);margin-top:4px;}
-.page-nav-arrow{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:20px;color:var(--muted);}
+.sim-data { border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 1.5rem; background: var(--bg); }
+.sim-data-row { display: grid; grid-template-columns: 160px 1fr; border-bottom: 1px solid var(--border); }
+.sim-data-row:last-child { border-bottom: none; }
+.sim-data-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--text3); padding: 10px 14px; background: var(--bg2); border-right: 1px solid var(--border); }
+.sim-data-val { font-size: 13.5px; color: var(--text2); padding: 10px 14px; line-height: 1.5; }
+.sim-data-val strong { color: var(--text); font-weight: 500; }
+.flag { font-family: var(--mono); font-size: 9.5px; padding: 1px 5px; background: var(--coral-bg); color: var(--coral); border: 1px solid var(--coral-border); border-radius: 3px; margin-left: 6px; }
+.ok { font-family: var(--mono); font-size: 9.5px; padding: 1px 5px; background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); border-radius: 3px; margin-left: 6px; }
 
-/* ── FOOTER ── */
-.footer-bar{border-top:1px solid var(--border);padding:32px 40px;display:flex;justify-content:space-between;align-items:center;}
-.footer-brand{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:13px;color:var(--muted);}
-.footer-brand em{font-style:italic;}
-.footer-brand strong{font-weight:600;}
-.footer-links a{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
-.footer-links a:hover{color:var(--muted);}
-.footer-copy{font-family:-apple-system,'Helvetica Neue',Arial,sans-serif;font-size:12px;color:var(--faint);}
+/* SHAP WRAPPER */
+.shap-bar-wrap { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+.shap-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--text3); margin-bottom: 1rem; }
+.shap-row { display: grid; grid-template-columns: 180px 1fr 50px; align-items: center; gap: 16px; margin-bottom: 8px; }
+.shap-feat { font-size: 12.5px; color: var(--text2); text-align: right; }
+.shap-bar-bg { height: 6px; background: var(--bg3); border-radius: 99px; overflow: hidden; }
+.shap-bar-fill { height: 100%; border-radius: 99px; transition: width 0.4s ease; }
+.shap-bar-fill.pos { background: var(--teal); }
+.shap-bar-fill.neg { background: var(--coral); }
+.shap-val { font-family: var(--mono); font-size: 11px; color: var(--text2); text-align: right; }
+
+/* HITL UX OVERLAY */
+.hitl-panel { border: 1px solid var(--amber-border); background: var(--amber-bg); border-radius: var(--r); padding: 1.25rem; margin-bottom: 1.5rem; }
+.hitl-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.hitl-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--amber); font-weight: 600; }
+.hitl-article { font-family: var(--mono); font-size: 9.5px; color: var(--text3); border: 1px solid var(--border); padding: 2px 6px; border-radius: 4px; background: white; }
+.hitl-reason { font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 10px; border-left: 2px solid var(--amber-border); padding-left: 8px; }
+.hitl-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 12px; }
+.hitl-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.hitl-btn { font-family: var(--sans); font-size: 12px; font-weight: 500; padding: 6px 14px; border: 1px solid var(--border2); border-radius: var(--r); color: var(--text2); background: white; cursor: pointer; transition: all 0.15s; }
+.hitl-btn:hover { border-color: var(--text); color: var(--text); }
+.hitl-btn.approve { background: var(--teal); color: white; border-color: var(--teal); }
+.hitl-btn.approve:hover { opacity: 0.9; }
+.hitl-btn.reject { border-color: var(--coral-border); color: var(--coral); }
+.hitl-btn.reject:hover { background: var(--coral-bg); }
+.hitl-timeout { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-top: 8px; }
+
+.sim-controls { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; border-top: 1px solid var(--border); background: var(--bg2); }
+.sim-btn { font-family: var(--mono); font-size: 11px; text-transform: uppercase; padding: 6px 16px; border: 1px solid var(--border2); border-radius: var(--r); color: var(--text2); background: white; cursor: pointer; transition: all 0.15s; }
+.sim-btn:hover:not(:disabled) { border-color: var(--text); color: var(--text); }
+.sim-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.sim-counter { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+
+/* ML MODEL ENGINE / DATA SPEC GRID */
+.ml-grid { display: flex; flex-direction: column; gap: 8px; margin: 1.5rem 0; }
+.ml-row { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: grid; grid-template-columns: 180px 1fr; gap: 2rem; }
+.ml-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); padding-top: 2px; }
+.ml-val { font-size: 13.5px; color: var(--text2); line-height: 1.65; }
+.ml-val strong { color: var(--text); font-weight: 500; }
+.feat-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+.feat-chip { font-family: var(--sans); font-size: 11.5px; padding: 2px 8px; background: var(--bg2); border: 1px solid var(--border); border-radius: 4px; color: var(--text2); }
+
+/* HITL BLUEPRINTS */
+.hitl-spec-grid { display: flex; flex-direction: column; gap: 8px; margin-bottom: 2.5rem; }
+.hitl-spec-row { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: grid; grid-template-columns: 160px 1fr; gap: 2rem; }
+.hitl-spec-label { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--text3); padding-top: 2px; }
+.hitl-spec-val { font-size: 13.5px; color: var(--text2); line-height: 1.6; }
+.hitl-spec-val strong { color: var(--text); font-weight: 500; }
+.hitl-checkpoint-heading { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text); margin: 2rem 0 0.75rem; display: flex; align-items: center; gap: 8px; }
+.hitl-checkpoint-heading::before { content: ''; display: block; width: 16px; height: 1px; background: var(--border2); }
+
+/* INTEGRATION PATTERNS */
+.int-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+.int-table th { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text3); padding: 12px 16px; border-bottom: 1px solid var(--border); text-align: left; background: var(--bg2); }
+.int-table td { padding: 14px 16px; border-bottom: 1px solid var(--border); color: var(--text2); vertical-align: top; line-height: 1.6; }
+.int-dir-badge { font-family: var(--mono); font-size: 9.5px; padding: 2px 6px; border-radius: 4px; display: inline-block; font-weight: 500; }
+.int-dir-badge.read { background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); }
+.int-dir-badge.write { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.sys-name { font-weight: 600; color: var(--text); font-size: 14px; }
+.sys-sub { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* ADR SYSTEM ARCHITECTURE */
+.adr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1.5rem 0; }
+.adr-card { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; display: flex; flex-direction: column; justify-content: space-between; }
+.adr-id { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; margin-bottom: 4px; }
+.adr-title { font-family: var(--serif); font-size: 17px; color: var(--text); margin-bottom: 6px; }
+.adr-body { font-size: 13px; color: var(--text2); line-height: 1.6; margin-bottom: 1rem; }
+.adr-status { font-family: var(--mono); font-size: 9.5px; padding: 2px 8px; border-radius: 99px; background: var(--teal-bg); color: var(--teal); border: 1px solid var(--teal-border); align-self: flex-start; }
+
+/* COST METRICS GRID */
+.cost-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; margin: 0 0 1.5rem; }
+.cost-stat { padding: 1.25rem 1.5rem; border-right: 1px solid var(--border); background: white; }
+.cost-stat:last-child { border-right: none; }
+.cost-num { font-family: var(--serif); font-size: 32px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.cost-label { font-family: var(--sans); font-size: 12.5px; font-weight: 500; color: var(--text2); line-height: 1.4; }
+.cost-src { font-family: var(--mono); font-size: 9.5px; color: var(--text3); margin-top: 4px; line-height: 1.3; }
+.cost-src a { color: var(--text3); text-decoration: none; border-bottom: 1px solid var(--border2); }
+
+.cost-breakdowns { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 1.5rem 0; }
+.cost-block { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.5rem; background: white; }
+.cost-block-title { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text3); margin-bottom: 1rem; }
+.cost-line { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-size: 13.5px; }
+.cost-line-label { color: var(--text2); }
+.cost-line-val { font-weight: 500; color: var(--text); }
+.cost-line-val.green { color: var(--teal); }
+.cost-line.total { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 10px; font-weight: 600; }
+.cost-line.total .cost-line-label { color: var(--text); }
+
+.roi-note { border-left: 2px solid var(--border2); background: var(--bg2); padding: 1rem 1.25rem; border-radius: 0 var(--r) var(--r) 0; font-size: 13px; color: var(--text2); line-height: 1.6; }
+.roi-note strong { color: var(--text); }
+.roi-note a { color: var(--text3); text-decoration: none; border-bottom: 1px solid var(--border2); }
+
+/* CONTINUATION FLOW NAVIGATION */
+.page-nav { display: flex; flex-direction: column; gap: 8px; margin-top: 4.5rem; }
+.page-nav-card { border: 1px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; background: white; display: flex; justify-content: space-between; align-items: center; text-decoration: none; color: inherit; transition: border-color 0.15s, background-color 0.15s; }
+.page-nav-card:hover { border-color: var(--border2); background-color: var(--bg2); }
+.page-nav-pg { font-family: var(--mono); font-size: 10px; text-transform: uppercase; color: var(--text3); }
+.page-nav-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
+.page-nav-sub { font-size: 12.5px; color: var(--text2); }
+.page-nav-arrow { font-family: var(--mono); font-size: 14px; color: var(--text3); transition: transform 0.15s; }
+.page-nav-card:hover .page-nav-arrow { transform: translateX(3px); color: var(--text); }
+
+/* FOOTER BAR BOUNDARY */
+.footer-bar { padding: 2rem 2.5rem; border-top: 1px solid var(--border); background: var(--bg2); font-family: var(--mono); font-size: 11px; color: var(--text3); display: flex; justify-content: space-between; align-items: center; }
+.footer-links a { color: var(--text2); text-decoration: none; }
+.footer-links a:hover { color: var(--text); }
+
+@media (max-width: 920px) {
+  .page-wrap { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .topbar { padding: 0.75rem 1.5rem; }
+  .content { padding: 2rem 1.5rem 4rem; }
+  .cost-stats, .cost-breakdowns, .adr-grid { grid-template-columns: 1fr; }
+  .sm-grid { min-width: 100%; }
+  .ml-row, .hitl-spec-row, .sim-data-row { grid-template-columns: 1fr; gap: 0.5rem; }
+}
 </style>
 </head>
 <body>
+<div class="page-wrap">
 
-<!-- ══ NAV ══ -->
-<nav>
-  <span class="nav-back sans">← <a href="index.html">The Autonomous Buyer</a></span>
-  <span class="nav-trail sans">
-    <a href="page-02.html">PG 02</a>
-    <span style="margin:0 10px;color:var(--faint);">·</span>
-    <strong>PG 03 — Sourcing / RFx</strong>
-    <span style="margin:0 10px;color:var(--faint);">·</span>
-    <a href="page-04.html">PG 04 →</a>
-  </span>
-  <div class="nav-right">
-    <a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a>
-  </div>
-</nav>
-
-<div class="layout">
-
-<!-- ══ SIDEBAR ══ -->
 <aside class="sidebar">
-  <div class="sb-links" id="sb">
-    <span class="sb-sep sans">Module</span>
-    <a href="#hero" class="sans">Overview</a>
-    <a href="#statemachine" class="sans">State Machine</a>
-    <a href="#workflow" class="sans">Workflow Simulation</a>
-    <span class="sb-sep sans">Specification</span>
-    <a href="#mlmodel" class="sans">ML Model</a>
-    <a href="#hitlspec" class="sans">HITL Specification</a>
-    <a href="#integrations" class="sans">Integration Points</a>
-    <a href="#adrs" class="sans">ADR References</a>
-    <span class="sb-sep sans">Economics</span>
-    <a href="#cost" class="sans">Cost &amp; ROI</a>
+  <div class="sidebar-logo">Architecture Portfolio</div>
+  <div class="sidebar-project">Autonomous P2P</div>
+  <nav>
+    <ul class="sidebar-nav">
+      <li><a href="#hero">Overview</a></li>
+      <li><a href="#statemachine">State Machine</a></li>
+      <li><a href="#workflow">Workflow Simulation</a></li>
+      <li><span class="sb-sep">Specification</span></li>
+      <li><a href="#mlmodel">ML Model Engine</a></li>
+      <li><a href="#hitlspec">HITL Specification</a></li>
+      <li><a href="#integrations">Integration Patterns</a></li>
+      <li><a href="#adrs">ADR Records</a></li>
+      <li><span class="sb-sep">Economics</span></li>
+      <li><a href="#cost">Cost &amp; ROI Model</a></li>
+    </ul>
+    <div class="sidebar-divider"></div>
+    <ul class="sidebar-nav">
+      <li><a href="index.html">← Back Overview</a></li>
+      <li><a href="page-02.html">← PG 02 Brief</a></li>
+    </ul>
+  </nav>
+
+  <div class="stack-block">
+    <div class="stack-title">Engine Core</div>
+    <div class="stack-tags">
+      <span class="stack-tag">XGBoost v2.1</span>
+      <span class="stack-tag">Vertex AI</span>
+      <span class="stack-tag">SHAP Engine</span>
+      <span class="stack-tag">Ariba Network</span>
+      <span class="stack-tag">Firestore SDK</span>
+    </div>
   </div>
 </aside>
 
-<!-- ══ CONTENT ══ -->
-<main class="content">
-
-<!-- §1 HERO -->
-<div id="hero">
-  <p class="page-eyebrow sans">PG 03 · The Autonomous Buyer · Sourcing / RFx</p>
-  <h1 class="page-title">From 23 candidates to <em>3 awarded.</em><br><strong>Every scoring decision explained.</strong></h1>
-  <p class="page-desc sans">The RFx Agent monitors contract expiry signals in SAP Ariba, screens the full approved vendor list against EU CSRD/LkSG compliance registries, scores shortlisted suppliers with an XGBoost model whose SHAP output is written to the audit log before any downstream action executes, and routes every award decision to a named human approver. No black-box shortlisting. No autonomous award.</p>
-  <div class="hero-tags">
-    <span class="htag sans">Supplier Shortlisting</span>
-    <span class="htag sans">RFx Automation</span>
-    <span class="htag sans">XGBoost Scoring</span>
-    <span class="htag sans">SHAP Explainability</span>
-    <span class="htag sans">HITL Award Gate</span>
-    <span class="htag sans">CSRD / LkSG Screen</span>
-    <span class="htag sans">SAP Ariba Integration</span>
-    <span class="htag sans">GCP / Vertex AI</span>
-    <span class="htag risk sans">EU AI Act — High Risk</span>
-    <span class="htag risk sans">GDPR Art. 22</span>
-  </div>
-  <p class="hero-adrs sans">Governed by ADR-001 · ADR-003 · ADR-004 · ADR-005</p>
-</div>
-
-<!-- §2 STATE MACHINE -->
-<div class="section" id="statemachine">
-  <p class="sec-id sans">Agent Architecture · State Machine</p>
-  <h2 class="sec-h2">Eight states. <em>Two human checkpoints.</em><br><strong>Every transition auditable.</strong></h2>
-  <p class="sec-intro sans">The RFx Agent is a deterministic state machine. HITL_REVIEW and HITL_AWARD are first-class states — not exception handlers. The machine cannot advance past either without a named human decision written to Firestore. Step through the simulation below to watch the active state update in real time.</p>
-
-  <div class="sm-wrap">
-    <div class="sm-grid" id="sm">
-      <div class="sm-node" data-state="0"><div class="sn-id sans">S0</div><div class="sn-name sans">IDLE</div></div>
-      <div class="sm-node" data-state="1"><div class="sn-id sans">S1</div><div class="sn-name sans">INTAKE</div></div>
-      <div class="sm-node" data-state="2"><div class="sn-id sans">S2</div><div class="sn-name sans">MARKET_SCAN</div></div>
-      <div class="sm-node" data-state="3"><div class="sn-id sans">S3</div><div class="sn-name sans">COMPLIANCE_SCREEN</div></div>
-      <div class="sm-node" data-state="4"><div class="sn-id sans">S4</div><div class="sn-name sans">ML_SCORE</div></div>
-      <div class="sm-node hitl-node" data-state="5"><div class="sn-id sans">⏸ HITL</div><div class="sn-name sans">HITL_REVIEW</div></div>
-      <div class="sm-node" data-state="6"><div class="sn-id sans">S6</div><div class="sn-name sans">RFX_DRAFT</div></div>
-      <div class="sm-node" data-state="7"><div class="sn-id sans">S7</div><div class="sn-name sans">RFX_ISSUED</div></div>
-      <div class="sm-node" data-state="8"><div class="sn-id sans">S8</div><div class="sn-name sans">RESPONSE_EVAL</div></div>
-      <div class="sm-node hitl-node" data-state="9"><div class="sn-id sans">⏸ HITL</div><div class="sn-name sans">HITL_AWARD</div></div>
-      <div class="sm-node" data-state="10"><div class="sn-id sans">S10</div><div class="sn-name sans">AWARDED</div></div>
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-breadcrumb">
+      <a href="index.html">The Autonomous Procure-to-Pay</a> &nbsp;/&nbsp; <a href="page-02.html">PG 02</a> &nbsp;/&nbsp; <strong>PG 03 — Sourcing / RFx</strong>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-tag">Decision Engine Core</span>
+      <a class="topbar-tag" href="index.html" style="text-decoration: none;">Overview</a>
+      <a class="topbar-tag" href="page-04.html" style="text-decoration: none;">Page 04 →</a>
     </div>
   </div>
-  <div class="sm-legend">
-    <div class="sm-leg-item sans"><div class="sm-leg-swatch active"></div>Current state</div>
-    <div class="sm-leg-item sans"><div class="sm-leg-swatch hitl"></div>HITL checkpoint (EU AI Act Art. 14 / risk-triggered)</div>
-    <div class="sm-leg-item sans"><div class="sm-leg-swatch done"></div>Completed state</div>
-  </div>
-</div>
 
-<!-- §3 WORKFLOW SIMULATION -->
-<div class="section" id="workflow">
-  <p class="sec-id sans">Workflow Simulation · Sterile Packaging Film RFx · ClaraVis Medical Systems GmbH</p>
-  <h2 class="sec-h2">Scenario: Sterile packaging film.<br><em>Contract expiry in 47 days.</em></h2>
-  <p class="sec-intro sans">Four incumbent suppliers. One active LkSG remediation flag. Annual spend €3.4M across 6 EU manufacturing sites. CSRD compliance mandatory. Step through each state to see the agent's reasoning, data reads, confidence scores, SHAP outputs, and both HITL checkpoints.</p>
+  <div class="content">
 
-  <div class="sim-wrap">
-    <div class="sim-progress" id="sim-progress"></div>
-    <div class="sim-panel" id="sim-panel"></div>
-    <div class="sim-controls">
-      <button class="sim-btn sans" id="btn-prev" onclick="simStep(-1)">← Previous</button>
-      <span class="sim-counter sans" id="sim-counter"></span>
-      <button class="sim-btn sans" id="btn-next" onclick="simStep(1)">Next →</button>
-    </div>
-  </div>
-</div>
+    <header class="doc-header" id="hero">
+      <div class="doc-eyebrow">PG 03 · The Autonomous Procure-to-Pay · Sourcing / RFx</div>
+      <h1 class="doc-title">From 23 candidates to <em>3 awarded.</em><br><strong>Every scoring decision explained.</strong></h1>
+      <p class="page-desc">The RFx Agent monitors contract expiry signals in SAP Ariba, screens the full approved vendor list against EU CSRD/LkSG compliance registries, scores shortlisted suppliers with an XGBoost model whose SHAP output is written to the audit log before any downstream action executes, and routes every award decision to a named human approver. No black-box shortlisting. No autonomous award.</p>
+      
+      <div class="hero-tags">
+        <span class="htag">Supplier Shortlisting</span>
+        <span class="htag">RFx Automation</span>
+        <span class="htag">XGBoost Scoring</span>
+        <span class="htag">SHAP Explainability</span>
+        <span class="htag">HITL Award Gate</span>
+        <span class="htag">CSRD / LkSG Screen</span>
+        <span class="htag">SAP Ariba Integration</span>
+        <span class="htag">GCP / Vertex AI</span>
+        <span class="htag htag risk">EU AI Act — High Risk</span>
+        <span class="htag htag risk">GDPR Art. 22</span>
+      </div>
+      <div class="hero-adrs">Governed by ADR-001 · ADR-003 · ADR-004 · ADR-005</div>
+    </header>
 
-<!-- §4 ML MODEL SPEC -->
-<div class="section" id="mlmodel">
-  <p class="sec-id sans">ML Model Specification</p>
-  <h2 class="sec-h2">Supplier Shortlisting Model — <em>XGBoost v2.1</em></h2>
-  <p class="sec-intro sans">XGBoost was selected over an LLM-based scorer because supplier shortlisting is a high-risk AI Act decision: it must be deterministic, reproducible, and natively SHAP-explainable. An LLM produces stochastic outputs that cannot be reliably audited across identical inputs. See ADR-003.</p>
-  <div class="ml-grid">
-    <div class="ml-row">
-      <div class="ml-label sans">Model type</div>
-      <div class="ml-val sans"><strong>XGBoost multi-criteria scorer (v2.1)</strong> — gradient-boosted decision tree ensemble. Trained on 48 months of ClaraVis Ariba award history. Retrained quarterly via Vertex AI Pipelines. Deterministic output for identical inputs.</div>
-    </div>
-    <div class="ml-row">
-      <div class="ml-label sans">Input features</div>
-      <div class="ml-val sans">
-        Six features per supplier, all sourced from systems of record:
-        <div class="feat-chips">
-          <span class="feat-chip sans">On-time delivery rate (24m)</span>
-          <span class="feat-chip sans">Quality rejection rate</span>
-          <span class="feat-chip sans">CSRD / ESG tier</span>
-          <span class="feat-chip sans">Geographic coverage score</span>
-          <span class="feat-chip sans">Financial stability index</span>
-          <span class="feat-chip sans">Price competitiveness index</span>
+    <section class="section" id="statemachine">
+      <div class="sec-id">Agent Architecture · State Machine</div>
+      <h2 class="sec-h2">Eight states. <em>Two human checkpoints.</em><br><strong>Every transition auditable.</strong></h2>
+      <p class="sec-intro">The RFx Agent is a deterministic state machine. HITL_REVIEW and HITL_AWARD are first-class states — not exception handlers. The machine cannot advance past either without a named human decision written to Firestore. Step through the simulation below to watch the active state update in real time.</p>
+
+      <div class="sm-wrap">
+        <div class="sm-grid" id="sm">
+          <div class="sm-node" data-state="0"><div class="sn-id">S0</div><div class="sn-name">IDLE</div></div>
+          <div class="sm-node" data-state="1"><div class="sn-id">S1</div><div class="sn-name">INTAKE</div></div>
+          <div class="sm-node" data-state="2"><div class="sn-id">S2</div><div class="sn-name">MARKET_SCAN</div></div>
+          <div class="sm-node" data-state="3"><div class="sn-id">S3</div><div class="sn-name">COMPLIANCE_SCREEN</div></div>
+          <div class="sm-node" data-state="4"><div class="sn-id">S4</div><div class="sn-name">ML_SCORE</div></div>
+          <div class="sm-node hitl-node" data-state="5"><div class="sn-id">⏸ HITL</div><div class="sn-name">HITL_REVIEW</div></div>
+          <div class="sm-node" data-state="6"><div class="sn-id">S6</div><div class="sn-name">RFX_DRAFT</div></div>
+          <div class="sm-node" data-state="7"><div class="sn-id">S7</div><div class="sn-name">RFX_ISSUED</div></div>
+          <div class="sm-node" data-state="8"><div class="sn-id">S8</div><div class="sn-name">RESPONSE_EVAL</div></div>
+          <div class="sm-node hitl-node" data-state="9"><div class="sn-id">⏸ HITL</div><div class="sn-name">HITL_AWARD</div></div>
+          <div class="sm-node" data-state="10"><div class="sn-id">S10</div><div class="sn-name">AWARDED</div></div>
         </div>
       </div>
-    </div>
-    <div class="ml-row">
-      <div class="ml-label sans">Output</div>
-      <div class="ml-val sans"><strong>Composite score 0.0–1.0</strong> per supplier, plus top-3 SHAP feature contributions (signed, normalised). Scores and SHAP values written to <code style="font-size:12px;">audit/rfx/{event_id}/shap/{supplier_id}</code> in Firestore <em>before</em> the shortlist is presented to any human — EU AI Act Article 13 compliance.</div>
-    </div>
-    <div class="ml-row">
-      <div class="ml-label sans">Thresholds</div>
-      <div class="ml-val sans">
-        <div style="margin-bottom:8px;"><strong style="color:#6aab80;">≥ 0.72</strong> — Auto-shortlist eligible (agent proceeds autonomously)</div>
-        <div style="margin-bottom:8px;"><strong style="color:var(--amber);">&lt; 0.72</strong> — HITL_REVIEW required (CPO must approve before RFx draft)</div>
-        <div style="margin-bottom:8px;"><strong style="color:#e08070;">Any active LkSG flag</strong> — Disqualified regardless of score (hard gate, no override)</div>
-        <div><strong style="color:var(--amber);">Single-source risk detected</strong> — HITL_REVIEW triggered regardless of scores</div>
+      <div class="sm-legend">
+        <div class="sm-leg-item"><div class="sm-leg-swatch active"></div>Current active state</div>
+        <div class="sm-leg-item"><div class="sm-leg-swatch hitl"></div>HITL checkpoint node (Art. 14 mandated)</div>
+        <div class="sm-leg-item"><div class="sm-leg-swatch done"></div>Completed processing state</div>
       </div>
-    </div>
-    <div class="ml-row">
-      <div class="ml-label sans">SHAP contract</div>
-      <div class="ml-val sans">Top-3 SHAP features per supplier rendered as a horizontal bar chart in the HITL interface. The approver sees <em>why</em> a supplier was scored — not just the score. Negative contributions shown in amber; positive in green. This is the EU AI Act Article 13 transparency obligation expressed as a UX contract, not a compliance checkbox.</div>
-    </div>
-    <div class="ml-row">
-      <div class="ml-label sans">Model registry</div>
-      <div class="ml-val sans">Every production model version stored in <strong>Vertex AI Model Registry</strong> with a Model Card documenting training data, evaluation metrics, bias assessment, and intended use. Model version hash written to every inference log entry — enabling point-in-time audit of any past scoring decision.</div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<!-- §5 HITL SPECIFICATION -->
-<div class="section" id="hitlspec">
-  <p class="sec-id sans">HITL Specification · Two Checkpoints</p>
-  <h2 class="sec-h2">Human oversight is a <em>designed mechanism.</em><br><strong>Not a fallback.</strong></h2>
-  <p class="sec-intro sans">EU AI Act Article 14 requires that high-risk AI systems allow human oversight with the ability to intervene, override, or halt automated decisions. Both HITL states below satisfy this obligation independently and produce immutable Firestore audit records regardless of the decision made.</p>
+    <section class="section" id="workflow">
+      <div class="sec-id">Workflow Simulation · Sterile Packaging Film RFx</div>
+      <h2 class="sec-h2">Scenario: Sterile packaging film.<br><em>Contract expiry in 47 days.</em></h2>
+      <p class="sec-intro">Four incumbent suppliers. One active LkSG remediation flag. Annual spend €3.4M across 6 EU manufacturing sites. CSRD compliance mandatory. Step through each state to see the agent's reasoning, data reads, confidence scores, SHAP outputs, and both HITL checkpoints.</p>
 
-  <div class="hitl-checkpoint-heading sans">HITL-1 — Shortlist Review</div>
-  <div class="hitl-spec-grid" style="margin-bottom:36px;">
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Entry condition</div>
-      <div class="hitl-spec-val sans"><strong>Single-source risk</strong> (only 1 shortlisted supplier covers all 6 manufacturing sites) OR any top-5 supplier score &lt; 0.72 OR any incumbent supplier carries an active compliance flag</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Routed to</div>
-      <div class="hitl-spec-val sans"><strong>CPO (S-01)</strong> — named approver defined in procurement policy register. Deputy CPO if primary is unavailable beyond 8h.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Presentation contract</div>
-      <div class="hitl-spec-val sans">SHAP bar chart per shortlisted supplier · Geographic coverage map (sites covered per supplier) · Risk flags with source citations · Agent recommendation with confidence score and reasoning</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Decision interface</div>
-      <div class="hitl-spec-val sans">Approve shortlist as-is / Modify (add or remove suppliers with justification) / Reject and request re-screen. Mandatory justification field on Modify or Reject (minimum 50 characters). Justification stored verbatim in audit log.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Timeout behaviour</div>
-      <div class="hitl-spec-val sans"><strong>24 hours</strong> from routing — auto-escalate to Deputy CPO. <strong>48 hours</strong> — escalate to CPO + CFO with SLA breach record and contract expiry countdown. Agent remains paused; no autonomous action on timeout.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Audit record</div>
-      <div class="hitl-spec-val sans"><code style="font-size:12px;">{approver_id, timestamp, decision, justification, shortlist_version, model_version, shap_ref}</code> → Firestore (immutable append — IAM write-only role, no update or delete permitted)</div>
-    </div>
-  </div>
+      <div class="sim-wrap">
+        <div class="sim-progress" id="sim-progress"></div>
+        <div class="sim-panel" id="sim-panel"></div>
+        <div class="sim-controls">
+          <button class="sim-btn" id="btn-prev" onclick="simStep(-1)">← Previous Step</button>
+          <span class="sim-counter" id="sim-counter"></span>
+          <button class="sim-btn" id="btn-next" onclick="simStep(1)">Next Step →</button>
+        </div>
+      </div>
+    </section>
 
-  <div class="hitl-checkpoint-heading sans">HITL-2 — Award Decision</div>
-  <div class="hitl-spec-grid">
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Entry condition</div>
-      <div class="hitl-spec-val sans"><strong>Always</strong> — every RFx award is human-approved. EU AI Act Article 14 is non-negotiable for high-risk procurement decisions. Additional trigger: spend &gt; €500K requires CFO co-signature (this scenario: €3.4M — both CPO and CFO required).</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Routed to</div>
-      <div class="hitl-spec-val sans"><strong>CPO (S-01)</strong> — primary approver. <strong>CFO (S-02)</strong> — co-approver when spend &gt; €500K. Both decisions are required; the agent awaits both signatures before writing the award record.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Presentation contract</div>
-      <div class="hitl-spec-val sans">Full evaluation matrix with weighted scores per criterion · SHAP outputs per shortlisted supplier · Agent recommendation (single or split award with rationale) · CSRD compliance tier per supplier · Total estimated contract value · Contract expiry countdown</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Decision interface</div>
-      <div class="hitl-spec-val sans">Approve agent recommendation / Split award (adjust percentage allocation per supplier) / Override supplier selection with mandatory justification. Agent creates Ariba sourcing event award record and fires Pub/Sub event on approval — no pre-emptive system writes.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Timeout behaviour</div>
-      <div class="hitl-spec-val sans"><strong>48 hours</strong> from routing — escalate to CPO + CFO with contract expiry countdown and supply continuity risk flag. Agent remains paused. No autonomous award under any circumstances.</div>
-    </div>
-    <div class="hitl-spec-row">
-      <div class="hitl-spec-label sans">Audit record</div>
-      <div class="hitl-spec-val sans"><code style="font-size:12px;">{approver_id, co_approver_id, timestamp_primary, timestamp_cosign, decision, award_split, justification, contract_value, model_version}</code> → Firestore (immutable append)</div>
-    </div>
-  </div>
-</div>
+    <section class="section" id="mlmodel">
+      <div class="sec-id">ML Model Specification</div>
+      <h2 class="sec-h2">Supplier Shortlisting Model — <em>XGBoost v2.1</em></h2>
+      <p class="sec-intro">XGBoost was selected over an LLM-based scorer because supplier shortlisting is a high-risk AI Act decision: it must be deterministic, reproducible, and natively SHAP-explainable. An LLM produces stochastic outputs that cannot be reliably audited across identical inputs. See ADR-003.</p>
+      
+      <div class="ml-grid">
+        <div class="ml-row">
+          <div class="ml-label">Model Engine Architecture</div>
+          <div class="ml-val"><strong>XGBoost multi-criteria scorer (v2.1)</strong> — gradient-boosted decision tree ensemble. Trained on 48 months of ClaraVis Ariba award history. Retrained quarterly via Vertex AI Pipelines. Deterministic output for identical inputs.</div>
+        </div>
+        <div class="ml-row">
+          <div class="ml-label">Evaluated Input Features</div>
+          <div class="ml-val">
+            Six distinct criteria lines processed synchronously out of core data vaults:
+            <div class="feat-chips">
+              <span class="feat-chip">On-time delivery rate (24m)</span>
+              <span class="feat-chip">Quality rejection rate</span>
+              <span class="feat-chip">CSRD / ESG tier</span>
+              <span class="feat-chip">Geographic coverage score</span>
+              <span class="feat-chip">Financial stability index</span>
+              <span class="feat-chip">Price competitiveness index</span>
+            </div>
+          </div>
+        </div>
+        <div class="ml-row">
+          <div class="ml-label">Inference Target Output</div>
+          <div class="ml-val"><strong>Composite score 0.0–1.0</strong> per supplier, plus top-3 SHAP feature contributions (signed, normalised). Scores and SHAP values written to <code style="font-family:var(--mono);">audit/rfx/{event_id}/shap/{supplier_id}</code> in Firestore <em>before</em> the shortlist is presented to any human — EU AI Act Article 13 compliance.</div>
+        </div>
+        <div class="ml-row">
+          <div class="ml-label">Confidence Threshold Gates</div>
+          <div class="ml-val">
+            <div style="margin-bottom:6px;"><strong style="color:var(--teal);">≥ 0.72</strong> — Auto-shortlist threshold passed (agent automated continuation)</div>
+            <div style="margin-bottom:6px;"><strong style="color:var(--amber);">&lt; 0.72</strong> — HITL_REVIEW fallback triggered (mandatory supervisor check block)</div>
+            <div style="margin-bottom:6px;"><strong style="color:var(--coral);">Any Active LkSG Flag</strong> — Instant terminal hard disqualification (un-bypassable)</div>
+            <div><strong style="color:var(--amber);">Single-Source Risk Condition</strong> — High-risk bypass block instantly shifts to human review</div>
+          </div>
+        </div>
+        <div class="ml-row">
+          <div class="ml-label">Explainability UX Contract</div>
+          <div class="ml-val">Top-3 SHAP features per supplier rendered as a horizontal bar chart in the HITL interface. The approver sees <em>why</em> a supplier was scored — not just the score. Negative contributions shown in amber/red; positive in green. This is the EU AI Act Article 13 transparency obligation expressed as a UX contract, not a compliance checkbox.</div>
+        </div>
+        <div class="ml-row">
+          <div class="ml-label">Model Lineage &amp; Registry</div>
+          <div class="ml-val">Every production model version stored in <strong>Vertex AI Model Registry</strong> with a Model Card documenting training data, evaluation metrics, bias assessment, and intended use. Model version hash written to every inference log entry — enabling point-in-time audit of any past scoring decision.</div>
+        </div>
+      </div>
+    </section>
 
-<!-- §6 INTEGRATION POINTS -->
-<div class="section" id="integrations">
-  <p class="sec-id sans">Integration Points</p>
-  <h2 class="sec-h2">What the agent <em>reads.</em> What it <em>writes.</em></h2>
-  <p class="sec-intro sans">The RFx Agent reads only from systems of record via published APIs. It writes only to defined targets via documented event contracts. No direct database mutations. Every write to Ariba is preceded by a Firestore audit entry — the audit record is always created first.</p>
-  <table class="int-table sans">
-    <thead>
-      <tr>
-        <th style="width:90px;">Direction</th>
-        <th style="width:220px;">System</th>
-        <th>Data</th>
-        <th style="width:160px;">Protocol</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="int-dir-badge read sans">READ</span></td>
-        <td><div class="sys-name">SAP Ariba</div><div class="sys-sub">Sourcing system of record · ADR-001</div></td>
-        <td>Supplier master · Contract expiry signals · Approved vendor list · Historical award data (48 months)</td>
-        <td style="font-size:12px;">Ariba REST API (Sourcing v2)</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge read sans">READ</span></td>
-        <td><div class="sys-name">SAP S/4HANA</div><div class="sys-sub">ERP system of record</div></td>
-        <td>24-month spend history by category · Goods receipt quality data · Budget availability by cost centre</td>
-        <td style="font-size:12px;">SAP OData v4</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge read sans">READ</span></td>
-        <td><div class="sys-name">EU CSRD / LkSG Registry</div><div class="sys-sub">Compliance screen — mandatory gate</div></td>
-        <td>CSRD compliance status per supplier · Active LkSG remediation flags · EUDR applicability</td>
-        <td style="font-size:12px;">Public API / 24h scheduled batch pull</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge write sans">WRITE</span></td>
-        <td><div class="sys-name">SAP Ariba</div><div class="sys-sub">Sourcing event creation on HITL approval</div></td>
-        <td>Sourcing event · RFx document · Supplier invitations · Award record (post HITL-2 only)</td>
-        <td style="font-size:12px;">Ariba REST API (write scope)</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge write sans">WRITE</span></td>
-        <td><div class="sys-name">Firestore</div><div class="sys-sub">Audit log — immutable append (IAM write-only)</div></td>
-        <td>All state transitions · SHAP explanations per supplier · HITL decisions + justifications + approver IDs · Model inference logs with version hash</td>
-        <td style="font-size:12px;">Firestore SDK (append-only IAM)</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge write sans">WRITE</span></td>
-        <td><div class="sys-name">GCP Pub/Sub</div><div class="sys-sub">Event bus — downstream module consumers</div></td>
-        <td><code style="font-size:12px;">rfx.shortlist.approved</code> · <code style="font-size:12px;">rfx.issued</code> · <code style="font-size:12px;">rfx.awarded</code> (consumed by PG 04 Contract Agent)</td>
-        <td style="font-size:12px;">Pub/Sub push topic</td>
-      </tr>
-      <tr>
-        <td><span class="int-dir-badge write sans">WRITE</span></td>
-        <td><div class="sys-name">Vertex AI Model Registry</div><div class="sys-sub">Model governance and lineage</div></td>
-        <td>Inference log per event: model version hash · input feature hash · output score · timestamp · event_id</td>
-        <td style="font-size:12px;">Vertex AI SDK</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+    <section class="section" id="hitlspec">
+      <div class="sec-id">HITL Specification · Oversight Framework</div>
+      <h2 class="sec-h2">Human oversight is a <em>designed mechanism.</em><br><strong>Not a fallback.</strong></h2>
+      <p class="sec-intro">EU AI Act Article 14 requires that high-risk AI systems allow human oversight with the ability to intervene, override, or halt automated decisions. Both HITL states below satisfy this obligation independently and produce immutable Firestore audit records regardless of the decision made.</p>
 
-<!-- §7 ADR REFERENCES -->
-<div class="section" id="adrs">
-  <p class="sec-id sans">Architecture Decision Records</p>
-  <h2 class="sec-h2">Every design choice <em>has a record.</em></h2>
-  <p class="sec-intro sans">No component in this module exists without a traceable decision record. Each ADR states the context, the alternatives considered, and the reasoning for the choice made.</p>
-  <div class="adr-grid">
-    <div class="adr-card">
-      <div class="adr-id sans">ADR-001 · SAP Ariba Integration Pattern</div>
-      <div class="adr-title sans">Ariba REST API — sourcing system of record</div>
-      <div class="adr-body sans">Ariba Network API integration was selected because the P2P domain depth of this portfolio is only demonstrable with a live system-of-record integration — a mock data pattern makes the sourcing intelligence claims unverifiable. Alternatives rejected: SAP SRM API (deprecated path, not forward-compatible with S/4HANA); CSV export (breaks the real-time event-driven model); Ariba Developer sandbox mock data (unverifiable claims).</div>
-      <span class="adr-status sans">Status: Accepted</span>
-    </div>
-    <div class="adr-card">
-      <div class="adr-id sans">ADR-003 · XGBoost over LLM for Supplier Scoring</div>
-      <div class="adr-title sans">Deterministic, auditable, natively SHAP-explainable</div>
-      <div class="adr-body sans">An LLM-based scorer produces stochastic outputs across runs with identical inputs — this fails EU AI Act Article 13 (explainability) and GDPR Article 22 (meaningful information about automated decisions). XGBoost produces a deterministic score and a SHAP decomposition from a single forward pass. Alternatives rejected: GPT-4 scoring prompt (stochastic, non-reproducible, not SHAP-native); weighted average rule (no learned signal, no SHAP, brittle to new supplier data).</div>
-      <span class="adr-status sans">Status: Accepted</span>
-    </div>
-    <div class="adr-card">
-      <div class="adr-id sans">ADR-004 · Firestore for Audit Log</div>
-      <div class="adr-title sans">Immutable append — full audit trail queryable in under 30 seconds</div>
-      <div class="adr-body sans">GDPR Article 22 and EU AI Act Article 12 require a complete decision trail for every automated procurement inference. Firestore with append-only IAM rules provides immutable append semantics, sub-second writes, and a queryable log returning a complete audit trail for any decision in the last 24 months without a data warehouse query. Alternative rejected: BigQuery (acceptable for analytics queries but too slow for real-time HITL context loading at the point of human decision).</div>
-      <span class="adr-status sans">Status: Accepted</span>
-    </div>
-    <div class="adr-card">
-      <div class="adr-id sans">ADR-005 · Two-HITL Pattern for Sourcing</div>
-      <div class="adr-title sans">Risk-triggered shortlist review + regulation-mandated award gate</div>
-      <div class="adr-body sans">Single-HITL designs (award gate only) pass EU AI Act Article 14 but fail the single-source risk requirement: an agent that shortlists a single qualified supplier has already constrained the human decision before the HITL state is entered. The two-HITL pattern ensures a human reviews the candidate pool before the RFx is issued, and approves the final award independently. Alternative rejected: single award-only HITL (cheaper operationally, but fails single-source risk gate and gives the human a constrained choice set rather than a genuine oversight decision).</div>
-      <span class="adr-status sans">Status: Accepted</span>
-    </div>
-  </div>
-</div>
+      <div class="hitl-checkpoint-heading">HITL-1 — Shortlist Review Block</div>
+      <div class="hitl-spec-grid">
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Entry State Criteria</div>
+          <div class="hitl-spec-val"><strong>Single-source risk</strong> (only 1 shortlisted supplier covers all 6 manufacturing sites) OR any top-5 supplier score &lt; 0.72 OR any incumbent supplier carries an active compliance flag</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Policy Route Target</div>
+          <div class="hitl-spec-val"><strong>CPO (S-01)</strong> — named approver defined in procurement policy register. Deputy CPO if primary is unavailable beyond 8h.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Presentation Contract</div>
+          <div class="hitl-spec-val">SHAP bar chart per shortlisted supplier · Geographic coverage map (sites covered per supplier) · Risk flags with source citations · Agent recommendation with confidence score and reasoning</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Decision Schema Scope</div>
+          <div class="hitl-spec-val">Approve shortlist as-is / Modify (add or remove suppliers with justification) / Reject and request re-screen. Mandatory justification field on Modify or Reject (minimum 50 characters). Justification stored verbatim in audit log.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Timeout Timeout SLA</div>
+          <div class="hitl-spec-val"><strong>24 hours</strong> from routing — auto-escalate to Deputy CPO. <strong>48 hours</strong> — escalate to CPO + CFO with SLA breach record and contract expiry countdown. Agent remains paused; no autonomous action on timeout.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Audit Payload Schema</div>
+          <div class="hitl-spec-val"><code style="font-family:var(--mono); font-size:12px;">{approver_id, timestamp, decision, justification, shortlist_version, model_version, shap_ref}</code> → Firestore (immutable append — IAM write-only role, no update or delete permitted)</div>
+        </div>
+      </div>
 
-<!-- §8 COST & ROI -->
-<div class="section" id="cost">
-  <p class="sec-id sans">Cost &amp; ROI</p>
-  <h2 class="sec-h2">What the RFx Agent <em>costs.</em><br><strong>What it saves. What it returns.</strong></h2>
-  <p class="sec-intro sans">Three views: infrastructure cost per 1,000 RFx events on GCP europe-west3, annual savings from cycle time and labour reduction at ClaraVis volumes, and combined year-1 ROI. All figures sourced or referenced below.</p>
+      <div class="hitl-checkpoint-heading">HITL-2 — Sourcing Award Gate</div>
+      <div class="hitl-spec-grid">
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Entry State Criteria</div>
+          <div class="hitl-spec-val"><strong>Always Mandatory</strong> — every RFx award is human-approved. EU AI Act Article 14 is non-negotiable for high-risk procurement decisions. Additional trigger: spend &gt; €500K requires CFO co-signature (this scenario: €3.4M — both CPO and CFO required).</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Policy Route Target</div>
+          <div class="hitl-spec-val"><strong>CPO (S-01)</strong> — primary approver. <strong>CFO (S-02)</strong> — co-approver when spend &gt; €500K. Both decisions are required; the agent awaits both signatures before writing the award record.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Presentation Contract</div>
+          <div class="hitl-spec-val">Full evaluation matrix with weighted scores per criterion · SHAP outputs per shortlisted supplier · Agent recommendation (single or split award with rationale) · CSRD compliance tier per supplier · Total estimated contract value · Contract expiry countdown</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Decision Schema Scope</div>
+          <div class="hitl-spec-val">Approve agent recommendation / Split award (adjust percentage allocation per supplier) / Override supplier selection with mandatory justification. Agent creates Ariba sourcing event award record and fires Pub/Sub event on approval — no pre-emptive system writes.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Timeout Timeout SLA</div>
+          <div class="hitl-spec-val"><strong>48 hours</strong> from routing — escalate to CPO + CFO with contract expiry countdown and supply continuity risk flag. Agent remains paused. No autonomous award under any circumstances.</div>
+        </div>
+        <div class="hitl-spec-row">
+          <div class="hitl-spec-label">Audit Payload Schema</div>
+          <div class="hitl-spec-val"><code style="font-family:var(--mono); font-size:12px;">{approver_id, co_approver_id, timestamp_primary, timestamp_cosign, decision, award_split, justification, contract_value, model_version}</code> → Firestore (immutable append)</div>
+        </div>
+      </div>
+    </section>
 
-  <div class="cost-stats">
-    <div class="cost-stat">
-      <div class="cost-num sans">€4.20</div>
-      <div class="cost-label sans">GCP infrastructure cost per RFx event</div>
-      <div class="cost-src sans">Cloud Run + Firestore + Pub/Sub + Vertex AI · <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Pricing Calculator</a></div>
-    </div>
-    <div class="cost-stat">
-      <div class="cost-num sans">€1.4M</div>
-      <div class="cost-label sans">Estimated annual savings — ClaraVis (340 events/yr)</div>
-      <div class="cost-src sans">Labour + cycle time + compliance risk reduction · <a href="https://www.mckinsey.com/capabilities/operations/our-insights/procurement-2025-and-beyond" target="_blank">McKinsey Procurement 2025</a></div>
-    </div>
-    <div class="cost-stat">
-      <div class="cost-num sans">214×</div>
-      <div class="cost-label sans">Year-1 ROI — savings ÷ infrastructure cost</div>
-      <div class="cost-src sans">€1,420,000 savings ÷ €6,528 annual infrastructure cost (340 events)</div>
-    </div>
-  </div>
+    <section class="section" id="integrations">
+      <div class="sec-id">Integration Points</div>
+      <h2 class="sec-h2">What the agent <em>reads.</em> What it <em>writes.</em></h2>
+      <p class="sec-intro">The RFx Agent reads only from systems of record via published APIs. It writes only to defined targets via documented event contracts. No direct database mutations. Every write to Ariba is preceded by a Firestore audit entry — the audit record is always created first.</p>
+      
+      <table class="int-table">
+        <thead>
+          <tr>
+            <th style="width:100px;">Pattern</th>
+            <th style="width:220px;">System Context</th>
+            <th>Transacted Payload Element</th>
+            <th style="width:160px;">Protocol Profile</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="int-dir-badge read">READPATTERN</span></td>
+            <td><div class="sys-name">SAP Ariba</div><div class="sys-sub">Sourcing data vault · ADR-001</div></td>
+            <td>Supplier master · Contract expiry signals · Approved vendor list · Historical award data (48 months)</td>
+            <td>Ariba REST API (Sourcing v2)</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge read">READPATTERN</span></td>
+            <td><div class="sys-name">SAP S/4HANA</div><div class="sys-sub">ERP Master System of Record</div></td>
+            <td>24-month spend history by category · Goods receipt quality data · Budget availability by cost centre</td>
+            <td>SAP OData v4</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge read">READPATTERN</span></td>
+            <td><div class="sys-name">EU Compliance Registries</div><div class="sys-sub">CSRD / LkSG external gate hub</div></td>
+            <td>CSRD compliance status per supplier · Active LkSG remediation flags · EUDR applicability</td>
+            <td>Public API / 24h batch ingestion</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge write">WRITEPATTERN</span></td>
+            <td><div class="sys-name">SAP Ariba</div><div class="sys-sub">Sourcing record creation on human sign</div></td>
+            <td>Sourcing event · RFx document · Supplier invitations · Award record (post HITL-2 only)</td>
+            <td>Ariba REST API (write scopes)</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge write">WRITEPATTERN</span></td>
+            <td><div class="sys-name">Firestore</div><div class="sys-sub">Audit trail ledger · IAM bounded write</div></td>
+            <td>All state transitions · SHAP explanations per supplier · HITL decisions + justifications + approver IDs · Model inference logs with version hash</td>
+            <td>Firestore SDK (append-only role)</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge write">WRITEPATTERN</span></td>
+            <td><div class="sys-name">GCP Pub/Sub</div><div class="sys-sub">Asynchronous system event fabric</div></td>
+            <td><code style="font-family:var(--mono);">rfx.shortlist.approved</code> · <code style="font-family:var(--mono);">rfx.issued</code> · <code style="font-family:var(--mono);">rfx.awarded</code> (triggers Contract Agent loop on page 04)</td>
+            <td>Pub/Sub push topics</td>
+          </tr>
+          <tr>
+            <td><span class="int-dir-badge write">WRITEPATTERN</span></td>
+            <td><div class="sys-name">Vertex AI Registry</div><div class="sys-sub">Model operations audit sink</div></td>
+            <td>Inference log per event: model version hash · input feature hash · output score · timestamp · event_id</td>
+            <td>Vertex AI SDK</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
 
-  <div class="cost-breakdowns">
-    <div class="cost-block">
-      <div class="cost-block-title sans">Infrastructure cost · per 1,000 RFx events · GCP europe-west3</div>
-      <div class="cost-line"><span class="cost-line-label sans">Cloud Run (agent compute)</span><span class="cost-line-val sans">€1,100</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">Firestore (audit log writes)</span><span class="cost-line-val sans">€420</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">GCP Pub/Sub (event bus)</span><span class="cost-line-val sans">€80</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">Vertex AI (XGBoost inference)</span><span class="cost-line-val sans">€1,900</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">Ariba API calls (read/write)</span><span class="cost-line-val sans">€700</span></div>
-      <div class="cost-line total"><span class="cost-line-label sans">Total per 1,000 events</span><span class="cost-line-val sans">€4,200</span></div>
-      <div class="cost-line" style="margin-top:6px;"><span class="cost-line-label sans" style="color:var(--faint);">ClaraVis annual (340 events)</span><span class="cost-line-val sans" style="font-weight:400;">€1,428</span></div>
-    </div>
-    <div class="cost-block">
-      <div class="cost-block-title sans">Annual savings model · ClaraVis Medical Systems GmbH</div>
-      <div class="cost-line"><span class="cost-line-label sans">Labour: 34 days → 4 days per RFx</span><span class="cost-line-val green sans">+€680,000</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">Supplier pool: 23 → 6 (screening automation)</span><span class="cost-line-val green sans">+€240,000</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">LkSG compliance risk reduction</span><span class="cost-line-val green sans">+€320,000</span></div>
-      <div class="cost-line"><span class="cost-line-label sans">Early award (contract expiry avoidance)</span><span class="cost-line-val green sans">+€180,000</span></div>
-      <div class="cost-line total"><span class="cost-line-label sans">Total annual savings</span><span class="cost-line-val green sans">€1,420,000</span></div>
-      <div class="cost-line" style="margin-top:6px;"><span class="cost-line-label sans" style="color:var(--faint);">Less: infrastructure cost</span><span class="cost-line-val sans" style="font-weight:400;">−€1,428</span></div>
-    </div>
-  </div>
+    <section class="section" id="adrs">
+      <div class="sec-id">Architecture Decision Records</div>
+      <h2 class="sec-h2">Every design choice <em>has a record.</em></h2>
+      <p class="sec-intro">No component in this module exists without a traceable decision record. Each ADR states the context, the alternatives considered, and the reasoning for the choice made.</p>
+      
+      <div class="adr-grid">
+        <div class="adr-card">
+          <div>
+            <div class="adr-id">ADR-001 · SAP Ariba Integration Pattern</div>
+            <div class="adr-title">Ariba REST API — sourcing system of record</div>
+            <div class="adr-body">Ariba Network API integration was selected because the P2P domain depth of this portfolio is only demonstrable with a live system-of-record integration — a mock data pattern makes the sourcing intelligence claims unverifiable. Alternatives rejected: SAP SRM API (deprecated path, not forward-compatible with S/4HANA); CSV export (breaks the real-time event-driven model); Ariba Developer sandbox mock data (unverifiable claims).</div>
+          </div>
+          <span class="adr-status">Status: Accepted</span>
+        </div>
+        <div class="adr-card">
+          <div>
+            <div class="adr-id">ADR-003 · XGBoost over LLM for Supplier Scoring</div>
+            <div class="adr-title">Deterministic, auditable, natively SHAP-explainable</div>
+            <div class="adr-body">An LLM-based scorer produces stochastic outputs across runs with identical inputs — this fails EU AI Act Article 13 (explainability) and GDPR Article 22 (meaningful information about automated decisions). XGBoost produces a deterministic score and a SHAP decomposition from a single forward pass. Alternatives rejected: GPT-4 scoring prompt (stochastic, non-reproducible, not SHAP-native); weighted average rule (no learned signal, no SHAP, brittle to new supplier data).</div>
+          </div>
+          <span class="adr-status">Status: Accepted</span>
+        </div>
+        <div class="adr-card">
+          <div>
+            <div class="adr-id">ADR-004 · Firestore for Audit Log</div>
+            <div class="adr-title">Immutable append — full audit trail queryable in under 30 seconds</div>
+            <div class="adr-body">GDPR Article 22 and EU AI Act Article 12 require a complete decision trail for every automated procurement inference. Firestore with append-only IAM rules provides immutable append semantics, sub-second writes, and a queryable log returning a complete audit trail for any decision in the last 24 months without a data warehouse query. Alternative rejected: BigQuery (acceptable for analytics queries but too slow for real-time HITL context loading at the point of human decision).</div>
+          </div>
+          <span class="adr-status">Status: Accepted</span>
+        </div>
+        <div class="adr-card">
+          <div>
+            <div class="adr-id">ADR-005 · Two-HITL Pattern for Sourcing</div>
+            <div class="adr-title">Risk-triggered shortlist review + regulation-mandated award gate</div>
+            <div class="adr-body">Single-HITL designs (award gate only) pass EU AI Act Article 14 but fail the single-source risk requirement: an agent that shortlists a single qualified supplier has already constrained the human decision before the HITL state is entered. The two-HITL pattern ensures a human reviews the candidate pool before the RFx is issued, and approves the final award independently. Alternative rejected: single award-only HITL (cheaper operationally, but fails single-source risk gate and gives the human a constrained choice set rather than a genuine oversight decision).</div>
+          </div>
+          <span class="adr-status">Status: Accepted</span>
+        </div>
+      </div>
+    </section>
 
-  <div class="roi-note sans">
-    <strong>Methodology.</strong> Labour savings assume a blended procurement FTE rate of €90,000/year (fully loaded), 340 sourcing events/year, and cycle time reduction from 34 to 4 days per event — consistent with <a href="https://www.thehackettgroup.com/research/procurement/" target="_blank">Hackett Group benchmarks on AI-assisted sourcing (2024)</a>. Compliance risk reduction modelled as 60% reduction in LkSG remediation exposure at €320K/year average ClaraVis exposure per <a href="https://www.bmas.de/EN/Services/Publications/a883-lksg-guidance.html" target="_blank">BMAS LkSG Guidance</a>. Infrastructure costs calculated on GCP europe-west3 on-demand pricing via <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Pricing Calculator</a>. All figures are indicative estimates; actual results depend on implementation quality, data completeness, and ClaraVis-specific event volumes.
-  </div>
-</div>
+    <section class="section" id="cost">
+      <div class="sec-id">Cost &amp; ROI Model</div>
+      <h2 class="sec-h2">What the RFx Agent <em>costs.</em><br><strong>What it saves. What it returns.</strong></h2>
+      <p class="sec-intro">Three views: infrastructure cost per 1,000 RFx events on GCP europe-west3, annual savings from cycle time and labour reduction at ClaraVis volumes, and combined year-1 ROI. All figures sourced or referenced below.</p>
 
-<!-- PAGE NAV -->
-<div class="page-nav">
-  <a class="page-nav-card" href="page-02.html">
-    <div>
-      <div class="page-nav-pg sans">← PG 02</div>
-      <div class="page-nav-title sans">ClaraVis Client Brief &amp; Requirements</div>
-      <div class="page-nav-sub sans">BRD · Stakeholder Map · AI Readiness · Use Case Catalogue</div>
-    </div>
-    <span class="page-nav-arrow sans">←</span>
-  </a>
-  <a class="page-nav-card" href="page-04.html">
-    <div>
-      <div class="page-nav-pg sans">PG 04 →</div>
-      <div class="page-nav-title sans">Contract Negotiation &amp; Award</div>
-      <div class="page-nav-sub sans">Clause Extraction · Risk Scoring · Redline Agent · HITL Sign-off</div>
-    </div>
-    <span class="page-nav-arrow sans">→</span>
-  </a>
-</div>
+      <div class="cost-stats">
+        <div class="cost-stat">
+          <div class="cost-num">€4.20</div>
+          <div class="cost-label">GCP infra cost per single RFx event</div>
+          <div class="cost-src">Cloud Run + Firestore + Vertex AI calculations · <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Calculator ↗</a></div>
+        </div>
+        <div class="cost-stat">
+          <div class="cost-num">€1.4M</div>
+          <div class="cost-label">Estimated annual savings at benchmark</div>
+          <div class="cost-src">Labour overhead + cycle time compression matrix · <a href="https://www.mckinsey.com/capabilities/operations/our-insights/procurement-2025-and-beyond" target="_blank">McKinsey Insights ↗</a></div>
+        </div>
+        <div class="cost-stat">
+          <div class="cost-num">214×</div>
+          <div class="cost-label">Calculated Year-1 ROI yield ceiling</div>
+          <div class="cost-src">Based on ClaraVis volume run rate scale of 340 events/annum</div>
+        </div>
+      </div>
+
+      <div class="cost-breakdowns">
+        <div class="cost-block">
+          <div class="cost-block-title">GCP Infrastructure Cost Matrix (Per 1,000 runs)</div>
+          <div class="cost-line"><span class="cost-line-label">Cloud Run Compute Tasks</span><span class="cost-line-val">€1,100</span></div>
+          <div class="cost-line"><span class="cost-line-label">Firestore Audit Log Storage Semantics</span><span class="cost-line-val">€420</span></div>
+          <div class="cost-line"><span class="cost-line-label">GCP Pub/Sub Bus Messages</span><span class="cost-line-val">€80</span></div>
+          <div class="cost-line"><span class="cost-line-label">Vertex AI Model Endpoint Interrogations</span><span class="cost-line-val">€1,900</span></div>
+          <div class="cost-line"><span class="cost-line-label">Ariba REST Sync Overheads</span><span class="cost-line-val">€700</span></div>
+          <div class="cost-line total"><span class="cost-line-label">Total Pipeline Cost Per 1,000 Runs</span><span class="cost-line-val">€4,200</span></div>
+        </div>
+        <div class="cost-block">
+          <div class="cost-block-title">Annual Savings Projection (ClaraVis Context)</div>
+          <div class="cost-line"><span class="cost-line-label">Labour Compression (34 Days → 4 Days)</span><span class="cost-line-val green">+€680,000</span></div>
+          <div class="cost-line"><span class="cost-line-label">Pool Filter Optimisation Engine</span><span class="cost-line-val green">+€240,000</span></div>
+          <div class="cost-line"><span class="cost-line-label">LkSG Exposure Risk Deflection</span><span class="cost-line-val green">+€320,000</span></div>
+          <div class="cost-line"><span class="cost-line-label">Early-Award Expiry Penalty Breakers</span><span class="cost-line-val green">+€180,000</span></div>
+          <div class="cost-line total"><span class="cost-line-label">Total Realized Annual Savings</span><span class="cost-line-val green">€1,420,000</span></div>
+        </div>
+      </div>
+
+      <div class="roi-note">
+        <strong>Methodology Reference.</strong> Labour savings assume a blended procurement FTE rate of €90,000/year (fully loaded), 340 sourcing events/year, and cycle time reduction from 34 to 4 days per event — consistent with <a href="https://www.thehackettgroup.com/research/procurement/" target="_blank">Hackett Group benchmarks on AI-assisted sourcing (2024)</a>. Compliance risk reduction modelled as 60% reduction in LkSG remediation exposure at €320K/year average ClaraVis exposure per <a href="https://www.bmas.de/EN/Services/Publications/a883-lksg-guidance.html" target="_blank">BMAS LkSG Guidance</a>. Infrastructure costs calculated on GCP europe-west3 on-demand pricing via <a href="https://cloud.google.com/products/calculator" target="_blank">GCP Pricing Calculator</a>. All figures are indicative estimates; actual results depend on implementation quality, data completeness, and ClaraVis-specific event volumes.
+      </div>
+
+      <nav class="page-nav">
+        <a class="page-nav-card" href="page-02.html">
+          <div>
+            <div class="page-nav-pg">← Previous Module (PG 02)</div>
+            <div class="page-nav-title">ClaraVis Client Brief &amp; Requirements Matrix</div>
+            <div class="page-nav-sub">BRD · Stakeholder Registry · Compliance Baseline Assays</div>
+          </div>
+          <span class="page-nav-arrow">←</span>
+        </a>
+        <a class="page-nav-card" href="#">
+          <div>
+            <div class="page-nav-pg">Next Module (PG 04) →</div>
+            <div class="page-nav-title">Contract Negotiation &amp; Award Execution</div>
+            <div class="page-nav-sub">Clause Structuring · Risk Mapping Engines · Counter-Redline Swarms</div>
+          </div>
+          <span class="page-nav-arrow">→</span>
+        </a>
+      </nav>
+    </section>
+
+  </div><footer class="footer-bar">
+    <span>The <em>Autonomous</em> Procure-to-Pay</span>
+    <div class="footer-links"><a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a></div>
+    <span>© 2026 Siddharth Rao</span>
+  </footer>
 
 </main>
-</div>
-
-<div class="footer-bar">
-  <span class="footer-brand sans">The <em>Autonomous</em> <strong>Buyer</strong></span>
-  <div class="footer-links"><a href="https://raosiddharth.com/blog.html" target="_blank">Blog</a></div>
-  <span class="footer-copy sans">© 2026 Siddharth Rao</span>
-</div>
-
-<script>
+</div><script>
 const STEPS = [
   {
     state:1, title:"Contract expiry signal detected",
@@ -698,7 +756,7 @@ const STEPS = [
     badge:"RFX_ISSUED", badgeClass:"",
     body:"The agent drafts the RFx document using the category specification, evaluation criteria, CSRD compliance clause, and dual-award option. The document is published to the SAP Ariba Network. All 6 shortlisted suppliers are notified. The rfx.issued event is fired to Pub/Sub.",
     data:[
-      {label:"Document",val:"RFx RFX-2026-0341 — sterile packaging film · ISO 11607 · 6 sites · 3-year term · dual-award option"},
+      {label:"Document",val:"RFx RFx-2026-0341 — sterile packaging film · ISO 11607 · 6 sites · 3-year term · dual-award option"},
       {label:"Evaluation criteria",val:"Price 35% · Quality 25% · Delivery 20% · ESG compliance 15% · Geographic coverage 5%"},
       {label:"CSRD clause",val:"Mandatory — supplier must provide CSRD Annex I disclosure within 30 days of award notification"},
       {label:"Response deadline",val:"14 days — 2026-04-10 17:00 CET"},
@@ -773,18 +831,18 @@ function updateStateMachine(){
 }
 
 function dataRows(data){
-  return data.map(r=>`<div class="sim-data-row"><div class="sim-data-label sans">${r.label}</div><div class="sim-data-val sans">${r.val}</div></div>`).join('');
+  return data.map(r=>`<div class="sim-data-row"><div class="sim-data-label">${r.label}</div><div class="sim-data-val">${r.val}</div></div>`).join('');
 }
 
 function shapBars(shap){
   if(!shap) return '';
   return `<div class="shap-bar-wrap">
-    <div class="shap-label sans">${shap.label}</div>
+    <div class="shap-label">${shap.label}</div>
     ${shap.rows.map(r=>`
     <div class="shap-row">
-      <div class="shap-feat sans">${r.feat}</div>
+      <div class="shap-feat">${r.feat}</div>
       <div class="shap-bar-bg"><div class="shap-bar-fill ${r.pos?'pos':'neg'}" style="width:${r.pct}%"></div></div>
-      <div class="shap-val sans">${r.val}</div>
+      <div class="shap-val">${r.val}</div>
     </div>`).join('')}
   </div>`;
 }
@@ -793,22 +851,22 @@ function hitlPanel(step){
   if(!step.hitl) return '';
   const t=step.hitlType;
   const a1=`
-    <button class="hitl-btn approve sans" onclick="hitlApprove()">✓ Approve shortlist</button>
-    <button class="hitl-btn sans" onclick="hitlApprove()">Edit shortlist</button>
-    <button class="hitl-btn reject sans">✗ Reject — re-screen</button>`;
+    <button class="hitl-btn approve" onclick="hitlApprove()">✓ Approve shortlist</button>
+    <button class="hitl-btn" onclick="hitlApprove()">Edit shortlist</button>
+    <button class="hitl-btn reject">✗ Reject — re-screen</button>`;
   const a2=`
-    <button class="hitl-btn approve sans" onclick="hitlApprove()">✓ Approve split award</button>
-    <button class="hitl-btn sans" onclick="hitlApprove()">Modify allocation</button>
-    <button class="hitl-btn reject sans">✗ Override supplier selection</button>`;
+    <button class="hitl-btn approve" onclick="hitlApprove()">✓ Approve split award</button>
+    <button class="hitl-btn" onclick="hitlApprove()">Modify allocation</button>
+    <button class="hitl-btn reject">✗ Override supplier selection</button>`;
   return `<div class="hitl-panel">
     <div class="hitl-header">
-      <span class="hitl-label sans">⏸ Human checkpoint ${t===1?'1 — Shortlist Review':'2 — Award Decision'}</span>
-      <span class="hitl-article sans">EU AI Act Art. 14</span>
+      <span class="hitl-label">⏸ Human checkpoint ${t===1?'1 — Shortlist Review':'2 — Award Decision'}</span>
+      <span class="hitl-article">EU AI Act Art. 14</span>
     </div>
-    <div class="hitl-reason sans">${step.hitlReason}</div>
-    <div class="hitl-body sans">${t===1?'Review the SHAP-scored shortlist and geographic coverage. You may approve, modify, or reject. The agent cannot issue the RFx until this decision is recorded in Firestore.':'Review the weighted evaluation matrix and agent recommendation. Approve, modify the split allocation, or override the supplier selection with justification. This decision requires CPO and CFO signatures and creates an immutable audit record.'}</div>
+    <div class="hitl-reason">${step.hitlReason}</div>
+    <div class="hitl-body">${t===1?'Review the SHAP-scored shortlist and geographic coverage. You may approve, modify, or reject. The agent cannot issue the RFx until this decision is recorded in Firestore.':'Review the weighted evaluation matrix and agent recommendation. Approve, modify the split allocation, or override the supplier selection with justification. This decision requires CPO and CFO signatures and creates an immutable audit record.'}</div>
     <div class="hitl-actions">${t===1?a1:a2}</div>
-    <div class="hitl-timeout sans">Timeout: ${t===1?'24h → CPO Deputy escalation · 48h → CPO + CFO escalation with SLA breach record':'48h → CPO + CFO escalation with contract expiry countdown and supply continuity risk flag'}</div>
+    <div class="hitl-timeout">Timeout: ${t===1?'24h → CPO Deputy escalation · 48h → CPO + CFO escalation with SLA breach record':'48h → CPO + CFO escalation with contract expiry countdown and supply continuity risk flag'}</div>
   </div>`;
 }
 
@@ -816,11 +874,11 @@ function render(){
   const step=STEPS[cur];
   document.getElementById('sim-panel').innerHTML=`
     <div class="sim-meta">
-      <span class="sim-step-num sans">Step ${cur+1} of ${STEPS.length}</span>
-      <span class="sim-state-badge ${step.badgeClass} sans">${step.badge}</span>
+      <span class="sim-step-num">Step ${cur+1} of ${STEPS.length}</span>
+      <span class="sim-state-badge ${step.badgeClass}">${step.badge}</span>
     </div>
-    <div class="sim-title sans">${step.title}</div>
-    <div class="sim-body sans">${step.body}</div>
+    <div class="sim-title">${step.title}</div>
+    <div class="sim-body">${step.body}</div>
     ${step.hitl?hitlPanel(step):''}
     ${step.data?`<div class="sim-data">${dataRows(step.data)}</div>`:''}
     ${step.shap?shapBars(step.shap):''}
@@ -842,7 +900,7 @@ function hitlApprove(){simStep(1);}
 buildProgress();
 render();
 
-/* Sidebar scroll tracking */
+/* Sidebar link scroll highlighting track */
 const sections=['hero','statemachine','workflow','mlmodel','hitlspec','integrations','adrs','cost'];
 window.addEventListener('scroll',()=>{
   let a=sections[0];
@@ -850,7 +908,7 @@ window.addEventListener('scroll',()=>{
     const el=document.getElementById(id);
     if(el&&el.getBoundingClientRect().top<120) a=id;
   });
-  document.querySelectorAll('.sb-links a').forEach(l=>{
+  document.querySelectorAll('.sidebar-nav a').forEach(l=>{
     l.classList.toggle('active',l.getAttribute('href')==='#'+a);
   });
 },{passive:true});
